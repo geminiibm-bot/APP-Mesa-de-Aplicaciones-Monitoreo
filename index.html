@@ -668,6 +668,12 @@ placeholder="INC-001" oninput="tlUpdateHeader()"></div>
 <div class="tl-field"><label>Fecha</label><input type="date" id="tlIncDate"
 oninput="tlUpdateHeader()"></div>
 </div>
+<div class="tl-field" style="margin-top:12px;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:var(--muted);font-weight:600;">
+<input type="checkbox" id="tlMultiDay" onchange="tlToggleMultiDay()" style="width:14px;height:14px;accent-color:var(--accent);">
+Habilitar línea de tiempo multidía
+</label>
+</div>
 </div>
 <!-- Formulario evento -->
 <div class="tl-card" id="tl-form-card">
@@ -679,6 +685,7 @@ style="display:none;font-size:11px;padding:4px
 10px;color:var(--accent);border-color:var(--accent);"
 onclick="tlCancelEdit()">Cancelar</button>
 </div>
+<div class="tl-field" id="tl-event-date-field" style="display:none;"><label>Fecha del evento</label><input type="date" id="tlEvtDate"></div>
 <div class="tl-field-row">
 <div class="tl-field"><label>Hora</label><input type="time" id="tlTime"></div>
 <div class="tl-field"><label>Fase / Tipo</label>
@@ -1242,6 +1249,11 @@ const TL_HEX={
 purple:'7C3AED',orange:'E37400',teal:'0D9488',green:'188038',
 indigo:'3F51B5',rose:'E91E63',red:'D93025',blue:'1A73E8',gray:'5F6368'
 };
+function tlToggleMultiDay(){
+const isMulti=document.getElementById('tlMultiDay').checked;
+document.getElementById('tl-event-date-field').style.display=isMulti?'block':'none';
+tlRenderAll();
+}
 function tlTs(evt){
 const base=evt.date||document.getElementById('tlIncDate').value||new
 Date().toISOString().split('T')[0];
@@ -1291,8 +1303,10 @@ s.forEach(evt=>{
 const div=document.createElement('div');
 div.className='ev-item';
 const color=TL_COLORS[evt.type]||'#888';
+const isMulti=document.getElementById('tlMultiDay').checked;
+const displayTime=isMulti&&evt.date?`${evt.date.split('-').slice(1).reverse().join('/')} ${evt.time}`:evt.time;
 div.innerHTML=`<div class="ev-stripe" style="background:${color}"></div><div
-class="ev-time" style="padding-left:6px">${evt.time}</div><div class="ev-info"
+class="ev-time" style="padding-left:6px;font-size:${isMulti?'9.5px':'11px'}">${displayTime}</div><div class="ev-info"
 
 onclick="tlLoadEdit(${evt.id})"><div class="ev-title">${evt.title}</div><div
 class="ev-desc">${evt.desc||''}</div></div><button class="ev-del"
@@ -1328,13 +1342,15 @@ dot.style[isTop?'bottom':'top']='-6px';
 const line=document.createElement('div');
 line.style.cssText='width:1px;height:40px;background:#cbd5e1;';
 const card=document.createElement('div');
+const isMulti=document.getElementById('tlMultiDay').checked;
+const displayTime=isMulti&&evt.date?`${evt.date.split('-').slice(1).reverse().join('/')} ${evt.time}`:evt.time;
 card.style.cssText=`background:#fff;border:1px solid
 #e2e8f0;border-radius:8px;padding:9px 11px;width:160px;font-size:12px;position:relative;`;
 if(evt.type==='green') card.style.borderTop=`3px solid ${color}`;
 else card.style.borderLeft=`3px solid ${color}`;
 card.innerHTML=`<div
 style="font-size:10px;font-weight:700;color:${color};border-bottom:1px solid
-#f1f5f9;padding-bottom:4px;margin-bottom:4px;">${evt.time}</div><div
+#f1f5f9;padding-bottom:4px;margin-bottom:4px;">${displayTime}</div><div
 style="font-weight:700;color:#1a1a2e;font-size:11px;line-height:1.3;margin-bottom:2px;">${e
 vt.title}</div>${evt.desc?`<div
 style="font-size:10px;color:#5a6a85;line-height:1.4;">${evt.desc}</div>`:''}`;
@@ -1351,8 +1367,11 @@ function tlAddEvent(){
 const time=document.getElementById('tlTime').value;
 const title=document.getElementById('tlTitle').value.trim();
 if(!time||!title){showToast('Hora y título son obligatorios','error');return;}
+const isMulti=document.getElementById('tlMultiDay').checked;
+const evtDate=isMulti?document.getElementById('tlEvtDate').value:document.getElementById('tlIncDate').value;
+if(isMulti&&!evtDate){showToast('La fecha del evento es obligatoria','error');return;}
 const
-data={time,date:document.getElementById('tlIncDate').value,title,desc:document.getElement
+data={time,date:evtDate,title,desc:document.getElement
 ById('tlDesc').value.trim(),explanation:document.getElementById('tlExpl').value.trim(),type:do
 cument.getElementById('tlType').value,manualPos:null};
 if(tlEditId){
@@ -1372,6 +1391,9 @@ function tlLoadEdit(id){
 const evt=tlEvts.find(e=>e.id===id);
 tlEditId=id;
 document.getElementById('tlTime').value=evt.time;
+if(document.getElementById('tlMultiDay').checked){
+document.getElementById('tlEvtDate').value=evt.date||document.getElementById('tlIncDate').value;
+}
 document.getElementById('tlTitle').value=evt.title;
 document.getElementById('tlDesc').value=evt.desc||'';
 document.getElementById('tlExpl').value=evt.explanation||'';
@@ -1450,6 +1472,8 @@ tlEvts.forEach((evt,idx)=>{
 const pct=tlPos(evt,idx,tlEvts.length,minTs,maxTs);
 const isTop=idx%2!==0;
 const colorHex=TL_HEX[evt.type]||'888888';
+const isMulti=document.getElementById('tlMultiDay').checked;
+const displayTime=isMulti&&evt.date?`${evt.date.split('-').slice(1).reverse().join('/')} ${evt.time}`:evt.time;
 const dotX=pct-1;
 const lineY=isTop?1.81:2.81;
 s1.addShape('line',{x:`${pct}%`,y:lineY,w:0,h:1,line:{color:'D0D0D0',width:2}});
@@ -1463,7 +1487,7 @@ s1.addShape('rect',{x:tx,y:ty,w:boxW,h:boxH,fill:{color:'FFFFFF'},line:{color:'E
 }});
 s1.addShape('rect',{x:tx,y:ty,w:evt.type==='green'?boxW:.05,h:evt.type==='green'?.05:boxH,f
 ill:{color:colorHex},line:null});
-s1.addText([{text:evt.time+'\n',options:{fontSize:10,bold:true,color:colorHex}},{text:evt.title+'\n
+s1.addText([{text:displayTime+'\n',options:{fontSize:isMulti?9:10,bold:true,color:colorHex}},{text:evt.title+'\n
 ',options:{fontSize:11,bold:true,color:'333333'}},{text:evt.desc||'',options:{fontSize:9,color:'666
 666'}}],{x:tx+.07,y:ty+.05,w:boxW-.07,h:boxH-.1,align:'center',shrinkText:true});
 });
