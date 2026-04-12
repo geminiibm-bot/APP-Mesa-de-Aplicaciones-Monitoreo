@@ -1,59 +1,45 @@
-index.html: <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mesa de Aplicaciones & Monitoreo</title>
-<link
-href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&fami
-ly=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root {
---bg:#ffffff; --surface:#f8f9fa; --surface2:#f1f3f5; --border:#dee2e6;
---accent:#e63946; --accent2:#457b9d; --text:#212529; --muted:#6c757d;
---success:#28a745; --warning:#fd7e14; --sidebar-w:260px;
+  --bg:#ffffff; --surface:#f8f9fa; --surface2:#f1f3f5; --border:#dee2e6;
+  --accent:#e63946; --accent2:#457b9d; --text:#212529; --muted:#6c757d;
+  --success:#28a745; --warning:#fd7e14; --sidebar-w:260px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM
-Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;overflow
--x:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;overflow-x:hidden;}
+
 /* SIDEBAR */
-#sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid
-var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100
-;overflow-y:auto;}
+#sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;}
 .sidebar-logo{padding:24px 20px 18px;border-bottom:1px solid var(--border);}
 .logo-badge{display:inline-flex;align-items:center;gap:10px;}
-.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;ali
-gn-items:center;justify-content:center;font-size:18px;}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
 .logo-text{font-size:13px;font-weight:600;line-height:1.3;}
 .logo-text span{color:var(--muted);font-weight:400;font-size:11px;display:block;}
 .nav-section{padding:16px 12px 8px;}
-.nav-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;colo
-r:var(--muted);padding:0 8px;margin-bottom:6px;}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px
-12px;border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--muted);transition:all
-.18s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left;}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 8px;margin-bottom:6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--muted);transition:all .18s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left;}
 .nav-item:hover{background:var(--surface2);color:var(--text);}
 .nav-item.active{background:rgba(230,57,70,.12);color:var(--accent);font-weight:600;}
-
-.nav-dot{width:6px;height:6px;border-radius:50%;background:transparent;flex-shrink:0;margi
-n-left:auto;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:transparent;flex-shrink:0;margin-left:auto;}
 .nav-item.active .nav-dot{background:var(--accent);}
 .nav-icon{font-size:15px;flex-shrink:0;}
-.sidebar-footer{margin-top:auto;padding:16px;border-top:1px solid
-var(--border);font-size:11px;color:var(--muted);text-align:center;}
+.sidebar-footer{margin-top:auto;padding:16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center;}
+
 /* MAIN */
 #main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
-.topbar{height:60px;background:var(--surface);border-bottom:1px solid
-var(--border);display:flex;align-items:center;justify-content:space-between;padding:0
-32px;position:sticky;top:0;z-index:50;}
+.topbar{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:50;}
 .topbar-title{font-size:15px;font-weight:600;}
 .topbar-meta{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:16px;}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--success);display:inline
--block;box-shadow:0 0 6px var(--success);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;box-shadow:0 0 6px var(--success);}
+
 /* PAGES */
 .page{display:none;padding:36px 40px;animation:fadeIn .25s ease;}
 .page.active{display:block;}
@@ -61,14 +47,12 @@ var(--border);display:flex;align-items:center;justify-content:space-between;padd
 .page-header{margin-bottom:32px;}
 .page-header h1{font-size:26px;font-weight:700;}
 .page-header p{color:var(--muted);font-size:13.5px;margin-top:6px;}
+
 /* CARDS */
-.card{background:var(--surface);border:1px solid
-var(--border);border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 4px
-rgba(0,0,0,.05);}
-.card-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color
-:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.card-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);bor
-der-radius:2px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 4px rgba(0,0,0,.05);}
+.card-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.card-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+
 /* FORMS */
 .form-grid{display:grid;gap:18px;}
 .form-grid.cols-2{grid-template-columns:1fr 1fr;}
@@ -76,39 +60,26 @@ der-radius:2px;}
 .form-group{display:flex;flex-direction:column;gap:6px;}
 .form-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;}
 .required{color:var(--accent);margin-left:3px;}
-input[type="text"],input[type="date"],input[type="time"],textarea,select{background:var(--bg);b
-order:1px solid var(--border);border-radius:8px;padding:10px
-14px;color:var(--text);font-family:'DM
-Sans',sans-serif;font-size:13.5px;outline:none;width:100%;transition:border .18s,box-shadow
-.18s;}
-input:focus,textarea:focus,select:focus{border-color:var(--accent2);box-shadow:0 0 0 3px
-rgba(69,123,157,.15);}
-
+input[type="text"],input[type="date"],input[type="time"],textarea,select{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;outline:none;width:100%;transition:border .18s,box-shadow .18s;}
+input:focus,textarea:focus,select:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(69,123,157,.15);}
 textarea{resize:vertical;min-height:80px;}
-.form-section{background:var(--surface2);border:1px solid
-var(--border);border-radius:10px;padding:18px 20px;margin-bottom:8px;}
-.form-section-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:upperca
-se;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.form-section{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:8px;}
+.form-section-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
 /* RADIO */
 .radio-group{display:flex;gap:20px;align-items:center;}
-.radio-label{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13.5px;font-weigh
-t:500;}
-.radio-label
-input[type="radio"]{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
-.check-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:1
-0px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.radio-label{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13.5px;font-weight:500;}
+.radio-label input[type="radio"]{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
+.check-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;}
 .check-row:last-child{border-bottom:none;}
 .check-row-label{flex:1;line-height:1.5;}
-.estado-badge{font-size:11px;font-weight:700;padding:3px
-10px;border-radius:20px;min-width:90px;text-align:center;display:inline-block;}
+.estado-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;min-width:90px;text-align:center;display:inline-block;}
 .estado-ok{background:rgba(40,167,69,.15);color:var(--success);}
 .estado-nok{background:rgba(230,57,70,.15);color:var(--accent);}
 .estado-empty{background:var(--surface2);color:var(--muted);}
+
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px
-20px;border-radius:8px;font-family:'DM
-Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;border:none;transition:all
-.18s;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;border:none;transition:all .18s;}
 .btn-primary{background:var(--accent);color:#fff;}
 .btn-primary:hover{background:#c1121f;}
 .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
@@ -116,1370 +87,817 @@ Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;border:none;tra
 .btn-success{background:var(--success);color:#fff;}
 .btn-success:hover{background:#1e7e34;}
 .btn-group{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;}
+
 /* TOOLS */
 .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
-.tool-card{background:var(--surface);border:1px solid
-var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:border-color
-.2s,transform .2s;}
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:border-color .2s,transform .2s;}
 .tool-card:hover{border-color:var(--accent2);transform:translateY(-2px);}
 .tool-card-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.tool-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-con
-tent:center;font-size:18px;flex-shrink:0;}
+.tool-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .tool-name{font-size:14px;font-weight:600;}
-.tool-url{font-size:11px;color:var(--accent2);font-family:'DM
-Mono',monospace;margin-top:1px;}
+.tool-url{font-size:11px;color:var(--accent2);font-family:'DM Mono',monospace;margin-top:1px;}
 .tool-desc{font-size:12.5px;color:var(--muted);line-height:1.5;}
 
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
-.stat-card{background:var(--surface);border:1px solid
-var(--border);border-radius:12px;padding:20px;}
-.stat-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-s
-pacing:.08em;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.stat-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;}
 .stat-value{font-size:28px;font-weight:700;margin:8px 0 2px;}
 .stat-sub{font-size:12px;color:var(--muted);}
 .stat-accent{color:var(--accent);}
 .stat-success{color:var(--success);}
 .stat-info{color:var(--accent2);}
+
 /* MISC */
 .divider{border:none;border-top:1px solid var(--border);margin:24px 0;}
-.note-box{background:rgba(244,162,97,.08);border:1px solid
-rgba(244,162,97,.25);border-radius:8px;padding:12px
-16px;font-size:12px;color:var(--warning);line-height:1.6;margin-top:16px;}
-.vc-section{background:var(--surface2);border:1px solid
-var(--border);border-radius:10px;padding:16px 20px;margin-bottom:12px;}
-.vc-section-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-color:var(--accent);margin-bottom:12px;}
+.note-box{background:rgba(244,162,97,.08);border:1px solid rgba(244,162,97,.25);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--warning);line-height:1.6;margin-top:16px;}
+.vc-section{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:12px;}
+.vc-section-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
 .responsable-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+
 /* HERRAMIENTAS */
-.htool-filter{background:var(--surface2);border:1px solid
-var(--border);border-radius:6px;padding:6px
-14px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);font-family:'DM
-Sans',sans-serif;transition:all .15s;}
-.htool-filter.active,.htool-filter:hover{background:var(--accent);color:#fff;border-color:var(--acc
-ent);}
+.htool-filter{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .15s;}
+.htool-filter.active,.htool-filter:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .htool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
-.htool-card{background:var(--surface);border:1px solid
-var(--border);border-radius:12px;padding:16px 18px;transition:border-color .2s,transform
-.15s;}
+.htool-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color .2s,transform .15s;}
 .htool-card:hover{border-color:var(--accent2);transform:translateY(-1px);}
 .htool-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
-.htool-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-co
-ntent:center;font-size:16px;flex-shrink:0;}
+.htool-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
 .htool-name{font-size:14px;font-weight:600;color:var(--text);line-height:1.2;}
-.htool-tipo{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;mar
-gin-top:3px;}
-.htool-url{font-size:11px;font-family:'DM
-Mono',monospace;color:var(--accent2);word-break:break-all;margin-bottom:8px;cursor:point
-er;}
+.htool-tipo{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-top:3px;}
+.htool-url{font-size:11px;font-family:'DM Mono',monospace;color:var(--accent2);word-break:break-all;margin-bottom:8px;cursor:pointer;}
 .htool-url:hover{text-decoration:underline;}
 .htool-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
 .htool-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;}
-
 .badge-web{background:rgba(69,123,157,.15);color:var(--accent2);}
 .badge-app{background:rgba(46,196,182,.15);color:#1a8c7c;}
 .badge-mail{background:rgba(244,162,97,.15);color:var(--warning);}
 .badge-auth{background:rgba(40,167,69,.15);color:var(--success);}
 .badge-noauth{background:rgba(108,117,125,.12);color:var(--muted);}
-.htool-creds{margin-top:8px;padding:8px
-10px;background:var(--surface2);border-radius:6px;font-size:11px;}
+.htool-creds{margin-top:8px;padding:8px 10px;background:var(--surface2);border-radius:6px;font-size:11px;}
 .htool-cred-row{display:flex;gap:6px;align-items:baseline;margin-bottom:2px;}
 .htool-cred-row:last-child{margin-bottom:0;}
 .htool-cred-label{color:var(--muted);min-width:62px;flex-shrink:0;}
 .htool-cred-val{font-family:'DM Mono',monospace;color:var(--text);word-break:break-all;}
 .htool-note{font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;line-height:1.4;}
 .htool-ip{font-size:11px;font-family:'DM Mono',monospace;color:var(--text);margin-top:6px;}
-.tag-mon{background:rgba(46,196,182,.15);color:#1a8c7c;display:inline-block;border-radius:
-4px;padding:2px 6px;font-size:10px;margin-top:3px;}
-.tag-sto{background:rgba(244,162,97,.15);color:var(--warning);display:inline-block;border-ra
-dius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
-.tag-app-badge{background:rgba(69,123,157,.15);color:var(--accent2);display:inline-block;bo
-rder-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
-.tag-seg{background:rgba(230,57,70,.15);color:var(--accent);display:inline-block;border-radiu
-s:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
-.tag-mail-badge{background:rgba(108,117,125,.12);color:var(--muted);display:inline-block;bo
-rder-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
+.tag-mon{background:rgba(46,196,182,.15);color:#1a8c7c;display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
+.tag-sto{background:rgba(244,162,97,.15);color:var(--warning);display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
+.tag-app-badge{background:rgba(69,123,157,.15);color:var(--accent2);display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
+.tag-seg{background:rgba(230,57,70,.15);color:var(--accent);display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
+.tag-mail-badge{background:rgba(108,117,125,.12);color:var(--muted);display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
+
 /* ═══════════════════════════════════════
-TIMELINE PAGE STYLES
+   TIMELINE PAGE STYLES
 ═══════════════════════════════════════ */
 #page-timeline{padding:0;display:none;height:calc(100vh - 60px);}
 #page-timeline.active{display:flex;flex-direction:row;}
-.tl-sidebar{width:330px;flex-shrink:0;background:var(--surface);border-right:1px solid
-var(--border);display:flex;flex-direction:column;height:100%;overflow:hidden;}
-.tl-sidebar-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12
-px;}
-.tl-canvas-area{flex:1;background:#e8ecf0;display:flex;flex-direction:column;overflow:hidden;
-}
-.tl-toolbar{height:52px;background:var(--bg);border-bottom:1px solid
-var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;}
-.tl-canvas-wrap{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;p
-adding:28px;}
+
+.tl-sidebar{width:330px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.tl-sidebar-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.tl-canvas-area{flex:1;background:#e8ecf0;display:flex;flex-direction:column;overflow:hidden;}
+
+.tl-toolbar{height:52px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;}
+.tl-canvas-wrap{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:28px;}
+
 /* Preview board */
-#tl-preview{background:#fff;box-shadow:0 4px 24px
-rgba(0,0,0,.12);position:relative;width:1100px;min-width:1100px;height:600px;min-height:600
-px;flex-shrink:0;display:flex;flex-direction:column;border:1px solid
-#dde;border-radius:4px;transform-origin:top center;}
+#tl-preview{background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.12);position:relative;width:1100px;min-width:1100px;height:600px;min-height:600px;flex-shrink:0;display:flex;flex-direction:column;border:1px solid #dde;border-radius:4px;transform-origin:top center;}
 
 /* TL form card */
-.tl-card{background:var(--bg);border:1px solid
-var(--border);border-radius:10px;padding:14px;}
-.tl-card-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;col
-or:var(--muted);font-family:'DM Mono',monospace;margin-bottom:10px;}
+.tl-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.tl-card-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:10px;}
 .tl-field{margin-bottom:9px;}
 .tl-field:last-child{margin-bottom:0;}
-.tl-field
-label{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercas
-e;letter-spacing:.8px;margin-bottom:4px;}
-.tl-field input,.tl-field select,.tl-field textarea{width:100%;padding:7px 10px;border:1px solid
-var(--border);border-radius:7px;font-size:12px;font-family:'DM
-Sans',sans-serif;color:var(--text);background:var(--bg);outline:none;}
+.tl-field label{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+.tl-field input,.tl-field select,.tl-field textarea{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:7px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);outline:none;}
 .tl-field input:focus,.tl-field select:focus,.tl-field textarea:focus{border-color:var(--accent2);}
 .tl-field textarea{resize:none;}
 .tl-field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+/* Drive upload box */
+.drive-box{background:rgba(40,167,69,.07);border:1px solid rgba(40,167,69,.25);border-radius:10px;padding:14px;}
+.drive-box-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--success);font-family:'DM Mono',monospace;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.drive-status{font-size:12px;color:var(--success);font-weight:600;margin-top:8px;min-height:16px;line-height:1.4;}
+.drive-status.err{color:var(--accent);}
+
 /* Event list items */
-.ev-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px
-12px;display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;transition:bord
-er-color .15s;position:relative;overflow:hidden;}
+.ev-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;transition:border-color .15s;position:relative;overflow:hidden;}
 .ev-item:hover{border-color:var(--accent2);}
 .ev-stripe{position:absolute;left:0;top:0;bottom:0;width:3px;}
-.ev-time{font-family:'DM
-Mono',monospace;font-size:11px;font-weight:700;color:var(--text);min-width:40px;}
+.ev-time{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--text);min-width:40px;}
 .ev-info{flex:1;}
 .ev-title{font-size:12px;font-weight:700;color:var(--text);}
-.ev-desc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow
-:ellipsis;max-width:170px;}
+.ev-desc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;}
 .ev-del{color:#ccc;font-size:11px;padding:4px;border:none;background:none;cursor:pointer;}
 .ev-del:hover{color:var(--accent);}
-/* Metrics footer */
-.tl-metrics{height:76px;background:#fafbff;border-top:1px solid
-var(--border);display:flex;align-items:center;justify-content:space-around;padding:0
-32px;flex-shrink:0;}
-.met-item{text-align:center;}
 
-.met-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:
-var(--muted);font-family:'DM Mono',monospace;margin-bottom:3px;}
+/* Metrics footer */
+.tl-metrics{height:76px;background:#fafbff;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 32px;flex-shrink:0;}
+.met-item{text-align:center;}
+.met-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:3px;}
 .met-val{font-size:22px;font-weight:700;line-height:1;}
 .met-sub{font-size:10px;color:var(--muted);}
 .met-sep{width:1px;height:32px;background:var(--border);}
 .mv-p{color:#7c3aed;}.mv-t{color:#0d9488;}.mv-g{color:#28a745;}.mv-x{color:#ccc;}
+
 /* TL header area */
-.tl-head-area{padding:24px 44px
-0;display:flex;justify-content:space-between;align-items:flex-start;}
+.tl-head-area{padding:24px 44px 0;display:flex;justify-content:space-between;align-items:flex-start;}
 .tl-main-title{font-size:28px;font-weight:800;color:#1a1a2e;letter-spacing:-.5px;}
 .tl-main-date{font-size:13px;color:#5a6a85;margin-top:4px;}
-.tl-inc-box{background:#f8faff;border:1px solid #c8d8f0;border-radius:10px;padding:10px
-16px;text-align:right;}
-.tl-inc-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color
-:#5a6a85;font-family:'DM Mono',monospace;}
+.tl-inc-box{background:#f8faff;border:1px solid #c8d8f0;border-radius:10px;padding:10px 16px;text-align:right;}
+.tl-inc-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#5a6a85;font-family:'DM Mono',monospace;}
 .tl-inc-val{font-size:18px;font-weight:700;color:#1a1a2e;font-family:'DM Mono',monospace;}
+
 .tl-track{flex:1;position:relative;margin:0 44px;}
 .tl-bar-wrap{position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);}
-.tl-bar{height:13px;border-radius:7px;background:linear-gradient(to right,#d93025
-0%,#d93025 85%,#188038 85%,#188038 100%);}
-.tl-lbl-s{position:absolute;top:-20px;left:0;font-size:9px;font-weight:700;color:#cbd5e1;letter-s
-pacing:1px;text-transform:uppercase;}
-
-.tl-lbl-e{position:absolute;top:-20px;right:0;font-size:9px;font-weight:700;color:#cbd5e1;letter-
-spacing:1px;text-transform:uppercase;}
-
+.tl-bar{height:13px;border-radius:7px;background:linear-gradient(to right,#d93025 0%,#d93025 85%,#188038 85%,#188038 100%);}
+.tl-lbl-s{position:absolute;top:-20px;left:0;font-size:9px;font-weight:700;color:#cbd5e1;letter-spacing:1px;text-transform:uppercase;}
+.tl-lbl-e{position:absolute;top:-20px;right:0;font-size:9px;font-weight:700;color:#cbd5e1;letter-spacing:1px;text-transform:uppercase;}
 #tl-items{position:absolute;top:0;left:0;width:100%;height:100%;}
+
 /* Toolbar small buttons */
-.tbtn{display:inline-flex;align-items:center;gap:6px;padding:6px
-12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid
-var(--border);background:var(--surface2);color:var(--text);font-family:'DM
-Sans',sans-serif;transition:all .15s;}
+.tbtn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;}
 .tbtn:hover{border-color:var(--accent2);color:var(--accent2);}
 .tbtn-red{background:var(--accent);color:#fff;border-color:var(--accent);}
 .tbtn-red:hover{background:#c1121f;}
 .tbtn-grn{background:var(--success);color:#fff;border-color:var(--success);}
 .tbtn-grn:hover{background:#1e7e34;}
+
 /* Toast */
-#toast{position:fixed;bottom:28px;right:28px;padding:13px
-20px;border-radius:10px;font-weight:600;font-size:13.5px;transform:translateY(80px);opacity
-:0;transition:all .3s;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.3);}
+#toast{position:fixed;bottom:28px;right:28px;padding:13px 20px;border-radius:10px;font-weight:600;font-size:13.5px;transform:translateY(80px);opacity:0;transition:all .3s;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.3);}
 #toast.show{transform:none;opacity:1;}
+
 ::-webkit-scrollbar{width:6px;height:6px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-
-@media(max-width:900px){.form-grid.cols-2,.form-grid.cols-3,.stats-row,.responsable-grid{gri
-d-template-columns:1fr;}.tl-sidebar{width:280px;}}
+@media(max-width:900px){.form-grid.cols-2,.form-grid.cols-3,.stats-row,.responsable-grid{grid-template-columns:1fr;}.tl-sidebar{width:280px;}}
 </style>
 </head>
 <body>
+
 <!-- ════════ SIDEBAR ════════ -->
 <nav id="sidebar">
-<div class="sidebar-logo">
-<div class="logo-badge">
-<div class="logo-icon">⚡</div>
-<div class="logo-text">Mesa Ops<span>Aplicaciones & Monitoreo</span></div>
-</div>
-</div>
-<div class="nav-section">
-<div class="nav-label">General</div>
-<button class="nav-item active" onclick="showPage('dashboard')"><span
-class="nav-icon">🏠</span> Dashboard <span class="nav-dot"></span></button>
-</div>
-<div class="nav-section">
-<div class="nav-label">Monitoreo</div>
-<button class="nav-item" onclick="showPage('entrega-turno-mon')"><span
-class="nav-icon">🔄</span> Entrega de Turno <span class="nav-dot"></span></button>
-<button class="nav-item" onclick="showPage('herramientas')"><span
-class="nav-icon">️</span> Herramientas <span class="nav-dot"></span></button>
-</div>
-<div class="nav-section">
-<div class="nav-label">Aplicaciones</div>
-<button class="nav-item" onclick="showPage('entrega-turno-app')"><span
-class="nav-icon">📋</span> Entrega de Turno <span class="nav-dot"></span></button>
-<button class="nav-item" onclick="showPage('validacion-cambios')"><span
-class="nav-icon">✅</span> Validación de Cambios <span
-class="nav-dot"></span></button>
-<button class="nav-item" onclick="showPage('timeline')"><span
-class="nav-icon">📊</span> Línea de Tiempo <span class="nav-dot"></span></button>
-</div>
-<div class="sidebar-footer"><span
-style="display:flex;align-items:center;justify-content:center;gap:6px"><span
-class="status-dot"></span> Sistemas operativos</span></div>
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">Mesa Ops<span>Aplicaciones & Monitoreo</span></div>
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">General</div>
+    <button class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">🏠</span> Dashboard <span class="nav-dot"></span></button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Monitoreo</div>
+    <button class="nav-item" onclick="showPage('entrega-turno-mon')"><span class="nav-icon">🔄</span> Entrega de Turno <span class="nav-dot"></span></button>
+    <button class="nav-item" onclick="showPage('herramientas')"><span class="nav-icon">🛠️</span> Herramientas <span class="nav-dot"></span></button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Aplicaciones</div>
+    <button class="nav-item" onclick="showPage('entrega-turno-app')"><span class="nav-icon">📋</span> Entrega de Turno <span class="nav-dot"></span></button>
+    <button class="nav-item" onclick="showPage('validacion-cambios')"><span class="nav-icon">✅</span> Validación de Cambios <span class="nav-dot"></span></button>
+    <button class="nav-item" onclick="showPage('timeline')"><span class="nav-icon">📊</span> Línea de Tiempo <span class="nav-dot"></span></button>
+  </div>
+  <div class="sidebar-footer"><span style="display:flex;align-items:center;justify-content:center;gap:6px"><span class="status-dot"></span> Sistemas operativos</span></div>
 </nav>
+
 <!-- ════════ MAIN ════════ -->
 <div id="main">
-<div class="topbar">
-<div class="topbar-title" id="topbar-title">Dashboard</div>
-<div class="topbar-meta">
-<span id="clock" style="font-family:'DM Mono',monospace;font-size:13px"></span>
-<span><span class="status-dot"></span> Activo</span>
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-meta">
+      <span id="clock" style="font-family:'DM Mono',monospace;font-size:13px"></span>
+      <span><span class="status-dot"></span> Activo</span>
+    </div>
+  </div>
 
-</div>
-</div>
-<!-- ══ DASHBOARD ══ -->
-<div class="page active" id="page-dashboard">
-<div class="page-header"><h1>Dashboard</h1><p>Resumen del estado operativo de la
-mesa</p></div>
-<div class="stats-row">
-<div class="stat-card"><div class="stat-label">Cambios hoy</div><div class="stat-value
-stat-accent">0</div><div class="stat-sub">Validaciones registradas</div></div>
-<div class="stat-card"><div class="stat-label">Turnos</div><div class="stat-value
-stat-info">0</div><div class="stat-sub">Entregas enviadas</div></div>
-<div class="stat-card"><div class="stat-label">Herramientas</div><div class="stat-value
-stat-success">8</div><div class="stat-sub">Accesos configurados</div></div>
-<div class="stat-card"><div class="stat-label">Alertas</div><div
-class="stat-value">0</div><div class="stat-sub">Sin incidentes activos</div></div>
-</div>
-<div class="card">
-<div class="card-title">Accesos rápidos</div>
-<div class="tools-grid"
-style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
-<div class="tool-card" onclick="showPage('validacion-cambios')"><div
-class="tool-card-header"><div class="tool-icon"
-style="background:rgba(230,57,70,.15)">✅</div><div><div class="tool-name">Validación
-de Cambios</div><div class="tool-url">Aplicaciones</div></div></div><div
-class="tool-desc">Registrar y certificar cambios en producción.</div></div>
-<div class="tool-card" onclick="showPage('entrega-turno-mon')"><div
-class="tool-card-header"><div class="tool-icon"
-style="background:rgba(46,196,182,.15)">🔄</div><div><div class="tool-name">Entrega de
-Turno</div><div class="tool-url">Monitoreo</div></div></div><div
-class="tool-desc">Formulario de entrega de turno para el equipo de monitoreo.</div></div>
-<div class="tool-card" onclick="showPage('herramientas')"><div
-class="tool-card-header"><div class="tool-icon"
-style="background:rgba(69,123,157,.15)">️</div><div><div
-class="tool-name">Herramientas</div><div class="tool-url">Accesos &
-URLs</div></div></div><div class="tool-desc">Listado de todas las herramientas y sus
-accesos.</div></div>
-<div class="tool-card" onclick="showPage('entrega-turno-app')"><div
-class="tool-card-header"><div class="tool-icon"
-style="background:rgba(244,162,97,.15)">📋</div><div><div class="tool-name">Entrega de
-Turno</div><div class="tool-url">Aplicaciones</div></div></div><div
-class="tool-desc">Formulario de entrega de turno para el equipo de
-aplicaciones.</div></div>
-<div class="tool-card" onclick="showPage('timeline')"><div
-class="tool-card-header"><div class="tool-icon"
-style="background:rgba(69,123,157,.15)">📊</div><div><div class="tool-name">Línea de
-Tiempo</div><div class="tool-url">Incidentes ITIL</div></div></div><div
-class="tool-desc">Documenta incidentes con métricas MTTD, MTTA, MTTR. Exporta
-la línea de tiempo.</div></div>
-</div>
-</div>
-</div>
-<!-- ══ HERRAMIENTAS ══ -->
-<div class="page" id="page-herramientas">
-<div class="page-header"><h1>Herramientas</h1><p>Catálogo completo de accesos,
-URLs y credenciales del equipo</p></div>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
-<button class="htool-filter active" onclick="filtrarH('todos',this)">Todas</button>
-<button class="htool-filter" onclick="filtrarH('monitoreo',this)">Monitoreo</button>
-<button class="htool-filter" onclick="filtrarH('storage',this)">Storage</button>
-<button class="htool-filter" onclick="filtrarH('aplicacion',this)">Aplicación</button>
-<button class="htool-filter" onclick="filtrarH('seguridad',this)">Seguridad</button>
-<button class="htool-filter" onclick="filtrarH('correo',this)">Correo</button>
-</div>
-<div class="htool-grid" id="htool-grid">
-<div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(46,196,182,.15)">📊</div><div><div
-class="htool-name">Dynatrace Colombia</div><div
-class="tag-mon">Monitoreo</div></div></div><div class="htool-url"
-onclick="openUrl('https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.classic.problems/
-ui/problems?gtf=-30m&gf=all')">esd62814.apps.dynatrace.com →</div><div
-class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-auth">Requiere usuario</span></div><div
-class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div><div class="htool-cred-row"><span
-class="htool-cred-label">Contraseña</span><span
-class="htool-cred-val">Propia</span></div></div></div>
-<div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(46,196,182,.15)">📊</div><div><div
-class="htool-name">Dynatrace El Salvador</div><div
-class="tag-mon">Monitoreo</div></div></div><div class="htool-url"
-onclick="openUrl('https://mua09709.live.dynatrace.com/ui/problems?gtf=-2h&gf=all')">mua0
-9709.live.dynatrace.com →</div><div class="htool-meta"><span class="htool-badge
-badge-web">Web</span><span class="htool-badge badge-auth">Requiere
-usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div><div class="htool-cred-row"><span
-class="htool-cred-label">Contraseña</span><span
-class="htool-cred-val">Propia</span></div></div></div>
-<div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(46,196,182,.15)">📊</div><div><div
-class="htool-name">Dynatrace Costa Rica</div><div
-class="tag-mon">Monitoreo</div></div></div><div class="htool-url"
+  <!-- ══ DASHBOARD ══ -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header"><h1>Dashboard</h1><p>Resumen del estado operativo de la mesa</p></div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Cambios hoy</div><div class="stat-value stat-accent">0</div><div class="stat-sub">Validaciones registradas</div></div>
+      <div class="stat-card"><div class="stat-label">Turnos</div><div class="stat-value stat-info">0</div><div class="stat-sub">Entregas enviadas</div></div>
+      <div class="stat-card"><div class="stat-label">Herramientas</div><div class="stat-value stat-success">8</div><div class="stat-sub">Accesos configurados</div></div>
+      <div class="stat-card"><div class="stat-label">Alertas</div><div class="stat-value">0</div><div class="stat-sub">Sin incidentes activos</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Accesos rápidos</div>
+      <div class="tools-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="tool-card" onclick="showPage('validacion-cambios')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(230,57,70,.15)">✅</div><div><div class="tool-name">Validación de Cambios</div><div class="tool-url">Aplicaciones</div></div></div><div class="tool-desc">Registrar y certificar cambios en producción.</div></div>
+        <div class="tool-card" onclick="showPage('entrega-turno-mon')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(46,196,182,.15)">🔄</div><div><div class="tool-name">Entrega de Turno</div><div class="tool-url">Monitoreo</div></div></div><div class="tool-desc">Formulario de entrega de turno para el equipo de monitoreo.</div></div>
+        <div class="tool-card" onclick="showPage('herramientas')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(69,123,157,.15)">🛠️</div><div><div class="tool-name">Herramientas</div><div class="tool-url">Accesos & URLs</div></div></div><div class="tool-desc">Listado de todas las herramientas y sus accesos.</div></div>
+        <div class="tool-card" onclick="showPage('entrega-turno-app')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(244,162,97,.15)">📋</div><div><div class="tool-name">Entrega de Turno</div><div class="tool-url">Aplicaciones</div></div></div><div class="tool-desc">Formulario de entrega de turno para el equipo de aplicaciones.</div></div>
+        <div class="tool-card" onclick="showPage('timeline')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(69,123,157,.15)">📊</div><div><div class="tool-name">Línea de Tiempo</div><div class="tool-url">Incidentes ITIL</div></div></div><div class="tool-desc">Documenta incidentes con métricas MTTD, MTTA, MTTR. Exporta y sube a Drive.</div></div>
+      </div>
+    </div>
+  </div>
 
-onclick="openUrl('https://ehu31881.live.dynatrace.com/#dashboard;id=f5dc64cf-28b9-40eb-
-b74e-3859749fed4e')">ehu31881.live.dynatrace.com →</div><div
+  <!-- ══ HERRAMIENTAS ══ -->
+  <div class="page" id="page-herramientas">
+    <div class="page-header"><h1>Herramientas</h1><p>Catálogo completo de accesos, URLs y credenciales del equipo</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="htool-filter active" onclick="filtrarH('todos',this)">Todas</button>
+      <button class="htool-filter" onclick="filtrarH('monitoreo',this)">Monitoreo</button>
+      <button class="htool-filter" onclick="filtrarH('storage',this)">Storage</button>
+      <button class="htool-filter" onclick="filtrarH('aplicacion',this)">Aplicación</button>
+      <button class="htool-filter" onclick="filtrarH('seguridad',this)">Seguridad</button>
+      <button class="htool-filter" onclick="filtrarH('correo',this)">Correo</button>
+    </div>
+    <div class="htool-grid" id="htool-grid">
+      <div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div class="htool-icon" style="background:rgba(46,196,182,.15)">📊</div><div><div class="htool-name">Dynatrace Colombia</div><div class="tag-mon">Monitoreo</div></div></div><div class="htool-url" onclick="openUrl('https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.classic.problems/ui/problems?gtf=-30m&gf=all')">esd62814.apps.dynatrace.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">Propia</span></div></div></div>
+      <div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div class="htool-icon" style="background:rgba(46,196,182,.15)">📊</div><div><div class="htool-name">Dynatrace El Salvador</div><div class="tag-mon">Monitoreo</div></div></div><div class="htool-url" onclick="openUrl('https://mua09709.live.dynatrace.com/ui/problems?gtf=-2h&gf=all')">mua09709.live.dynatrace.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">Propia</span></div></div></div>
+      <div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div class="htool-icon" style="background:rgba(46,196,182,.15)">📊</div><div><div class="htool-name">Dynatrace Costa Rica</div><div class="tag-mon">Monitoreo</div></div></div><div class="htool-url" onclick="openUrl('https://ehu31881.live.dynatrace.com/#dashboard;id=f5dc64cf-28b9-40eb-b74e-3859749fed4e')">ehu31881.live.dynatrace.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div class="htool-icon" style="background:rgba(46,196,182,.15)">📊</div><div><div class="htool-name">Dynatrace Panamá</div><div class="tag-mon">Monitoreo</div></div></div><div class="htool-url" onclick="openUrl('https://fay24490.live.dynatrace.com/ui/problems?gtf=-30m&gf=all')">fay24490.live.dynatrace.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div class="htool-icon" style="background:rgba(46,196,182,.15)">📈</div><div><div class="htool-name">Newrelic</div><div class="tag-mon">Monitoreo</div></div></div><div class="htool-url" onclick="openUrl('https://one.newrelic.com/alerts?account=3040357')">one.newrelic.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div class="htool-icon" style="background:rgba(244,162,97,.15)">📉</div><div><div class="htool-name">Grafana</div><div class="tag-mon">Monitoreo</div></div></div><div class="htool-url" onclick="openUrl('https://davivienda.grafana.net/d/ma6ntwt/001-tablero-operativo-superapp?orgId=1&from=now-3h&to=now')">davivienda.grafana.net →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">s-grafanacgr@davivienda.com</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">AGvb{8`Ai#=</span></div></div><div class="htool-note">Ingresar en ventana sin correo logueado</div></div>
+      <div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div class="htool-icon" style="background:rgba(244,162,97,.15)">🌐</div><div><div class="htool-name">Solarwinds</div><div class="tag-mon">Monitoreo</div></div></div><div class="htool-url" onclick="openUrl('https://solarwindsdav/Orion/SummaryView.aspx?ViewID=319')">solarwindsdav →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div class="htool-icon" style="background:rgba(230,57,70,.15)">🚨</div><div><div class="htool-name">Victor Ops</div><div class="tag-mon">Monitoreo</div></div></div><div class="htool-url" onclick="openUrl('https://portal.victorops.com/ui/banco-davivienda/incidents')">portal.victorops.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="seguridad"><div class="htool-head"><div class="htool-icon" style="background:rgba(230,57,70,.15)">🔐</div><div><div class="htool-name">Biocatch</div><div class="tag-seg">Seguridad</div></div></div><div class="htool-url" onclick="openUrl('https://p.datadoghq.com/sb/c9d66ae84-742be501c5c7c5550312f38ce473b09c')">p.datadoghq.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
+      <div class="htool-card" data-cat="seguridad"><div class="htool-head"><div class="htool-icon" style="background:rgba(230,57,70,.15)">🎙️</div><div><div class="htool-name">Sade</div><div class="tag-seg">Seguridad</div></div></div><div class="htool-url" onclick="openUrl('http://sade.davivienda.com/Sade/Manager/login.jsp')">sade.davivienda.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="seguridad"><div class="htool-head"><div class="htool-icon" style="background:rgba(230,57,70,.15)">📹</div><div><div class="htool-name">Ctlog Grabadoras</div><div class="tag-seg">Seguridad</div></div></div><div class="htool-url" onclick="openUrl('https://ctlog.claro.davivienda.com/CTPlatformDashboard/Account/Login')">ctlog.claro.davivienda.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">monitoreoColombia</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">123@#]</span></div></div></div>
+      <div class="htool-card" data-cat="storage"><div class="htool-head"><div class="htool-icon" style="background:rgba(244,162,97,.15)">💾</div><div><div class="htool-name">Storage Fase 1</div><div class="tag-sto">Storage</div></div></div><div class="htool-url" onclick="openUrl('https://90.5.7.43/preloginmonitor/index.jsp')">90.5.7.43 →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
+      <div class="htool-card" data-cat="storage"><div class="htool-head"><div class="htool-icon" style="background:rgba(244,162,97,.15)">💾</div><div><div class="htool-name">Storage Fase 2</div><div class="tag-sto">Storage</div></div></div><div class="htool-url" onclick="openUrl('https://90.5.4.92/preloginmonitor/index.jsp')">90.5.4.92 →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
+      <div class="htool-card" data-cat="storage"><div class="htool-head"><div class="htool-icon" style="background:rgba(244,162,97,.15)">💾</div><div><div class="htool-name">Storage Contingencia</div><div class="tag-sto">Storage</div></div></div><div class="htool-url" onclick="openUrl('https://99.5.89.70/preloginmonitor/index.jsp')">99.5.89.70 →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
+      <div class="htool-card" data-cat="storage"><div class="htool-head"><div class="htool-icon" style="background:rgba(244,162,97,.15)">🗄️</div><div><div class="htool-name">NAS Medellín</div><div class="tag-sto">Storage</div></div></div><div class="htool-url" onclick="openUrl('https://nasmedellin.davivienda.loc/index.html')">nasmedellin.davivienda.loc →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">monitoreo</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">M0n1t0r30*</span></div></div></div>
+      <div class="htool-card" data-cat="storage"><div class="htool-head"><div class="htool-icon" style="background:rgba(244,162,97,.15)">🗄️</div><div><div class="htool-name">NAS Bogotá</div><div class="tag-sto">Storage</div></div></div><div class="htool-url" onclick="openUrl('https://nasbogota.davivienda.loc/index.html')">nasbogota.davivienda.loc →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">monitoreo</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">M0n1t0r30*</span></div></div></div>
+      <div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div class="htool-icon" style="background:rgba(69,123,157,.15)">📱</div><div><div class="htool-name">KTC Aplicación</div><div class="tag-app-badge">Aplicación</div></div></div><div class="htool-url" onclick="openUrl('https://monktcapp.davivienda.loc')">monktcapp.davivienda.loc →</div><div class="htool-meta"><span class="htool-badge badge-app">App</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div class="htool-icon" style="background:rgba(69,123,157,.15)">📨</div><div><div class="htool-name">Masiv</div><div class="tag-app-badge">Aplicación</div></div></div><div class="htool-url" onclick="openUrl('https://frontend.masivapp.com/auth/login')">frontend.masivapp.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div class="htool-icon" style="background:rgba(69,123,157,.15)">🖥️</div><div><div class="htool-name">Stratus</div><div class="tag-app-badge">Aplicación</div></div></div><div class="htool-meta"><span class="htool-badge badge-app">App</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-ip">IP: 172.25.2.115</div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div></div></div>
+      <div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div class="htool-icon" style="background:rgba(69,123,157,.15)">⚙️</div><div><div class="htool-name">Postilion Medellín</div><div class="tag-app-badge">Aplicación</div></div></div><div class="htool-meta"><span class="htool-badge badge-app">App</span><span class="htool-badge badge-noauth">Sin usuario</span></div><div class="htool-ip">IP-RT1: 90.5.12.1:57205<br>DAAS: 168.170.1.206:57201</div></div>
+      <div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div class="htool-icon" style="background:rgba(69,123,157,.15)">⚙️</div><div><div class="htool-name">Postilion Bogotá</div><div class="tag-app-badge">Aplicación</div></div></div><div class="htool-meta"><span class="htool-badge badge-app">App</span><span class="htool-badge badge-noauth">Sin usuario</span></div><div class="htool-ip">IP-RT2: 90.5.12.2:57205<br>DAAS: 168.170.1.207:57201</div></div>
+      <div class="htool-card" data-cat="correo"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📧</div><div><div class="htool-name">Movizzon</div><div class="tag-mail-badge">Correo</div></div></div><div class="htool-meta"><span class="htool-badge badge-mail">Correo electrónico</span></div><div class="htool-note">Reporte vía correo electrónico</div></div>
+      <div class="htool-card" data-cat="correo"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📧</div><div><div class="htool-name">Sara</div><div class="tag-mail-badge">Correo</div></div></div><div class="htool-meta"><span class="htool-badge badge-mail">Correo electrónico</span></div><div class="htool-note">Reporte vía correo electrónico</div></div>
+    </div>
+    <div class="note-box" style="margin-top:20px">⚙️ <strong>Nota:</strong> Las credenciales marcadas como "Propio" corresponden al acceso personal de cada analista.</div>
+  </div>
 
-class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-auth">Requiere usuario</span></div><div
-class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(46,196,182,.15)">📊</div><div><div
-class="htool-name">Dynatrace Panamá</div><div
-class="tag-mon">Monitoreo</div></div></div><div class="htool-url"
-onclick="openUrl('https://fay24490.live.dynatrace.com/ui/problems?gtf=-30m&gf=all')">fay24
-490.live.dynatrace.com →</div><div class="htool-meta"><span class="htool-badge
-badge-web">Web</span><span class="htool-badge badge-auth">Requiere
-usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(46,196,182,.15)">📈</div><div><div
-class="htool-name">Newrelic</div><div class="tag-mon">Monitoreo</div></div></div><div
-class="htool-url"
-onclick="openUrl('https://one.newrelic.com/alerts?account=3040357')">one.newrelic.com
-→</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-auth">Requiere usuario</span></div><div
-class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(244,162,97,.15)">📉</div><div><div
-class="htool-name">Grafana</div><div class="tag-mon">Monitoreo</div></div></div><div
-class="htool-url"
-onclick="openUrl('https://davivienda.grafana.net/d/ma6ntwt/001-tablero-operativo-superapp?
-orgId=1&from=now-3h&to=now')">davivienda.grafana.net →</div><div
-class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-auth">Requiere usuario</span></div><div
-class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">s-grafanacgr@davivienda.com</span></div><div
-class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span
-class="htool-cred-val">AGvb{8`Ai#=</span></div></div><div class="htool-note">Ingresar en
-ventana sin correo logueado</div></div>
-<div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(244,162,97,.15)">🌐</div><div><div
-class="htool-name">Solarwinds</div><div
-class="tag-mon">Monitoreo</div></div></div><div class="htool-url"
-onclick="openUrl('https://solarwindsdav/Orion/SummaryView.aspx?ViewID=319')">solarwind
-sdav →</div><div class="htool-meta"><span class="htool-badge
-badge-web">Web</span><span class="htool-badge badge-auth">Requiere
 
-usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="monitoreo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(230,57,70,.15)">🚨</div><div><div
-class="htool-name">Victor Ops</div><div class="tag-mon">Monitoreo</div></div></div><div
-class="htool-url"
-onclick="openUrl('https://portal.victorops.com/ui/banco-davivienda/incidents')">portal.victoro
-ps.com →</div><div class="htool-meta"><span class="htool-badge
-badge-web">Web</span><span class="htool-badge badge-auth">Requiere
-usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="seguridad"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(230,57,70,.15)">🔐</div><div><div
-class="htool-name">Biocatch</div><div class="tag-seg">Seguridad</div></div></div><div
-class="htool-url"
-onclick="openUrl('https://p.datadoghq.com/sb/c9d66ae84-742be501c5c7c5550312f38ce473
-b09c')">p.datadoghq.com →</div><div class="htool-meta"><span class="htool-badge
-badge-web">Web</span><span class="htool-badge badge-noauth">Sin
-usuario</span></div></div>
-<div class="htool-card" data-cat="seguridad"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(230,57,70,.15)">️</div><div><div
-class="htool-name">Sade</div><div class="tag-seg">Seguridad</div></div></div><div
-class="htool-url"
-onclick="openUrl('http://sade.davivienda.com/Sade/Manager/login.jsp')">sade.davivienda.co
-m →</div><div class="htool-meta"><span class="htool-badge
-badge-web">Web</span><span class="htool-badge badge-auth">Requiere
-usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="seguridad"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(230,57,70,.15)">📹</div><div><div
-class="htool-name">Ctlog Grabadoras</div><div
-class="tag-seg">Seguridad</div></div></div><div class="htool-url"
-onclick="openUrl('https://ctlog.claro.davivienda.com/CTPlatformDashboard/Account/Login')"
->ctlog.claro.davivienda.com →</div><div class="htool-meta"><span class="htool-badge
-badge-web">Web</span><span class="htool-badge badge-auth">Requiere
-usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">monitoreoColombia</span></div><div class="htool-cred-row"><span
-class="htool-cred-label">Contraseña</span><span
-class="htool-cred-val">123@#]</span></div></div></div>
-<div class="htool-card" data-cat="storage"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(244,162,97,.15)">💾</div><div><div
-class="htool-name">Storage Fase 1</div><div
-class="tag-sto">Storage</div></div></div><div class="htool-url"
-onclick="openUrl('https://90.5.7.43/preloginmonitor/index.jsp')">90.5.7.43 →</div><div
 
-class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-noauth">Sin usuario</span></div></div>
-<div class="htool-card" data-cat="storage"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(244,162,97,.15)">💾</div><div><div
-class="htool-name">Storage Fase 2</div><div
-class="tag-sto">Storage</div></div></div><div class="htool-url"
-onclick="openUrl('https://90.5.4.92/preloginmonitor/index.jsp')">90.5.4.92 →</div><div
-class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-noauth">Sin usuario</span></div></div>
-<div class="htool-card" data-cat="storage"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(244,162,97,.15)">💾</div><div><div
-class="htool-name">Storage Contingencia</div><div
-class="tag-sto">Storage</div></div></div><div class="htool-url"
-onclick="openUrl('https://99.5.89.70/preloginmonitor/index.jsp')">99.5.89.70 →</div><div
-class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-noauth">Sin usuario</span></div></div>
-<div class="htool-card" data-cat="storage"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(244,162,97,.15)">️</div><div><div
-class="htool-name">NAS Medellín</div><div class="tag-sto">Storage</div></div></div><div
-class="htool-url"
-onclick="openUrl('https://nasmedellin.davivienda.loc/index.html')">nasmedellin.davivienda.lo
-c →</div><div class="htool-meta"><span class="htool-badge
-badge-web">Web</span><span class="htool-badge badge-auth">Requiere
-usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">monitoreo</span></div><div class="htool-cred-row"><span
-class="htool-cred-label">Contraseña</span><span
-class="htool-cred-val">M0n1t0r30*</span></div></div></div>
-<div class="htool-card" data-cat="storage"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(244,162,97,.15)">️</div><div><div
-class="htool-name">NAS Bogotá</div><div class="tag-sto">Storage</div></div></div><div
-class="htool-url"
-onclick="openUrl('https://nasbogota.davivienda.loc/index.html')">nasbogota.davivienda.loc
-→</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-auth">Requiere usuario</span></div><div
-class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">monitoreo</span></div><div class="htool-cred-row"><span
-class="htool-cred-label">Contraseña</span><span
-class="htool-cred-val">M0n1t0r30*</span></div></div></div>
-<div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(69,123,157,.15)">📱</div><div><div
-class="htool-name">KTC Aplicación</div><div
-class="tag-app-badge">Aplicación</div></div></div><div class="htool-url"
-onclick="openUrl('https://monktcapp.davivienda.loc')">monktcapp.davivienda.loc
-→</div><div class="htool-meta"><span class="htool-badge badge-app">App</span><span
-class="htool-badge badge-auth">Requiere usuario</span></div><div
-class="htool-creds"><div class="htool-cred-row"><span
 
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(69,123,157,.15)">📨</div><div><div
-class="htool-name">Masiv</div><div
-class="tag-app-badge">Aplicación</div></div></div><div class="htool-url"
-onclick="openUrl('https://frontend.masivapp.com/auth/login')">frontend.masivapp.com
-→</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span
-class="htool-badge badge-auth">Requiere usuario</span></div><div
-class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(69,123,157,.15)">️</div><div><div
-class="htool-name">Stratus</div><div
-class="tag-app-badge">Aplicación</div></div></div><div class="htool-meta"><span
-class="htool-badge badge-app">App</span><span class="htool-badge
-badge-auth">Requiere usuario</span></div><div class="htool-ip">IP:
-172.25.2.115</div><div class="htool-creds"><div class="htool-cred-row"><span
-class="htool-cred-label">Usuario</span><span
-class="htool-cred-val">Propio</span></div></div></div>
-<div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(69,123,157,.15)">⚙️</div><div><div
-class="htool-name">Postilion Medellín</div><div
-class="tag-app-badge">Aplicación</div></div></div><div class="htool-meta"><span
-class="htool-badge badge-app">App</span><span class="htool-badge badge-noauth">Sin
-usuario</span></div><div class="htool-ip">IP-RT1: 90.5.12.1:57205<br>DAAS:
-168.170.1.206:57201</div></div>
-<div class="htool-card" data-cat="aplicacion"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(69,123,157,.15)">⚙️</div><div><div
-class="htool-name">Postilion Bogotá</div><div
-class="tag-app-badge">Aplicación</div></div></div><div class="htool-meta"><span
-class="htool-badge badge-app">App</span><span class="htool-badge badge-noauth">Sin
-usuario</span></div><div class="htool-ip">IP-RT2: 90.5.12.2:57205<br>DAAS:
-168.170.1.207:57201</div></div>
-<div class="htool-card" data-cat="correo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(108,117,125,.12)">📧</div><div><div
-class="htool-name">Movizzon</div><div
-class="tag-mail-badge">Correo</div></div></div><div class="htool-meta"><span
-class="htool-badge badge-mail">Correo electrónico</span></div><div
-class="htool-note">Reporte vía correo electrónico</div></div>
-<div class="htool-card" data-cat="correo"><div class="htool-head"><div
-class="htool-icon" style="background:rgba(108,117,125,.12)">📧</div><div><div
-class="htool-name">Sara</div><div class="tag-mail-badge">Correo</div></div></div><div
-class="htool-meta"><span class="htool-badge badge-mail">Correo
-electrónico</span></div><div class="htool-note">Reporte vía correo electrónico</div></div>
-</div>
+  <!-- ══ TIMELINE ══ -->
+  <div class="page" id="page-timeline">
 
-<div class="note-box" style="margin-top:20px">⚙️ <strong>Nota:</strong> Las
-credenciales marcadas como "Propio" corresponden al acceso personal de cada
-analista.</div>
-</div>
-<!-- ══ TIMELINE ══ -->
-<div class="page" id="page-timeline">
-<!-- Panel lateral -->
-<div class="tl-sidebar">
-<div class="tl-sidebar-body">
-<!-- Cabecera incidente -->
-<div class="tl-card">
-<div class="tl-card-title">Cabecera del Incidente</div>
-<div class="tl-field"><label>Título</label><input type="text" id="tlIncTitle"
-placeholder="Ej: Caída Base de Datos" oninput="tlUpdateHeader()"></div>
-<div class="tl-field-row">
-<div class="tl-field"><label>No. Ticket</label><input type="text" id="tlIncNum"
-placeholder="INC-001" oninput="tlUpdateHeader()"></div>
-<div class="tl-field"><label>Fecha</label><input type="date" id="tlIncDate"
-oninput="tlUpdateHeader()"></div>
-</div>
-<div class="tl-field" style="margin-top:12px;">
-<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:var(--muted);font-weight:600;">
-<input type="checkbox" id="tlMultiDay" onchange="tlToggleMultiDay()" style="width:14px;height:14px;accent-color:var(--accent);">
-Habilitar línea de tiempo multidía
-</label>
-</div>
-</div>
-<!-- Formulario evento -->
-<div class="tl-card" id="tl-form-card">
-<div
-style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-<div class="tl-card-title" style="margin:0" id="tl-form-title">Nuevo Evento</div>
-<button id="tl-cancel-btn" class="tbtn"
-style="display:none;font-size:11px;padding:4px
-10px;color:var(--accent);border-color:var(--accent);"
-onclick="tlCancelEdit()">Cancelar</button>
-</div>
-<div class="tl-field" id="tl-event-date-field" style="display:none;"><label>Fecha del evento</label><input type="date" id="tlEvtDate"></div>
-<div class="tl-field-row">
-<div class="tl-field"><label>Hora</label><input type="time" id="tlTime"></div>
-<div class="tl-field"><label>Fase / Tipo</label>
-<select id="tlType">
-<optgroup label="Fases ITIL">
-<option value="purple">Inicio Evento</option>
-<option value="orange">Alerta</option>
-<option value="teal">Acknowledge</option>
-<option value="green">Recuperación</option>
-</optgroup>
-<optgroup label="Otras">
-<option value="indigo">Diagnóstico</option>
-<option value="rose">Reparación</option>
+    <!-- Panel lateral -->
+    <div class="tl-sidebar">
+      <div class="tl-sidebar-body">
 
-<option value="red">Falla Crítica</option>
-<option value="blue">Informativo</option>
-<option value="gray">Neutro</option>
-</optgroup>
-</select>
-</div>
-</div>
-<div class="tl-field"><label>Título corto</label><input type="text" id="tlTitle"
-placeholder="Ej: Latencia Detectada"></div>
-<div class="tl-field"><label>Descripción visual</label><textarea id="tlDesc" rows="2"
-placeholder="Resumen visible en la gráfica..."></textarea></div>
-<div class="tl-field"><label>Detalles técnicos</label><textarea id="tlExpl" rows="2"
-placeholder="Logs, errores, acciones..." style="background:#fffbeb;"></textarea></div>
-<button class="btn btn-primary"
-style="width:100%;justify-content:center;margin-top:6px;" onclick="tlAddEvent()"
-id="tl-add-btn">
-+ <span id="tl-btn-label">Agregar Evento</span>
-</button>
-</div>
-<!-- Lista eventos -->
-<div>
-<div
-style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-<span
-style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var
-(--muted);font-family:'DM Mono',monospace;">Eventos</span>
-<button class="tbtn" style="font-size:11px;padding:4px
-10px;color:var(--accent);border-color:var(--accent);" onclick="tlClearAll()">Limpiar
-todo</button>
-</div>
-<div id="tl-event-list">
-<div
-style="text-align:center;padding:20px;color:var(--muted);font-size:12px;opacity:.6;">Sin
-eventos registrados</div>
-</div>
+        <!-- Cabecera incidente -->
+        <div class="tl-card">
+          <div class="tl-card-title">Cabecera del Incidente</div>
+          <div class="tl-field"><label>Título</label><input type="text" id="tlIncTitle" placeholder="Ej: Caída Base de Datos" oninput="tlUpdateHeader()"></div>
+          <div class="tl-field-row">
+            <div class="tl-field"><label>No. Ticket</label><input type="text" id="tlIncNum" placeholder="INC-001" oninput="tlUpdateHeader()"></div>
+            <div class="tl-field"><label>Fecha</label><input type="date" id="tlIncDate" oninput="tlUpdateHeader()"></div>
+          </div>
+        </div>
 
-</div>
-</div><!-- /sidebar body -->
-</div><!-- /tl-sidebar -->
-<!-- Canvas -->
-<div class="tl-canvas-area">
-<div class="tl-toolbar">
-<button class="tbtn" onclick="tlToggleMode()">⇄ <span
-id="tl-mode-lbl">Cronológico</span></button>
-<div style="flex:1;"></div>
-<div
-style="display:flex;align-items:center;gap:8px;background:var(--surface2);padding:4px
-10px;border-radius:7px;font-size:12px;color:var(--muted);">
-🔍 <input type="range" min="0.4" max="1.2" step="0.05" value="0.78" id="tl-zoom"
-oninput="tlZoom(this.value)"
-style="width:80px;padding:0;border:none;background:transparent;box-shadow:none;">
-</div>
-<button class="tbtn" onclick="tlExportPNG()" title="Descargar PNG">🖼 PNG</button>
-<button class="tbtn tbtn-red" onclick="tlExportPPTX()">📊 PPTX</button>
-</div>
-<div class="tl-canvas-wrap">
-<div id="tl-preview">
-<!-- Header -->
-<div class="tl-head-area">
-<div>
-<div class="tl-main-title" id="tl-h-title">LÍNEA DE TIEMPO</div>
-<div class="tl-main-date" id="tl-h-date">Fecha: —</div>
-</div>
-<div class="tl-inc-box">
-<div class="tl-inc-label">Incidente ID</div>
-<div class="tl-inc-val" id="tl-h-inc">—</div>
-</div>
-</div>
-<!-- Track -->
-<div class="tl-track">
-<div class="tl-bar-wrap">
-<div class="tl-lbl-s">Inicio</div>
-<div class="tl-lbl-e">Fin</div>
-<div class="tl-bar"></div>
-</div>
-<div id="tl-items"></div>
-</div>
-<!-- Metrics -->
-<div class="tl-metrics">
+        <!-- Formulario evento -->
+        <div class="tl-card" id="tl-form-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div class="tl-card-title" style="margin:0" id="tl-form-title">Nuevo Evento</div>
+            <button id="tl-cancel-btn" class="tbtn" style="display:none;font-size:11px;padding:4px 10px;color:var(--accent);border-color:var(--accent);" onclick="tlCancelEdit()">Cancelar</button>
+          </div>
+          <div class="tl-field-row">
+            <div class="tl-field"><label>Hora</label><input type="time" id="tlTime"></div>
+            <div class="tl-field"><label>Fase / Tipo</label>
+              <select id="tlType">
+                <optgroup label="Fases ITIL">
+                  <option value="purple">Inicio Evento</option>
+                  <option value="orange">Alerta</option>
+                  <option value="teal">Acknowledge</option>
+                  <option value="green">Recuperación</option>
+                </optgroup>
+                <optgroup label="Otras">
+                  <option value="indigo">Diagnóstico</option>
+                  <option value="rose">Reparación</option>
+                  <option value="red">Falla Crítica</option>
+                  <option value="blue">Informativo</option>
+                  <option value="gray">Neutro</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+          <div class="tl-field"><label>Título corto</label><input type="text" id="tlTitle" placeholder="Ej: Latencia Detectada"></div>
+          <div class="tl-field"><label>Descripción visual</label><textarea id="tlDesc" rows="2" placeholder="Resumen visible en la gráfica..."></textarea></div>
+          <div class="tl-field"><label>Detalles técnicos</label><textarea id="tlExpl" rows="2" placeholder="Logs, errores, acciones..." style="background:#fffbeb;"></textarea></div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:6px;" onclick="tlAddEvent()" id="tl-add-btn">
+            ＋ <span id="tl-btn-label">Agregar Evento</span>
+          </button>
+        </div>
 
-<div class="met-item"><div class="met-label">MTTD — Detección</div><div
-class="met-val mv-p" id="m-mttd">--</div><div class="met-sub">min · Inicio →
-Alerta</div></div>
-<div class="met-sep"></div>
-<div class="met-item"><div class="met-label">MTTA — Acknowledge</div><div
-class="met-val mv-t" id="m-mtta">--</div><div class="met-sub">min · Alerta →
-Ack</div></div>
-<div class="met-sep"></div>
-<div class="met-item"><div class="met-label">MTTR — Recuperación</div><div
-class="met-val mv-g" id="m-mttr">--</div><div class="met-sub">min · Inicio →
-Recuperación</div></div>
-</div>
-</div>
-</div>
-</div>
-</div><!-- /page-timeline -->
-<!-- ══ ENTREGA TURNO MONITOREO ══ -->
-<div class="page" id="page-entrega-turno-mon">
-<div class="page-header"><h1>Entrega de Turno — Monitoreo</h1><p>Checklist
-operativo de validación de servicios y estado de plataformas.</p></div>
-<div class="card"><div class="card-title">Información del turno</div><div class="form-grid
-cols-3"><div class="form-group"><label class="form-label">Fecha <span
-class="required">*</span></label><input type="date" id="mon-fecha"></div><div
-class="form-group"><label class="form-label">Ingeniero Saliente <span
-class="required">*</span></label><input type="text" id="mon-saliente"
-placeholder="Nombre completo"></div><div class="form-group"><label
-class="form-label">Ingeniero Entrante <span class="required">*</span></label><input
-type="text" id="mon-entrante" placeholder="Nombre completo"></div></div></div>
-<div class="card"><div class="card-title">Canales Externos</div><div
-class="form-section"><div class="form-section-title">📊 Estatus Redebán</div><div
-class="form-group"><label class="form-label">Estado</label><select
-id="mon-redeban-status"><option value="OK">✅ Operacional</option><option
-value="FAIL">❌ Falla / Degradado</option></select></div><div class="form-group"
-style="margin-top:10px"><label class="form-label">Observaciones</label><textarea
-id="mon-obs-redeban" placeholder="Detalle..."></textarea></div></div><div
-class="form-section"><div class="form-section-title">💳 INS Credibanco</div><div
-class="form-group"><label class="form-label">Estado</label><select
-id="mon-credibanco-status"><option value="OK">✅ Operacional</option><option
-value="FAIL">❌ Falla / Degradado</option></select></div><div class="form-group"
-style="margin-top:10px"><label class="form-label">Observaciones</label><textarea
-id="mon-obs-credibanco" placeholder="Detalle..."></textarea></div></div></div>
-<div class="card"><div class="card-title">Monitoreo Dynatrace / Newrelic</div><div
-class="form-grid cols-2"><div class="form-group"><label class="form-label"><a
-href="https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/3c0dd
-a57-9165-4bf5-a164-a7f93848aaae" target="_blank"
-style="color:inherit;text-decoration:none">Passwordless / Login 🔗</a></label><select
+        <!-- Drive Upload — URL estática en código -->
+        <div class="drive-box">
+          <div class="drive-box-title">☁️ Subir a Google Drive</div>
+          <p style="font-size:11px;color:#155e38;margin-bottom:10px;line-height:1.5;">Captura el canvas y lo sube automáticamente a la carpeta de incidentes en Drive.</p>
+          <button class="btn btn-success" style="width:100%;justify-content:center;" onclick="tlExportAndUploadDrive()">
+            ☁️ Exportar PNG y Subir a Drive
+          </button>
+          <div class="drive-status" id="tl-drive-status"></div>
+        </div>
 
-id="mon-dyn-passwordless"><option value="OK">✅ Operacional</option><option
-value="FAIL">❌ Falla</option></select><textarea id="mon-dyn-passwordless-det"
-placeholder="Detalle..."></textarea></div><div class="form-group"><label
-class="form-label"><a
-href="https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/afabb
-302-1469-4de6-81bd-6fdb802f1b7d" target="_blank"
-style="color:inherit;text-decoration:none">Pagos QR Interoperable 🔗</a></label><select
-id="mon-dyn-qr"><option value="OK">✅ Operacional</option><option value="FAIL">❌
-Falla</option></select><textarea id="mon-dyn-qr-det"
-placeholder="Detalle..."></textarea></div><div class="form-group"><label
-class="form-label"><a
-href="https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/938a
-ba25-efc0-45d6-beb6-d3a6df0b475e" target="_blank"
-style="color:inherit;text-decoration:none">Transferencia Daviplata 🔗</a></label><select
-id="mon-dyn-daviplata"><option value="OK">✅ Operacional</option><option
-value="FAIL">❌ Falla</option></select><textarea id="mon-dyn-daviplata-det"
-placeholder="Detalle..."></textarea></div><div class="form-group"><label
-class="form-label"><a
-href="https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/029c9
-d16-8621-45f5-841e-c5dfaadfce5a" target="_blank"
-style="color:inherit;text-decoration:none">Gateway MSTX 🔗</a></label><select
-id="mon-dyn-mstx"><option value="OK">✅ Operacional</option><option value="FAIL">❌
-Falla</option></select><textarea id="mon-dyn-mstx-det"
-placeholder="Detalle..."></textarea></div><div class="form-group"><label
-class="form-label">PRAD</label><select id="mon-dyn-prad"><option value="OK">✅
-Operacional</option><option value="FAIL">❌ Falla</option></select><textarea
-id="mon-dyn-prad-det" placeholder="Detalle..."></textarea></div><div
-class="form-group"><label class="form-label">BreB</label><select
-id="mon-dyn-breb"><option value="OK">✅ Operacional</option><option value="FAIL">❌
-Falla</option></select><textarea id="mon-dyn-breb-det"
-placeholder="Detalle..."></textarea></div><div class="form-group"><label
-class="form-label">SRE — PSE (Últimos 3 cortes)</label><input type="text"
-id="mon-dyn-pse" placeholder="Ej: 15%, 16%, 15%"><textarea id="mon-dyn-pse-det"
-placeholder="Detalle..."></textarea></div><div class="form-group"><label
-class="form-label">Alertas Dynatrace</label><select id="mon-dyn-alertas"><option
-value="OK">✅ Sin alertas</option><option value="FAIL">❌ Alertas
-activas</option></select><textarea id="mon-dyn-alertas-det"
-placeholder="Detalle..."></textarea></div></div></div>
-<div class="card"><div class="card-title">Torre de Control — Grafana</div><div
-class="form-grid cols-2"><div class="form-group"><label class="form-label">Tablero
-Operativo Davicom</label><select id="mon-graf-davicom"><option value="OK">✅
-Operacional</option><option value="FAIL">❌ Falla</option></select><textarea
-id="mon-graf-davicom-det" placeholder="Detalle..."></textarea></div><div
-class="form-group"><label class="form-label">Tablero Portal Corporativo</label><select
-id="mon-graf-corporativo"><option value="OK">✅ Operacional</option><option
-value="FAIL">❌ Falla</option></select><textarea id="mon-graf-corporativo-det"
-placeholder="Detalle..."></textarea></div><div class="form-group"><label
-class="form-label">Tablero Portal Empresarial</label><select
+        <!-- Lista eventos -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;">Eventos</span>
+            <button class="tbtn" style="font-size:11px;padding:4px 10px;color:var(--accent);border-color:var(--accent);" onclick="tlClearAll()">Limpiar todo</button>
+          </div>
+          <div id="tl-event-list">
+            <div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;opacity:.6;">Sin eventos registrados</div>
+          </div>
+        </div>
 
-id="mon-graf-empresarial"><option value="OK">✅ Operacional</option><option
-value="FAIL">❌ Falla</option></select></div><div class="form-group"><label
-class="form-label">Exp. Digital Login PYME</label><select id="mon-graf-pyme"><option
-value="OK">✅ Operacional</option><option value="FAIL">❌
-Falla</option></select></div><div class="form-group"><label class="form-label">Exp. Digital
-Login SUPERAPP</label><select id="mon-graf-superapp"><option value="OK">✅
-Operacional</option><option value="FAIL">❌ Falla</option></select></div></div></div>
-<div class="card"><div class="card-title">Infraestructura & Seguridad</div><div
-class="form-grid cols-2"><div class="form-section"><div class="form-section-title">️
-Canales e Infra</div><div class="form-group"><label class="form-label">Colas Stratus
-PRD</label><select id="mon-stratus"><option value="OK">✅ Operacional</option><option
-value="FAIL">❌ Falla</option></select><textarea id="mon-stratus-det"
-placeholder="Observaciones..."></textarea></div><div class="form-group"
-style="margin-top:12px"><label class="form-label">Postilion — CGR</label><select
-id="mon-postilion"><option value="OK">✅ Operacional</option><option value="FAIL">❌
-Falla</option></select></div><div class="form-group" style="margin-top:12px"><label
-class="form-label">H2H</label><select id="mon-h2h"><option value="OK">✅
-Operacional</option><option value="FAIL">❌ Falla</option></select></div></div><div
-class="form-section"><div class="form-section-title">🔐 Seguridad</div><div
-class="form-group"><label class="form-label">Biocatch</label><select
-id="mon-biocatch"><option value="OK">✅ OK</option><option value="FAIL">❌
-Falla</option></select></div><div class="form-group" style="margin-top:12px"><label
-class="form-label">SADE</label><select id="mon-sade"><option value="OK">✅
-OK</option><option value="FAIL">❌ Falla</option></select></div></div></div></div>
-<div class="card"><div class="card-title">Incidentes & Observaciones Finales</div><div
-class="form-group"><label class="form-label">Incidentes Críticos Activos</label><textarea
-id="mon-incidentes" style="min-height:100px" placeholder="Ej: INC-99283 - Degradación en
-canal transaccional..."></textarea></div><div class="form-group"
-style="margin-top:15px"><label class="form-label">Gestiones en Curso
-(CTASK)</label><textarea id="mon-ctask" placeholder="Pendientes para el siguiente
-turno..."></textarea></div><div class="note-box">⚠️ Antes de enviar, asegúrese de haber
-finalizado la grabación en Meet.</div></div>
-<div class="btn-group"><button class="btn btn-primary" onclick="enviarTurnoMon()">📤
-Enviar Resumen de Entrega</button><button class="btn btn-secondary"
-onclick="showPage('dashboard')">Cancelar</button></div>
-</div>
-<!-- ══ ENTREGA TURNO APLICACIONES ══ -->
-<div class="page" id="page-entrega-turno-app">
-<div class="page-header"><h1>Entrega de Turno — Mesa de
-Aplicaciones</h1><p>Resumen operativo del estado de la mesa y gestión del
-turno.</p></div>
-<div class="card"><div class="card-title">Información del turno</div><div class="form-grid
-cols-3"><div class="form-group"><label class="form-label">Fecha <span
-class="required">*</span></label><input type="date" id="app-fecha"></div><div
-class="form-group"><label class="form-label">Ingeniero Saliente <span
-class="required">*</span></label><input type="text" id="app-saliente" placeholder="Nombre
-completo"></div><div class="form-group"><label class="form-label">Ingeniero Entrante
+      </div><!-- /sidebar body -->
+    </div><!-- /tl-sidebar -->
 
-<span class="required">*</span></label><input type="text" id="app-entrante"
-placeholder="Nombre completo"></div></div></div>
-<div class="card"><div class="card-title">Backlog Mesa</div><div
-class="form-group"><textarea id="app-backlog" placeholder="Cantidad total + seguimiento
-(SI/NO)"></textarea></div></div>
-<div class="card"><div class="card-title">Incidentes Pendientes / Meets</div><div
-class="form-group"><textarea id="app-incidentes" placeholder="Incidentes, meets activas,
-protocolos..."></textarea></div></div>
-<div class="card"><div class="card-title">Incidentes Prioridad Alta / Crítica</div><div
-class="form-group"><textarea id="app-altos" placeholder="#INC - descripción -
-estado"></textarea></div></div>
-<div class="card"><div class="card-title">Archivo de Cambios</div><div
-class="form-group"><select id="app-cambios"><option
-value="">Seleccione...</option><option>No aplica (06:00 - 14:00)</option><option>Archivo
-actualizado (14:00 - 21:00)</option><option>Certificación de cambios (21:00 -
-06:00)</option></select></div></div>
-<div class="card"><div class="card-title">Líneas de Tiempo</div><div
-class="form-group"><textarea id="app-linea-tiempo" placeholder="Estado, responsable,
-links..."></textarea></div></div>
-<div class="card"><div class="card-title">Mesas Operativas</div><div
-class="form-group"><label class="form-label">Mesa Oficinas</label><textarea
-id="app-oficinas"></textarea></div><div class="form-group" style="margin-top:12px"><label
-class="form-label">Mesa Cash</label><textarea id="app-cash"></textarea></div><div
-class="form-group" style="margin-top:12px"><label class="form-label">Mesa
-SWAT</label><textarea id="app-swat"></textarea></div></div>
-<div class="card"><div class="card-title">Observaciones</div><div
-class="form-group"><textarea id="app-obs" placeholder="Gestión pendiente, novedades..."
-style="min-height:100px"></textarea></div></div>
-<div class="btn-group"><button class="btn btn-primary"
-onclick="enviarTurnoAplicaciones()">📤 Enviar</button><button class="btn btn-secondary"
-onclick="limpiarApp()">️ Limpiar</button></div>
-</div>
-<!-- ══ VALIDACIÓN DE CAMBIOS ══ -->
-<div class="page" id="page-validacion-cambios">
-<div class="page-header"><h1>Certificación de Cambios</h1><p>Registro y validación
-de cambios finalizados en producción — ITIL</p></div>
-<div class="card"><div class="card-title">Información General</div><div class="form-grid
-cols-2"><div class="form-group"><label class="form-label">ID del Cambio <span
-class="required">*</span></label><input type="text" id="vc-cambio"
-placeholder="CHG0000000"></div><div class="form-group"><label class="form-label">CI /
-Aplicación <span class="required">*</span></label><input type="text" id="vc-ci"
-placeholder="Nombre del CI o aplicación"></div></div></div>
-<div class="card"><div class="card-title">Checklist de Certificación</div>
-<div class="vc-section"><div class="vc-section-title">🔧 Validación Técnica</div><div
-class="check-row"><span class="check-row-label">¿Actividades ejecutadas según plan
-aprobado?</span><div style="display:flex;align-items:center;gap:16px"><div
-class="radio-group"><label class="radio-label"><input type="radio" name="vt1" value="SI"
+    <!-- Canvas -->
+    <div class="tl-canvas-area">
+      <div class="tl-toolbar">
+        <button class="tbtn" onclick="tlToggleMode()">⇄ <span id="tl-mode-lbl">Cronológico</span></button>
+        <div style="flex:1;"></div>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--surface2);padding:4px 10px;border-radius:7px;font-size:12px;color:var(--muted);">
+          🔍 <input type="range" min="0.4" max="1.2" step="0.05" value="0.78" id="tl-zoom" oninput="tlZoom(this.value)" style="width:80px;padding:0;border:none;background:transparent;box-shadow:none;">
+        </div>
+        <button class="tbtn" onclick="tlExportPNG()" title="Descargar PNG">🖼 PNG</button>
+        <button class="tbtn tbtn-red" onclick="tlExportPPTX()">📊 PPTX</button>
+      </div>
 
-onchange="actualizarEstado('vt1')"> SI</label><label class="radio-label"><input
-type="radio" name="vt1" value="NO" onchange="actualizarEstado('vt1')">
-NO</label></div><span id="badge-vt1" class="estado-badge
-estado-empty">—</span></div></div><div class="check-row"><span
-class="check-row-label">¿Tareas pendientes o desviaciones críticas?</span><div
-style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label
-class="radio-label"><input type="radio" name="vt2" value="SI"
-onchange="actualizarEstado('vt2')"> SI</label><label class="radio-label"><input
-type="radio" name="vt2" value="NO" onchange="actualizarEstado('vt2')">
-NO</label></div><span id="badge-vt2" class="estado-badge
-estado-empty">—</span></div></div></div>
-<div class="vc-section"><div class="vc-section-title">📡 Monitoreo</div><div
-class="check-row"><span class="check-row-label">¿Alarmas activas?</span><div
-style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label
-class="radio-label"><input type="radio" name="m1" value="SI"
-onchange="actualizarEstado('m1')"> SI</label><label class="radio-label"><input
-type="radio" name="m1" value="NO" onchange="actualizarEstado('m1')">
-NO</label></div><span id="badge-m1" class="estado-badge
-estado-empty">—</span></div></div><div class="check-row"><span
-class="check-row-label">¿Integraciones y dependencias funcionando?</span><div
-style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label
-class="radio-label"><input type="radio" name="m2" value="SI"
-onchange="actualizarEstado('m2')"> SI</label><label class="radio-label"><input
-type="radio" name="m2" value="NO" onchange="actualizarEstado('m2')">
-NO</label></div><span id="badge-m2" class="estado-badge
-estado-empty">—</span></div></div></div>
-<div class="vc-section"><div class="vc-section-title">💼 Impacto al Negocio</div><div
-class="check-row"><span class="check-row-label">¿Sin incidentes asociados al
-cambio?</span><div style="display:flex;align-items:center;gap:16px"><div
-class="radio-group"><label class="radio-label"><input type="radio" name="i1" value="SI"
-onchange="actualizarEstado('i1')"> SI</label><label class="radio-label"><input type="radio"
-name="i1" value="NO" onchange="actualizarEstado('i1')"> NO</label></div><span
-id="badge-i1" class="estado-badge estado-empty">—</span></div></div><div
-class="check-row"><span class="check-row-label">¿Usuarios o áreas
-validadas?</span><div style="display:flex;align-items:center;gap:16px"><div
-class="radio-group"><label class="radio-label"><input type="radio" name="i2" value="SI"
-onchange="actualizarEstado('i2')"> SI</label><label class="radio-label"><input type="radio"
-name="i2" value="NO" onchange="actualizarEstado('i2')"> NO</label></div><span
-id="badge-i2" class="estado-badge estado-empty">—</span></div></div><div
-class="check-row"><span class="check-row-label">¿Servicio restablecido
-correctamente?</span><div style="display:flex;align-items:center;gap:16px"><div
-class="radio-group"><label class="radio-label"><input type="radio" name="i3" value="SI"
-onchange="actualizarEstado('i3')"> SI</label><label class="radio-label"><input type="radio"
-name="i3" value="NO" onchange="actualizarEstado('i3')"> NO</label></div><span
-id="badge-i3" class="estado-badge estado-empty">—</span></div></div></div>
-<div class="vc-section"><div class="vc-section-title">🟢 Validación del
-Servicio</div><div class="check-row"><span class="check-row-label">¿Servicio operativo y
-estable?</span><div style="display:flex;align-items:center;gap:16px"><div
+      <div class="tl-canvas-wrap">
+        <div id="tl-preview">
+          <!-- Header -->
+          <div class="tl-head-area">
+            <div>
+              <div class="tl-main-title" id="tl-h-title">LÍNEA DE TIEMPO</div>
+              <div class="tl-main-date"  id="tl-h-date">Fecha: —</div>
+            </div>
+            <div class="tl-inc-box">
+              <div class="tl-inc-label">Incidente ID</div>
+              <div class="tl-inc-val" id="tl-h-inc">—</div>
+            </div>
+          </div>
+          <!-- Track -->
+          <div class="tl-track">
+            <div class="tl-bar-wrap">
+              <div class="tl-lbl-s">Inicio</div>
+              <div class="tl-lbl-e">Fin</div>
+              <div class="tl-bar"></div>
+            </div>
+            <div id="tl-items"></div>
+          </div>
+          <!-- Metrics -->
+          <div class="tl-metrics">
+            <div class="met-item"><div class="met-label">MTTD — Detección</div><div class="met-val mv-p" id="m-mttd">--</div><div class="met-sub">min · Inicio → Alerta</div></div>
+            <div class="met-sep"></div>
+            <div class="met-item"><div class="met-label">MTTA — Acknowledge</div><div class="met-val mv-t" id="m-mtta">--</div><div class="met-sub">min · Alerta → Ack</div></div>
+            <div class="met-sep"></div>
+            <div class="met-item"><div class="met-label">MTTR — Recuperación</div><div class="met-val mv-g" id="m-mttr">--</div><div class="met-sub">min · Inicio → Recuperación</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-class="radio-group"><label class="radio-label"><input type="radio" name="v1" value="SI"
-onchange="actualizarEstado('v1')"> SI</label><label class="radio-label"><input type="radio"
-name="v1" value="NO" onchange="actualizarEstado('v1')"> NO</label></div><span
-id="badge-v1" class="estado-badge estado-empty">—</span></div></div><div
-class="check-row"><span class="check-row-label">¿Pruebas funcionales
-exitosas?</span><div style="display:flex;align-items:center;gap:16px"><div
-class="radio-group"><label class="radio-label"><input type="radio" name="v2" value="SI"
-onchange="actualizarEstado('v2')"> SI</label><label class="radio-label"><input type="radio"
-name="v2" value="NO" onchange="actualizarEstado('v2')"> NO</label></div><span
-id="badge-v2" class="estado-badge estado-empty">—</span></div></div><div
-class="check-row"><span class="check-row-label">¿Sin alertas en monitoreo?</span><div
-style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label
-class="radio-label"><input type="radio" name="v3" value="SI"
-onchange="actualizarEstado('v3')"> SI</label><label class="radio-label"><input type="radio"
-name="v3" value="NO" onchange="actualizarEstado('v3')"> NO</label></div><span
-id="badge-v3" class="estado-badge estado-empty">—</span></div></div></div>
-</div>
-<div class="card"><div class="card-title">Responsables</div><div
-class="responsable-grid"><div class="form-group"><label class="form-label">Dueño del
-Servicio <span class="required">*</span></label><input type="text" id="vc-dueno"
-placeholder="Nombre / equipo"></div><div class="form-group"><label
-class="form-label">Torre de Control</label><input type="text" id="vc-torre"
-placeholder="Nombre del analista"></div><div class="form-group"><label
-class="form-label">Líder Técnico <span class="required">*</span></label><input
-type="text" id="vc-lider" placeholder="Nombre del líder"></div></div><div class="note-box"
-style="margin-top:16px">📄 <strong>Nota:</strong> Documento de certificación Arus by
-IBM. Completar respetando el contenido y formato original.</div></div>
-<div class="btn-group"><button class="btn btn-primary" onclick="enviarCertificacion()">📤
-Enviar Certificación al Chat</button><button class="btn btn-secondary"
-onclick="limpiarCertificacion()">️ Limpiar</button></div>
-</div>
+  </div><!-- /page-timeline -->
+
+  <!-- ══ ENTREGA TURNO MONITOREO ══ -->
+  <div class="page" id="page-entrega-turno-mon">
+    <div class="page-header"><h1>Entrega de Turno — Monitoreo</h1><p>Checklist operativo de validación de servicios y estado de plataformas.</p></div>
+    <div class="card"><div class="card-title">Información del turno</div><div class="form-grid cols-3"><div class="form-group"><label class="form-label">Fecha <span class="required">*</span></label><input type="date" id="mon-fecha"></div><div class="form-group"><label class="form-label">Ingeniero Saliente <span class="required">*</span></label><input type="text" id="mon-saliente" placeholder="Nombre completo"></div><div class="form-group"><label class="form-label">Ingeniero Entrante <span class="required">*</span></label><input type="text" id="mon-entrante" placeholder="Nombre completo"></div></div></div>
+    <div class="card"><div class="card-title">Canales Externos</div><div class="form-section"><div class="form-section-title">📊 Estatus Redebán</div><div class="form-group"><label class="form-label">Estado</label><select id="mon-redeban-status"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla / Degradado</option></select></div><div class="form-group" style="margin-top:10px"><label class="form-label">Observaciones</label><textarea id="mon-obs-redeban" placeholder="Detalle..."></textarea></div></div><div class="form-section"><div class="form-section-title">💳 INS Credibanco</div><div class="form-group"><label class="form-label">Estado</label><select id="mon-credibanco-status"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla / Degradado</option></select></div><div class="form-group" style="margin-top:10px"><label class="form-label">Observaciones</label><textarea id="mon-obs-credibanco" placeholder="Detalle..."></textarea></div></div></div>
+    <div class="card"><div class="card-title">Monitoreo Dynatrace / Newrelic</div><div class="form-grid cols-2"><div class="form-group"><label class="form-label"><a href="https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/3c0dda57-9165-4bf5-a164-a7f93848aaae" target="_blank" style="color:inherit;text-decoration:none">Passwordless / Login 🔗</a></label><select id="mon-dyn-passwordless"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-dyn-passwordless-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label"><a href="https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/afabb302-1469-4de6-81bd-6fdb802f1b7d" target="_blank" style="color:inherit;text-decoration:none">Pagos QR Interoperable 🔗</a></label><select id="mon-dyn-qr"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-dyn-qr-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label"><a href="https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/938aba25-efc0-45d6-beb6-d3a6df0b475e" target="_blank" style="color:inherit;text-decoration:none">Transferencia Daviplata 🔗</a></label><select id="mon-dyn-daviplata"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-dyn-daviplata-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label"><a href="https://esd62814.apps.dynatrace.com/ui/apps/dynatrace.dashboards/dashboard/029c9d16-8621-45f5-841e-c5dfaadfce5a" target="_blank" style="color:inherit;text-decoration:none">Gateway MSTX 🔗</a></label><select id="mon-dyn-mstx"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-dyn-mstx-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label">PRAD</label><select id="mon-dyn-prad"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-dyn-prad-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label">BreB</label><select id="mon-dyn-breb"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-dyn-breb-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label">SRE — PSE (Últimos 3 cortes)</label><input type="text" id="mon-dyn-pse" placeholder="Ej: 15%, 16%, 15%"><textarea id="mon-dyn-pse-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label">Alertas Dynatrace</label><select id="mon-dyn-alertas"><option value="OK">✅ Sin alertas</option><option value="FAIL">❌ Alertas activas</option></select><textarea id="mon-dyn-alertas-det" placeholder="Detalle..."></textarea></div></div></div>
+    <div class="card"><div class="card-title">Torre de Control — Grafana</div><div class="form-grid cols-2"><div class="form-group"><label class="form-label">Tablero Operativo Davicom</label><select id="mon-graf-davicom"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-graf-davicom-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label">Tablero Portal Corporativo</label><select id="mon-graf-corporativo"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-graf-corporativo-det" placeholder="Detalle..."></textarea></div><div class="form-group"><label class="form-label">Tablero Portal Empresarial</label><select id="mon-graf-empresarial"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select></div><div class="form-group"><label class="form-label">Exp. Digital Login PYME</label><select id="mon-graf-pyme"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select></div><div class="form-group"><label class="form-label">Exp. Digital Login SUPERAPP</label><select id="mon-graf-superapp"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select></div></div></div>
+    <div class="card"><div class="card-title">Infraestructura & Seguridad</div><div class="form-grid cols-2"><div class="form-section"><div class="form-section-title">🖥️ Canales e Infra</div><div class="form-group"><label class="form-label">Colas Stratus PRD</label><select id="mon-stratus"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select><textarea id="mon-stratus-det" placeholder="Observaciones..."></textarea></div><div class="form-group" style="margin-top:12px"><label class="form-label">Postilion — CGR</label><select id="mon-postilion"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select></div><div class="form-group" style="margin-top:12px"><label class="form-label">H2H</label><select id="mon-h2h"><option value="OK">✅ Operacional</option><option value="FAIL">❌ Falla</option></select></div></div><div class="form-section"><div class="form-section-title">🔐 Seguridad</div><div class="form-group"><label class="form-label">Biocatch</label><select id="mon-biocatch"><option value="OK">✅ OK</option><option value="FAIL">❌ Falla</option></select></div><div class="form-group" style="margin-top:12px"><label class="form-label">SADE</label><select id="mon-sade"><option value="OK">✅ OK</option><option value="FAIL">❌ Falla</option></select></div></div></div></div>
+    <div class="card"><div class="card-title">Incidentes & Observaciones Finales</div><div class="form-group"><label class="form-label">Incidentes Críticos Activos</label><textarea id="mon-incidentes" style="min-height:100px" placeholder="Ej: INC-99283 - Degradación en canal transaccional..."></textarea></div><div class="form-group" style="margin-top:15px"><label class="form-label">Gestiones en Curso (CTASK)</label><textarea id="mon-ctask" placeholder="Pendientes para el siguiente turno..."></textarea></div><div class="note-box">⚠️ Antes de enviar, asegúrese de haber finalizado la grabación en Meet.</div></div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="enviarTurnoMon()">📤 Enviar Resumen de Entrega</button><button class="btn btn-secondary" onclick="showPage('dashboard')">Cancelar</button></div>
+  </div>
+
+  <!-- ══ ENTREGA TURNO APLICACIONES ══ -->
+  <div class="page" id="page-entrega-turno-app">
+    <div class="page-header"><h1>Entrega de Turno — Mesa de Aplicaciones</h1><p>Resumen operativo del estado de la mesa y gestión del turno.</p></div>
+    <div class="card"><div class="card-title">Información del turno</div><div class="form-grid cols-3"><div class="form-group"><label class="form-label">Fecha <span class="required">*</span></label><input type="date" id="app-fecha"></div><div class="form-group"><label class="form-label">Ingeniero Saliente <span class="required">*</span></label><input type="text" id="app-saliente" placeholder="Nombre completo"></div><div class="form-group"><label class="form-label">Ingeniero Entrante <span class="required">*</span></label><input type="text" id="app-entrante" placeholder="Nombre completo"></div></div></div>
+    <div class="card"><div class="card-title">Backlog Mesa</div><div class="form-group"><textarea id="app-backlog" placeholder="Cantidad total + seguimiento (SI/NO)"></textarea></div></div>
+    <div class="card"><div class="card-title">Incidentes Pendientes / Meets</div><div class="form-group"><textarea id="app-incidentes" placeholder="Incidentes, meets activas, protocolos..."></textarea></div></div>
+    <div class="card"><div class="card-title">Incidentes Prioridad Alta / Crítica</div><div class="form-group"><textarea id="app-altos" placeholder="#INC - descripción - estado"></textarea></div></div>
+    <div class="card"><div class="card-title">Archivo de Cambios</div><div class="form-group"><select id="app-cambios"><option value="">Seleccione...</option><option>No aplica (06:00 - 14:00)</option><option>Archivo actualizado (14:00 - 21:00)</option><option>Certificación de cambios (21:00 - 06:00)</option></select></div></div>
+    <div class="card"><div class="card-title">Líneas de Tiempo</div><div class="form-group"><textarea id="app-linea-tiempo" placeholder="Estado, responsable, links..."></textarea></div></div>
+    <div class="card"><div class="card-title">Mesas Operativas</div><div class="form-group"><label class="form-label">Mesa Oficinas</label><textarea id="app-oficinas"></textarea></div><div class="form-group" style="margin-top:12px"><label class="form-label">Mesa Cash</label><textarea id="app-cash"></textarea></div><div class="form-group" style="margin-top:12px"><label class="form-label">Mesa SWAT</label><textarea id="app-swat"></textarea></div></div>
+    <div class="card"><div class="card-title">Observaciones</div><div class="form-group"><textarea id="app-obs" placeholder="Gestión pendiente, novedades..." style="min-height:100px"></textarea></div></div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="enviarTurnoAplicaciones()">📤 Enviar</button><button class="btn btn-secondary" onclick="limpiarApp()">🗑️ Limpiar</button></div>
+  </div>
+
+  <!-- ══ VALIDACIÓN DE CAMBIOS ══ -->
+  <div class="page" id="page-validacion-cambios">
+    <div class="page-header"><h1>Certificación de Cambios</h1><p>Registro y validación de cambios finalizados en producción — ITIL</p></div>
+    <div class="card"><div class="card-title">Información General</div><div class="form-grid cols-2"><div class="form-group"><label class="form-label">ID del Cambio <span class="required">*</span></label><input type="text" id="vc-cambio" placeholder="CHG0000000"></div><div class="form-group"><label class="form-label">CI / Aplicación <span class="required">*</span></label><input type="text" id="vc-ci" placeholder="Nombre del CI o aplicación"></div></div></div>
+    <div class="card"><div class="card-title">Checklist de Certificación</div>
+      <div class="vc-section"><div class="vc-section-title">🔧 Validación Técnica</div><div class="check-row"><span class="check-row-label">¿Actividades ejecutadas según plan aprobado?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="vt1" value="SI" onchange="actualizarEstado('vt1')"> SI</label><label class="radio-label"><input type="radio" name="vt1" value="NO" onchange="actualizarEstado('vt1')"> NO</label></div><span id="badge-vt1" class="estado-badge estado-empty">—</span></div></div><div class="check-row"><span class="check-row-label">¿Tareas pendientes o desviaciones críticas?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="vt2" value="SI" onchange="actualizarEstado('vt2')"> SI</label><label class="radio-label"><input type="radio" name="vt2" value="NO" onchange="actualizarEstado('vt2')"> NO</label></div><span id="badge-vt2" class="estado-badge estado-empty">—</span></div></div></div>
+      <div class="vc-section"><div class="vc-section-title">📡 Monitoreo</div><div class="check-row"><span class="check-row-label">¿Alarmas activas?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="m1" value="SI" onchange="actualizarEstado('m1')"> SI</label><label class="radio-label"><input type="radio" name="m1" value="NO" onchange="actualizarEstado('m1')"> NO</label></div><span id="badge-m1" class="estado-badge estado-empty">—</span></div></div><div class="check-row"><span class="check-row-label">¿Integraciones y dependencias funcionando?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="m2" value="SI" onchange="actualizarEstado('m2')"> SI</label><label class="radio-label"><input type="radio" name="m2" value="NO" onchange="actualizarEstado('m2')"> NO</label></div><span id="badge-m2" class="estado-badge estado-empty">—</span></div></div></div>
+      <div class="vc-section"><div class="vc-section-title">💼 Impacto al Negocio</div><div class="check-row"><span class="check-row-label">¿Sin incidentes asociados al cambio?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="i1" value="SI" onchange="actualizarEstado('i1')"> SI</label><label class="radio-label"><input type="radio" name="i1" value="NO" onchange="actualizarEstado('i1')"> NO</label></div><span id="badge-i1" class="estado-badge estado-empty">—</span></div></div><div class="check-row"><span class="check-row-label">¿Usuarios o áreas validadas?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="i2" value="SI" onchange="actualizarEstado('i2')"> SI</label><label class="radio-label"><input type="radio" name="i2" value="NO" onchange="actualizarEstado('i2')"> NO</label></div><span id="badge-i2" class="estado-badge estado-empty">—</span></div></div><div class="check-row"><span class="check-row-label">¿Servicio restablecido correctamente?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="i3" value="SI" onchange="actualizarEstado('i3')"> SI</label><label class="radio-label"><input type="radio" name="i3" value="NO" onchange="actualizarEstado('i3')"> NO</label></div><span id="badge-i3" class="estado-badge estado-empty">—</span></div></div></div>
+      <div class="vc-section"><div class="vc-section-title">🟢 Validación del Servicio</div><div class="check-row"><span class="check-row-label">¿Servicio operativo y estable?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="v1" value="SI" onchange="actualizarEstado('v1')"> SI</label><label class="radio-label"><input type="radio" name="v1" value="NO" onchange="actualizarEstado('v1')"> NO</label></div><span id="badge-v1" class="estado-badge estado-empty">—</span></div></div><div class="check-row"><span class="check-row-label">¿Pruebas funcionales exitosas?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="v2" value="SI" onchange="actualizarEstado('v2')"> SI</label><label class="radio-label"><input type="radio" name="v2" value="NO" onchange="actualizarEstado('v2')"> NO</label></div><span id="badge-v2" class="estado-badge estado-empty">—</span></div></div><div class="check-row"><span class="check-row-label">¿Sin alertas en monitoreo?</span><div style="display:flex;align-items:center;gap:16px"><div class="radio-group"><label class="radio-label"><input type="radio" name="v3" value="SI" onchange="actualizarEstado('v3')"> SI</label><label class="radio-label"><input type="radio" name="v3" value="NO" onchange="actualizarEstado('v3')"> NO</label></div><span id="badge-v3" class="estado-badge estado-empty">—</span></div></div></div>
+    </div>
+    <div class="card"><div class="card-title">Responsables</div><div class="responsable-grid"><div class="form-group"><label class="form-label">Dueño del Servicio <span class="required">*</span></label><input type="text" id="vc-dueno" placeholder="Nombre / equipo"></div><div class="form-group"><label class="form-label">Torre de Control</label><input type="text" id="vc-torre" placeholder="Nombre del analista"></div><div class="form-group"><label class="form-label">Líder Técnico <span class="required">*</span></label><input type="text" id="vc-lider" placeholder="Nombre del líder"></div></div><div class="note-box" style="margin-top:16px">📄 <strong>Nota:</strong> Documento de certificación Arus by IBM. Completar respetando el contenido y formato original.</div></div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="enviarCertificacion()">📤 Enviar Certificación al Chat</button><button class="btn btn-secondary" onclick="limpiarCertificacion()">🗑️ Limpiar</button></div>
+  </div>
+
 </div><!-- /main -->
 <div id="toast"></div>
+
 <!-- ════════════════════════════════════
-SCRIPTS
+     SCRIPTS
 ════════════════════════════════════ -->
 <script>
+// ─────────────────────────────────────
+// DRIVE CONFIG — URL ESTÁTICA EN CÓDIGO
+// Reemplaza estos valores con los tuyos:
+// ─────────────────────────────────────
+const DRIVE_ACCESS_TOKEN = 'REEMPLAZA_CON_TU_TOKEN_OAUTH2'; // ya29.A0ARr...
+const DRIVE_FOLDER_ID    = 'REEMPLAZA_CON_ID_DE_CARPETA';   // 1BxiMV...
 
+// ─────────────────────────────────────
 // WEBHOOKS GOOGLE CHAT
 // ─────────────────────────────────────
-const WH_CERT =
-'https://chat.googleapis.com/v1/spaces/AAQAU3eC4u0/messages?key=AIzaSyDdI0hCZtE6
-vySjMm-WEfRq3CPzqKqqsHI&token=7DiQ5qv_QuiG-wlxVexD2_v2LEwD-ArEcllS5YgmVzI';
-const WH_TURNO =
-'https://chat.googleapis.com/v1/spaces/AAQAhjVz23w/messages?key=AIzaSyDdI0hCZtE6v
-ySjMm-WEfRq3CPzqKqqsHI&token=rqpcS_Fk7jlZk9z4I3LoXR1FUvmZgNcODUEGdGq3-g
-M';
+const WH_CERT  = 'https://chat.googleapis.com/v1/spaces/AAQAU3eC4u0/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=7DiQ5qv_QuiG-wlxVexD2_v2LEwD-ArEcllS5YgmVzI';
+const WH_TURNO = 'https://chat.googleapis.com/v1/spaces/AAQAhjVz23w/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=rqpcS_Fk7jlZk9z4I3LoXR1FUvmZgNcODUEGdGq3-gM';
+
 // ── NAV ──
 function showPage(id) {
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-const page=document.getElementById('page-'+id);
-if(page) page.classList.add('active');
-const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de
-Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de
-Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios'};
-document.getElementById('topbar-title').textContent=titles[id]||id;
-document.querySelectorAll('.nav-item').forEach(btn=>{
-if((btn.getAttribute('onclick')||'').includes("'"+id+"'")) btn.classList.add('active');
-});
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  const page=document.getElementById('page-'+id);
+  if(page) page.classList.add('active');
+  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios'};
+  document.getElementById('topbar-title').textContent=titles[id]||id;
+  document.querySelectorAll('.nav-item').forEach(btn=>{
+    if((btn.getAttribute('onclick')||'').includes("'"+id+"'")) btn.classList.add('active');
+  });
 }
+
 // ── CLOCK ──
-function updClock(){const n=new
-Date();document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'
-+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');}
+function updClock(){const n=new Date();document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');}
 setInterval(updClock,1000);updClock();
+
 document.addEventListener('DOMContentLoaded',()=>{
-const today=new Date().toISOString().split('T')[0];
-document.querySelectorAll('input[type="date"]').forEach(f=>f.value=today);
-tlUpdateHeader();
+  const today=new Date().toISOString().split('T')[0];
+  document.querySelectorAll('input[type="date"]').forEach(f=>f.value=today);
+  tlUpdateHeader();
 });
+
 // ── TOAST ──
 function showToast(msg,type){
-const t=document.getElementById('toast');
-t.textContent=(type==='error'?'❌ ':'✅ ')+msg;
-t.style.background=type==='error'?'var(--accent)':type==='info'?'var(--accent2)':'var(--success
-)';
-t.style.color=(type==='error'||type==='info')?'#fff':'#0f1117';
-t.classList.add('show');
-clearTimeout(t._t);
-t._t=setTimeout(()=>t.classList.remove('show'),3500);
-
+  const t=document.getElementById('toast');
+  t.textContent=(type==='error'?'❌ ':'✅ ')+msg;
+  t.style.background=type==='error'?'var(--accent)':type==='info'?'var(--accent2)':'var(--success)';
+  t.style.color=(type==='error'||type==='info')?'#fff':'#0f1117';
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),3500);
 }
+
 // ── HELPERS FORMS ──
 const LINE='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
-function ic(val){if(!val)return'⬜ Sin respuesta';return val==='OK'?'✅ Operacional':'❌ Falla /
-Degradado';}
+function ic(val){if(!val)return'⬜ Sin respuesta';return val==='OK'?'✅ Operacional':'❌ Falla / Degradado';}
 function icSI(val){if(!val)return'⬜ Sin respuesta';return val==='SI'?'✅ SI':'❌ NO';}
 function iv(val){return(val&&val.trim()!=='')?val:'_Sin registrar_';}
 function g(id){var el=document.getElementById(id);return el?el.value:'';}
 function openUrl(url){window.open(url,'_blank');}
+
 function filtrarH(cat,btn){
-document.querySelectorAll('.htool-filter').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
-document.querySelectorAll('#htool-grid
-.htool-card').forEach(c=>{c.style.display=(cat==='todos'||c.dataset.cat===cat)?'':'none';});
+  document.querySelectorAll('.htool-filter').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#htool-grid .htool-card').forEach(c=>{c.style.display=(cat==='todos'||c.dataset.cat===cat)?'':'none';});
 }
+
 function actualizarEstado(n){
-var sel=document.querySelector('input[name="'+n+'"]:checked');
-var badge=document.getElementById('badge-'+n);
-if(!sel||!badge)return;
-badge.textContent=sel.value==='SI'?'✔ VALIDADO':'✘ NO APLICA';
-badge.className='estado-badge '+(sel.value==='SI'?'estado-ok':'estado-nok');
+  var sel=document.querySelector('input[name="'+n+'"]:checked');
+  var badge=document.getElementById('badge-'+n);
+  if(!sel||!badge)return;
+  badge.textContent=sel.value==='SI'?'✔ VALIDADO':'✘ NO APLICA';
+  badge.className='estado-badge '+(sel.value==='SI'?'estado-ok':'estado-nok');
 }
+
 // ── CERTIFICACIÓN ──
 function enviarCertificacion(){
-var cambio=g('vc-cambio'),ci=g('vc-ci'),dueno=g('vc-dueno'),lider=g('vc-lider');
-if(!cambio||!ci||!dueno||!lider){showToast('Complete los campos obligatorios','error');return;}
-var radios={};
-['vt1','vt2','m1','m2','i1','i2','i3','v1','v2','v3'].forEach(function(n){var
-r=document.querySelector('input[name="'+n+'"]:checked');radios[n]=r?r.value:null;});
-var msg='🔴 *CERTIFICACIÓN DE CAMBIOS – ARUS by IBM*\n'+LINE+'\n\n'+'📋
-*INFORMACIÓN GENERAL*\n'+' • Cambio: *'+iv(cambio)+'*\n'+' • CI / Aplicación:
-'+iv(ci)+'\n\n'+LINE+'\n\n'+'🔧 *VALIDACIÓN TÉCNICA*\n'+' • Actividades ejecutadas según
-plan aprobado: '+icSI(radios.vt1)+'\n'+' • Tareas pendientes o desviaciones críticas:
-'+icSI(radios.vt2)+'\n\n'+'📡 *MONITOREO*\n'+' • Alarmas activas: '+icSI(radios.m1)+'\n'+' •
-Integraciones y dependencias funcionando: '+icSI(radios.m2)+'\n\n'+'💼 *IMPACTO AL
-NEGOCIO*\n'+' • Sin incidentes asociados al cambio: '+icSI(radios.i1)+'\n'+' • Usuarios o
-áreas validadas: '+icSI(radios.i2)+'\n'+' • Servicio restablecido correctamente:
-'+icSI(radios.i3)+'\n\n'+'🟢 *VALIDACIÓN DEL SERVICIO*\n'+' • Servicio operativo y
-estable: '+icSI(radios.v1)+'\n'+' • Pruebas funcionales exitosas: '+icSI(radios.v2)+'\n'+' • Sin
-alertas en monitoreo: '+icSI(radios.v3)+'\n\n'+LINE+'\n\n'+'👥 *RESPONSABLES*\n'+' •
-Dueño del Servicio: '+iv(dueno)+'\n'+' • Torre de Control: '+iv(g('vc-torre'))+'\n'+' • Líder
-Técnico: '+iv(lider)+'\n\n'+LINE+'\n'+'📄 _Certificación diligenciada conforme al proceso
-ITIL._';
-
-fetch(WH_CERT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.strin
-gify({text:msg})})
-.then(()=>showToast('Certificación enviada al chat'))
-.catch(()=>showToast('Error al enviar','error'));
+  var cambio=g('vc-cambio'),ci=g('vc-ci'),dueno=g('vc-dueno'),lider=g('vc-lider');
+  if(!cambio||!ci||!dueno||!lider){showToast('Complete los campos obligatorios','error');return;}
+  var radios={};
+  ['vt1','vt2','m1','m2','i1','i2','i3','v1','v2','v3'].forEach(function(n){var r=document.querySelector('input[name="'+n+'"]:checked');radios[n]=r?r.value:null;});
+  var msg='🔴 *CERTIFICACIÓN DE CAMBIOS – ARUS by IBM*\n'+LINE+'\n\n'+'📋 *INFORMACIÓN GENERAL*\n'+'  • Cambio: *'+iv(cambio)+'*\n'+'  • CI / Aplicación: '+iv(ci)+'\n\n'+LINE+'\n\n'+'🔧 *VALIDACIÓN TÉCNICA*\n'+'  • Actividades ejecutadas según plan aprobado: '+icSI(radios.vt1)+'\n'+'  • Tareas pendientes o desviaciones críticas: '+icSI(radios.vt2)+'\n\n'+'📡 *MONITOREO*\n'+'  • Alarmas activas: '+icSI(radios.m1)+'\n'+'  • Integraciones y dependencias funcionando: '+icSI(radios.m2)+'\n\n'+'💼 *IMPACTO AL NEGOCIO*\n'+'  • Sin incidentes asociados al cambio: '+icSI(radios.i1)+'\n'+'  • Usuarios o áreas validadas: '+icSI(radios.i2)+'\n'+'  • Servicio restablecido correctamente: '+icSI(radios.i3)+'\n\n'+'🟢 *VALIDACIÓN DEL SERVICIO*\n'+'  • Servicio operativo y estable: '+icSI(radios.v1)+'\n'+'  • Pruebas funcionales exitosas: '+icSI(radios.v2)+'\n'+'  • Sin alertas en monitoreo: '+icSI(radios.v3)+'\n\n'+LINE+'\n\n'+'👥 *RESPONSABLES*\n'+'  • Dueño del Servicio: '+iv(dueno)+'\n'+'  • Torre de Control: '+iv(g('vc-torre'))+'\n'+'  • Líder Técnico: '+iv(lider)+'\n\n'+LINE+'\n'+'📄 _Certificación diligenciada conforme al proceso ITIL._';
+  fetch(WH_CERT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:msg})})
+    .then(()=>showToast('Certificación enviada al chat'))
+    .catch(()=>showToast('Error al enviar','error'));
 }
 function limpiarCertificacion(){
-['vc-cambio','vc-ci','vc-dueno','vc-torre','vc-lider'].forEach(id=>{var
-el=document.getElementById(id);if(el)el.value='';});
-document.querySelectorAll('#page-validacion-cambios
-input[type="radio"]').forEach(r=>r.checked=false);
-['vt1','vt2','m1','m2','i1','i2','i3','v1','v2','v3'].forEach(n=>{var
-b=document.getElementById('badge-'+n);if(b){b.textContent='—';b.className='estado-badg
-e estado-empty';}});
+  ['vc-cambio','vc-ci','vc-dueno','vc-torre','vc-lider'].forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});
+  document.querySelectorAll('#page-validacion-cambios input[type="radio"]').forEach(r=>r.checked=false);
+  ['vt1','vt2','m1','m2','i1','i2','i3','v1','v2','v3'].forEach(n=>{var b=document.getElementById('badge-'+n);if(b){b.textContent='—';b.className='estado-badge estado-empty';}});
 }
+
 // ── TURNO MONITOREO ──
 function enviarTurnoMon(){
-var fecha=g('mon-fecha'),saliente=g('mon-saliente'),entrante=g('mon-entrante');
-if(!fecha||!saliente||!entrante){showToast('Complete los campos obligatorios','error');return;}
-var msg='🟢 *ENTREGA DE TURNO – MONITOREO*\n'+LINE+'\n\n'+'📋 *INFORMACIÓN
-DEL TURNO*\n'+' • Fecha: *'+iv(fecha)+'*\n'+' • Saliente: '+iv(saliente)+'\n'+' • Entrante:
-'+iv(entrante)+'\n\n'+LINE+'\n\n'+'🌐 *CANALES EXTERNOS*\n'+' • Redebán:
-'+ic(g('mon-redeban-status'))+' — '+iv(g('mon-obs-redeban'))+'\n'+' • Credibanco:
-'+ic(g('mon-credibanco-status'))+' — '+iv(g('mon-obs-credibanco'))+'\n\n'+LINE+'\n\n'+'📊
-*DYNATRACE*\n'+' • Passwordless: '+ic(g('mon-dyn-passwordless'))+'\n'+' • QR
-Interoperable: '+ic(g('mon-dyn-qr'))+'\n'+' • Daviplata: '+ic(g('mon-dyn-daviplata'))+'\n'+' •
-MSTX: '+ic(g('mon-dyn-mstx'))+'\n'+' • PRAD: '+ic(g('mon-dyn-prad'))+'\n'+' • BreB:
-'+ic(g('mon-dyn-breb'))+'\n'+' • PSE (cortes): '+iv(g('mon-dyn-pse'))+'\n'+' • Alertas:
-'+ic(g('mon-dyn-alertas'))+'\n\n'+'📈 *GRAFANA*\n'+' • Davicom:
-'+ic(g('mon-graf-davicom'))+'\n'+' • Portal Corporativo: '+ic(g('mon-graf-corporativo'))+'\n'+' •
-Portal Empresarial: '+ic(g('mon-graf-empresarial'))+'\n'+' • Login PYME:
-'+ic(g('mon-graf-pyme'))+'\n'+' • Login SUPERAPP:
-'+ic(g('mon-graf-superapp'))+'\n\n'+LINE+'\n\n'+'️ *INFRAESTRUCTURA*\n'+' • Stratus
-PRD: '+ic(g('mon-stratus'))+'\n'+' • Postilion CGR: '+ic(g('mon-postilion'))+'\n'+' • H2H:
-'+ic(g('mon-h2h'))+'\n'+' • Biocatch: '+ic(g('mon-biocatch'))+'\n'+' • SADE:
-'+ic(g('mon-sade'))+'\n\n'+LINE+'\n\n'+'🚨 *INCIDENTES Y GESTIONES*\n'+' •
-Incidentes:\n'+iv(g('mon-incidentes'))+'\n\n'+' •
-CTASK:\n'+iv(g('mon-ctask'))+'\n\n'+LINE+'\n'+'👥 Entrega: '+iv(saliente)+' → Recibe:
-'+iv(entrante);
-fetch(WH_TURNO,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.st
-ringify({text:msg})})
-.then(()=>showToast('Entrega enviada correctamente'))
-.catch(()=>showToast('Error al enviar','error'));
+  var fecha=g('mon-fecha'),saliente=g('mon-saliente'),entrante=g('mon-entrante');
+  if(!fecha||!saliente||!entrante){showToast('Complete los campos obligatorios','error');return;}
+  var msg='🟢 *ENTREGA DE TURNO – MONITOREO*\n'+LINE+'\n\n'+'📋 *INFORMACIÓN DEL TURNO*\n'+'  • Fecha: *'+iv(fecha)+'*\n'+'  • Saliente: '+iv(saliente)+'\n'+'  • Entrante: '+iv(entrante)+'\n\n'+LINE+'\n\n'+'🌐 *CANALES EXTERNOS*\n'+'  • Redebán: '+ic(g('mon-redeban-status'))+' — '+iv(g('mon-obs-redeban'))+'\n'+'  • Credibanco: '+ic(g('mon-credibanco-status'))+' — '+iv(g('mon-obs-credibanco'))+'\n\n'+LINE+'\n\n'+'📊 *DYNATRACE*\n'+'  • Passwordless: '+ic(g('mon-dyn-passwordless'))+'\n'+'  • QR Interoperable: '+ic(g('mon-dyn-qr'))+'\n'+'  • Daviplata: '+ic(g('mon-dyn-daviplata'))+'\n'+'  • MSTX: '+ic(g('mon-dyn-mstx'))+'\n'+'  • PRAD: '+ic(g('mon-dyn-prad'))+'\n'+'  • BreB: '+ic(g('mon-dyn-breb'))+'\n'+'  • PSE (cortes): '+iv(g('mon-dyn-pse'))+'\n'+'  • Alertas: '+ic(g('mon-dyn-alertas'))+'\n\n'+'📈 *GRAFANA*\n'+'  • Davicom: '+ic(g('mon-graf-davicom'))+'\n'+'  • Portal Corporativo: '+ic(g('mon-graf-corporativo'))+'\n'+'  • Portal Empresarial: '+ic(g('mon-graf-empresarial'))+'\n'+'  • Login PYME: '+ic(g('mon-graf-pyme'))+'\n'+'  • Login SUPERAPP: '+ic(g('mon-graf-superapp'))+'\n\n'+LINE+'\n\n'+'🖥️ *INFRAESTRUCTURA*\n'+'  • Stratus PRD: '+ic(g('mon-stratus'))+'\n'+'  • Postilion CGR: '+ic(g('mon-postilion'))+'\n'+'  • H2H: '+ic(g('mon-h2h'))+'\n'+'  • Biocatch: '+ic(g('mon-biocatch'))+'\n'+'  • SADE: '+ic(g('mon-sade'))+'\n\n'+LINE+'\n\n'+'🚨 *INCIDENTES Y GESTIONES*\n'+'  • Incidentes:\n'+iv(g('mon-incidentes'))+'\n\n'+'  • CTASK:\n'+iv(g('mon-ctask'))+'\n\n'+LINE+'\n'+'👥 Entrega: '+iv(saliente)+' → Recibe: '+iv(entrante);
+  fetch(WH_TURNO,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:msg})})
+    .then(()=>showToast('Entrega enviada correctamente'))
+    .catch(()=>showToast('Error al enviar','error'));
 }
-// ── TURNO APLICACIONES ──
 
+// ── TURNO APLICACIONES ──
 function enviarTurnoAplicaciones(){
-var fecha=g('app-fecha'),saliente=g('app-saliente'),entrante=g('app-entrante');
-if(!fecha||!saliente||!entrante){showToast('Complete los campos obligatorios','error');return;}
-var msg='🔵 *ENTREGA DE TURNO – MESA DE APLICACIONES*\n'+LINE+'\n\n'+'📋
-*INFORMACIÓN GENERAL*\n'+' • Fecha: *'+iv(fecha)+'*\n'+' • Saliente: '+iv(saliente)+'\n'+'
-• Entrante: '+iv(entrante)+'\n\n'+LINE+'\n\n'+'📊 *BACKLOG
-MESA*\n'+iv(g('app-backlog'))+'\n\n'+'🚨 *INCIDENTES /
-MEETS*\n'+iv(g('app-incidentes'))+'\n\n'+'🔴 *INCIDENTES ALTA /
-CRÍTICA*\n'+iv(g('app-altos'))+'\n\n'+'🔄 *GESTIÓN DE
-CAMBIOS*\n'+iv(g('app-cambios'))+'\n\n'+'⏱️ *LÍNEAS DE
-TIEMPO*\n'+iv(g('app-linea-tiempo'))+'\n\n'+LINE+'\n\n'+'🏢 *MESAS OPERATIVAS*\n'+' •
-Oficinas:\n'+iv(g('app-oficinas'))+'\n\n'+' • Cash:\n'+iv(g('app-cash'))+'\n\n'+' •
-SWAT:\n'+iv(g('app-swat'))+'\n\n'+LINE+'\n\n'+'📝
-*OBSERVACIONES*\n'+iv(g('app-obs'))+'\n\n'+LINE+'\n'+'👥 Entrega: '+iv(saliente)+' →
-Recibe: '+iv(entrante);
-fetch(WH_TURNO,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.st
-ringify({text:msg})})
-.then(()=>showToast('Entrega enviada correctamente'))
-.catch(()=>showToast('Error al enviar','error'));
+  var fecha=g('app-fecha'),saliente=g('app-saliente'),entrante=g('app-entrante');
+  if(!fecha||!saliente||!entrante){showToast('Complete los campos obligatorios','error');return;}
+  var msg='🔵 *ENTREGA DE TURNO – MESA DE APLICACIONES*\n'+LINE+'\n\n'+'📋 *INFORMACIÓN GENERAL*\n'+'  • Fecha: *'+iv(fecha)+'*\n'+'  • Saliente: '+iv(saliente)+'\n'+'  • Entrante: '+iv(entrante)+'\n\n'+LINE+'\n\n'+'📊 *BACKLOG MESA*\n'+iv(g('app-backlog'))+'\n\n'+'🚨 *INCIDENTES / MEETS*\n'+iv(g('app-incidentes'))+'\n\n'+'🔴 *INCIDENTES ALTA / CRÍTICA*\n'+iv(g('app-altos'))+'\n\n'+'🔄 *GESTIÓN DE CAMBIOS*\n'+iv(g('app-cambios'))+'\n\n'+'⏱️ *LÍNEAS DE TIEMPO*\n'+iv(g('app-linea-tiempo'))+'\n\n'+LINE+'\n\n'+'🏢 *MESAS OPERATIVAS*\n'+'  • Oficinas:\n'+iv(g('app-oficinas'))+'\n\n'+'  • Cash:\n'+iv(g('app-cash'))+'\n\n'+'  • SWAT:\n'+iv(g('app-swat'))+'\n\n'+LINE+'\n\n'+'📝 *OBSERVACIONES*\n'+iv(g('app-obs'))+'\n\n'+LINE+'\n'+'👥 Entrega: '+iv(saliente)+' → Recibe: '+iv(entrante);
+  fetch(WH_TURNO,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:msg})})
+    .then(()=>showToast('Entrega enviada correctamente'))
+    .catch(()=>showToast('Error al enviar','error'));
 }
-function
-limpiarApp(){['app-backlog','app-incidentes','app-altos','app-linea-tiempo','app-oficinas','app-c
-ash','app-swat','app-obs','app-saliente','app-entrante'].forEach(id=>{var
-el=document.getElementById(id);if(el)el.value='';});}
+function limpiarApp(){['app-backlog','app-incidentes','app-altos','app-linea-tiempo','app-oficinas','app-cash','app-swat','app-obs','app-saliente','app-entrante'].forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});}
+
 // ══════════════════════════════════════
 // TIMELINE ENGINE
 // ══════════════════════════════════════
 let tlEvts=[];
 let tlEditId=null;
 let tlEquidist=false;
+
 const TL_COLORS={
-purple:'#7C3AED',orange:'#E37400',teal:'#0D9488',green:'#188038',
-indigo:'#3F51B5',rose:'#E91E63',red:'#D93025',blue:'#1A73E8',gray:'#5F6368'
+  purple:'#7C3AED',orange:'#E37400',teal:'#0D9488',green:'#188038',
+  indigo:'#3F51B5',rose:'#E91E63',red:'#D93025',blue:'#1A73E8',gray:'#5F6368'
 };
 const TL_HEX={
-purple:'7C3AED',orange:'E37400',teal:'0D9488',green:'188038',
-indigo:'3F51B5',rose:'E91E63',red:'D93025',blue:'1A73E8',gray:'5F6368'
+  purple:'7C3AED',orange:'E37400',teal:'0D9488',green:'188038',
+  indigo:'3F51B5',rose:'E91E63',red:'D93025',blue:'1A73E8',gray:'5F6368'
 };
-function tlToggleMultiDay(){
-const isMulti=document.getElementById('tlMultiDay').checked;
-document.getElementById('tl-event-date-field').style.display=isMulti?'block':'none';
-tlRenderAll();
-}
+
 function tlTs(evt){
-const base=evt.date||document.getElementById('tlIncDate').value||new
-Date().toISOString().split('T')[0];
-return new Date(base+'T'+(evt.time||'00:00')+':00').getTime();
+  const base=evt.date||document.getElementById('tlIncDate').value||new Date().toISOString().split('T')[0];
+  return new Date(base+'T'+(evt.time||'00:00')+':00').getTime();
 }
 function tlSort(){tlEvts.sort((a,b)=>tlTs(a)-tlTs(b));}
 
 function tlPos(evt,idx,total,minTs,maxTs){
-if(evt.manualPos!=null) return parseFloat(evt.manualPos);
-if(tlEquidist){return total<=1?50:5+(90/(total-1))*idx;}
-const dur=Math.max(maxTs-minTs,3600000);
-return 5+((tlTs(evt)-minTs)/dur)*90;
+  if(evt.manualPos!=null) return parseFloat(evt.manualPos);
+  if(tlEquidist){return total<=1?50:5+(90/(total-1))*idx;}
+  const dur=Math.max(maxTs-minTs,3600000);
+  return 5+((tlTs(evt)-minTs)/dur)*90;
 }
+
 function tlMetrics(){
-const s=[...tlEvts].sort((a,b)=>tlTs(a)-tlTs(b));
-const start=s.find(e=>e.type==='purple');
-const alert=s.find(e=>e.type==='orange');
-const ack=s.find(e=>e.type==='teal');
-const rec=s.find(e=>e.type==='green');
-const fmt=ms=>ms<0?'--':String(Math.floor(ms/60000));
-const setM=(id,val,cls)=>{const
-el=document.getElementById(id);el.textContent=val;el.className='met-val
-'+(val==='--'?'mv-x':cls);};
-setM('m-mttd',start&&alert?fmt(tlTs(alert)-tlTs(start)):'--','mv-p');
-setM('m-mtta',alert&&ack?fmt(tlTs(ack)-tlTs(alert)):'--','mv-t');
-setM('m-mttr',start&&rec?fmt(tlTs(rec)-tlTs(start)):'--','mv-g');
+  const s=[...tlEvts].sort((a,b)=>tlTs(a)-tlTs(b));
+  const start=s.find(e=>e.type==='purple');
+  const alert=s.find(e=>e.type==='orange');
+  const ack=s.find(e=>e.type==='teal');
+  const rec=s.find(e=>e.type==='green');
+  const fmt=ms=>ms<0?'--':String(Math.floor(ms/60000));
+  const setM=(id,val,cls)=>{const el=document.getElementById(id);el.textContent=val;el.className='met-val '+(val==='--'?'mv-x':cls);};
+  setM('m-mttd',start&&alert?fmt(tlTs(alert)-tlTs(start)):'--','mv-p');
+  setM('m-mtta',alert&&ack?fmt(tlTs(ack)-tlTs(alert)):'--','mv-t');
+  setM('m-mttr',start&&rec?fmt(tlTs(rec)-tlTs(start)):'--','mv-g');
 }
+
 function tlUpdateHeader(){
-const title=(document.getElementById('tlIncTitle')||{}).value||'LÍNEA DE TIEMPO';
-const inc=(document.getElementById('tlIncNum')||{}).value||'—';
-const d=(document.getElementById('tlIncDate')||{}).value;
-const ht=document.getElementById('tl-h-title');
-const hd=document.getElementById('tl-h-date');
-const hi=document.getElementById('tl-h-inc');
-if(ht) ht.textContent=title.toUpperCase();
-if(hi) hi.textContent=inc||'—';
-if(hd) hd.textContent=d?'Fecha: '+d.split('-').reverse().join('/'):'Fecha: —';
+  const title=(document.getElementById('tlIncTitle')||{}).value||'LÍNEA DE TIEMPO';
+  const inc=(document.getElementById('tlIncNum')||{}).value||'—';
+  const d=(document.getElementById('tlIncDate')||{}).value;
+  const ht=document.getElementById('tl-h-title');
+  const hd=document.getElementById('tl-h-date');
+  const hi=document.getElementById('tl-h-inc');
+  if(ht) ht.textContent=title.toUpperCase();
+  if(hi) hi.textContent=inc||'—';
+  if(hd) hd.textContent=d?'Fecha: '+d.split('-').reverse().join('/'):'Fecha: —';
 }
+
 function tlRenderList(){
-const c=document.getElementById('tl-event-list');
-if(tlEvts.length===0){c.innerHTML='<div
-style="text-align:center;padding:20px;color:var(--muted);font-size:12px;opacity:.6;">Sin
-eventos registrados</div>';return;}
-const s=[...tlEvts].sort((a,b)=>tlTs(a)-tlTs(b));
-c.innerHTML='';
-s.forEach(evt=>{
-const div=document.createElement('div');
-div.className='ev-item';
-const color=TL_COLORS[evt.type]||'#888';
-const isMulti=document.getElementById('tlMultiDay').checked;
-const displayTime=isMulti&&evt.date?`${evt.date.split('-').slice(1).reverse().join('/')} ${evt.time}`:evt.time;
-div.innerHTML=`<div class="ev-stripe" style="background:${color}"></div><div
-class="ev-time" style="padding-left:6px;font-size:${isMulti?'9.5px':'11px'}">${displayTime}</div><div class="ev-info"
-
-onclick="tlLoadEdit(${evt.id})"><div class="ev-title">${evt.title}</div><div
-class="ev-desc">${evt.desc||''}</div></div><button class="ev-del"
-onclick="tlRemove(${evt.id})">✕</button>`;
-c.appendChild(div);
-});
+  const c=document.getElementById('tl-event-list');
+  if(tlEvts.length===0){c.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;opacity:.6;">Sin eventos registrados</div>';return;}
+  const s=[...tlEvts].sort((a,b)=>tlTs(a)-tlTs(b));
+  c.innerHTML='';
+  s.forEach(evt=>{
+    const div=document.createElement('div');
+    div.className='ev-item';
+    const color=TL_COLORS[evt.type]||'#888';
+    div.innerHTML=`<div class="ev-stripe" style="background:${color}"></div><div class="ev-time" style="padding-left:6px">${evt.time}</div><div class="ev-info" onclick="tlLoadEdit(${evt.id})"><div class="ev-title">${evt.title}</div><div class="ev-desc">${evt.desc||''}</div></div><button class="ev-del" onclick="tlRemove(${evt.id})">✕</button>`;
+    c.appendChild(div);
+  });
 }
+
 function tlRenderCanvas(){
-const layer=document.getElementById('tl-items');
-layer.innerHTML='';
-if(tlEvts.length===0) return;
-tlSort();
-const ts=tlEvts.map(e=>tlTs(e));
-const minTs=Math.min(...ts),maxTs=Math.max(...ts);
-tlEvts.forEach((evt,idx)=>{
-const pct=tlPos(evt,idx,tlEvts.length,minTs,maxTs);
-const isTop=idx%2!==0;
-const color=TL_COLORS[evt.type]||'#888';
-const wrap=document.createElement('div');
-wrap.style.cssText='position:absolute;display:flex;flex-direction:column;align-items:center;z-i
-ndex:10;';
-wrap.style.left=pct+'%';
-let tX='translateX(-50%)';
-if(pct<8) tX='translateX(0)';
-else if(pct>92) tX='translateX(-100%)';
-wrap.style.transform=tX;
-if(isTop){wrap.style.bottom='50%';wrap.style.top='auto';}
-else wrap.style.top='50%';
-const dot=document.createElement('div');
-dot.style.cssText=`width:13px;height:13px;border-radius:50%;border:2px solid
-#fff;box-shadow:0 1px 4px rgba(0,0,0,.2);background:${color};position:absolute;z-index:20;`;
-dot.style[isTop?'bottom':'top']='-6px';
-const line=document.createElement('div');
-line.style.cssText='width:1px;height:40px;background:#cbd5e1;';
-const card=document.createElement('div');
-const isMulti=document.getElementById('tlMultiDay').checked;
-const displayTime=isMulti&&evt.date?`${evt.date.split('-').slice(1).reverse().join('/')} ${evt.time}`:evt.time;
-card.style.cssText=`background:#fff;border:1px solid
-#e2e8f0;border-radius:8px;padding:9px 11px;width:160px;font-size:12px;position:relative;`;
-if(evt.type==='green') card.style.borderTop=`3px solid ${color}`;
-else card.style.borderLeft=`3px solid ${color}`;
-card.innerHTML=`<div
-style="font-size:10px;font-weight:700;color:${color};border-bottom:1px solid
-#f1f5f9;padding-bottom:4px;margin-bottom:4px;">${displayTime}</div><div
-style="font-weight:700;color:#1a1a2e;font-size:11px;line-height:1.3;margin-bottom:2px;">${e
-vt.title}</div>${evt.desc?`<div
-style="font-size:10px;color:#5a6a85;line-height:1.4;">${evt.desc}</div>`:''}`;
+  const layer=document.getElementById('tl-items');
+  layer.innerHTML='';
+  if(tlEvts.length===0) return;
+  tlSort();
+  const ts=tlEvts.map(e=>tlTs(e));
+  const minTs=Math.min(...ts),maxTs=Math.max(...ts);
+  tlEvts.forEach((evt,idx)=>{
+    const pct=tlPos(evt,idx,tlEvts.length,minTs,maxTs);
+    const isTop=idx%2!==0;
+    const color=TL_COLORS[evt.type]||'#888';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='position:absolute;display:flex;flex-direction:column;align-items:center;z-index:10;';
+    wrap.style.left=pct+'%';
+    let tX='translateX(-50%)';
+    if(pct<8) tX='translateX(0)';
+    else if(pct>92) tX='translateX(-100%)';
+    wrap.style.transform=tX;
+    if(isTop){wrap.style.bottom='50%';wrap.style.top='auto';}
+    else wrap.style.top='50%';
+    const dot=document.createElement('div');
+    dot.style.cssText=`width:13px;height:13px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2);background:${color};position:absolute;z-index:20;`;
+    dot.style[isTop?'bottom':'top']='-6px';
+    const line=document.createElement('div');
+    line.style.cssText='width:1px;height:40px;background:#cbd5e1;';
+    const card=document.createElement('div');
+    card.style.cssText=`background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:9px 11px;width:160px;font-size:12px;position:relative;`;
+    if(evt.type==='green') card.style.borderTop=`3px solid ${color}`;
+    else card.style.borderLeft=`3px solid ${color}`;
+    card.innerHTML=`<div style="font-size:10px;font-weight:700;color:${color};border-bottom:1px solid #f1f5f9;padding-bottom:4px;margin-bottom:4px;">${evt.time}</div><div style="font-weight:700;color:#1a1a2e;font-size:11px;line-height:1.3;margin-bottom:2px;">${evt.title}</div>${evt.desc?`<div style="font-size:10px;color:#5a6a85;line-height:1.4;">${evt.desc}</div>`:''}`;
+    if(isTop){card.style.marginBottom='5px';wrap.appendChild(card);wrap.appendChild(line);wrap.appendChild(dot);}
+    else{card.style.marginTop='5px';wrap.appendChild(dot);wrap.appendChild(line);wrap.appendChild(card);}
+    layer.appendChild(wrap);
+  });
+}
 
-if(isTop){card.style.marginBottom='5px';wrap.appendChild(card);wrap.appendChild(line);wra
-p.appendChild(dot);}
-else{card.style.marginTop='5px';wrap.appendChild(dot);wrap.appendChild(line);wrap.append
-Child(card);}
-layer.appendChild(wrap);
-});
-}
 function tlRenderAll(){tlRenderList();tlRenderCanvas();tlMetrics();tlUpdateHeader();}
+
 function tlAddEvent(){
-const time=document.getElementById('tlTime').value;
-const title=document.getElementById('tlTitle').value.trim();
-if(!time||!title){showToast('Hora y título son obligatorios','error');return;}
-const isMulti=document.getElementById('tlMultiDay').checked;
-const evtDate=isMulti?document.getElementById('tlEvtDate').value:document.getElementById('tlIncDate').value;
-if(isMulti&&!evtDate){showToast('La fecha del evento es obligatoria','error');return;}
-const
-data={time,date:evtDate,title,desc:document.getElement
-ById('tlDesc').value.trim(),explanation:document.getElementById('tlExpl').value.trim(),type:do
-cument.getElementById('tlType').value,manualPos:null};
-if(tlEditId){
-const idx=tlEvts.findIndex(e=>e.id===tlEditId);
-tlEvts[idx]={...tlEvts[idx],...data};
-tlCancelEdit();
-} else {
-tlEvts.push({id:Date.now(),...data});
-document.getElementById('tlTitle').value='';
-document.getElementById('tlDesc').value='';
-document.getElementById('tlExpl').value='';
+  const time=document.getElementById('tlTime').value;
+  const title=document.getElementById('tlTitle').value.trim();
+  if(!time||!title){showToast('Hora y título son obligatorios','error');return;}
+  const data={time,date:document.getElementById('tlIncDate').value,title,desc:document.getElementById('tlDesc').value.trim(),explanation:document.getElementById('tlExpl').value.trim(),type:document.getElementById('tlType').value,manualPos:null};
+  if(tlEditId){
+    const idx=tlEvts.findIndex(e=>e.id===tlEditId);
+    tlEvts[idx]={...tlEvts[idx],...data};
+    tlCancelEdit();
+  } else {
+    tlEvts.push({id:Date.now(),...data});
+    document.getElementById('tlTitle').value='';
+    document.getElementById('tlDesc').value='';
+    document.getElementById('tlExpl').value='';
+  }
+  tlRenderAll();
+  showToast('Evento guardado','info');
 }
-tlRenderAll();
-showToast('Evento guardado','info');
-}
+
 function tlLoadEdit(id){
-const evt=tlEvts.find(e=>e.id===id);
-tlEditId=id;
-document.getElementById('tlTime').value=evt.time;
-if(document.getElementById('tlMultiDay').checked){
-document.getElementById('tlEvtDate').value=evt.date||document.getElementById('tlIncDate').value;
-}
-document.getElementById('tlTitle').value=evt.title;
-document.getElementById('tlDesc').value=evt.desc||'';
-document.getElementById('tlExpl').value=evt.explanation||'';
-document.getElementById('tlType').value=evt.type;
-document.getElementById('tl-form-title').textContent='Editando Evento';
-document.getElementById('tl-btn-label').textContent='Guardar Cambios';
-document.getElementById('tl-cancel-btn').style.display='';
-document.getElementById('tl-form-card').style.borderColor='var(--accent2)';
-document.getElementById('tl-add-btn').style.background='var(--accent2)';
+  const evt=tlEvts.find(e=>e.id===id);
+  tlEditId=id;
+  document.getElementById('tlTime').value=evt.time;
+  document.getElementById('tlTitle').value=evt.title;
+  document.getElementById('tlDesc').value=evt.desc||'';
+  document.getElementById('tlExpl').value=evt.explanation||'';
+  document.getElementById('tlType').value=evt.type;
+  document.getElementById('tl-form-title').textContent='Editando Evento';
+  document.getElementById('tl-btn-label').textContent='Guardar Cambios';
+  document.getElementById('tl-cancel-btn').style.display='';
+  document.getElementById('tl-form-card').style.borderColor='var(--accent2)';
+  document.getElementById('tl-add-btn').style.background='var(--accent2)';
 }
 
 function tlCancelEdit(){
-tlEditId=null;
-document.getElementById('tlTitle').value='';
-document.getElementById('tlDesc').value='';
-document.getElementById('tlExpl').value='';
-document.getElementById('tl-form-title').textContent='Nuevo Evento';
-document.getElementById('tl-btn-label').textContent='Agregar Evento';
-document.getElementById('tl-cancel-btn').style.display='none';
-document.getElementById('tl-form-card').style.borderColor='';
-document.getElementById('tl-add-btn').style.background='';
+  tlEditId=null;
+  document.getElementById('tlTitle').value='';
+  document.getElementById('tlDesc').value='';
+  document.getElementById('tlExpl').value='';
+  document.getElementById('tl-form-title').textContent='Nuevo Evento';
+  document.getElementById('tl-btn-label').textContent='Agregar Evento';
+  document.getElementById('tl-cancel-btn').style.display='none';
+  document.getElementById('tl-form-card').style.borderColor='';
+  document.getElementById('tl-add-btn').style.background='';
 }
-function
-tlRemove(id){if(tlEditId===id)tlCancelEdit();tlEvts=tlEvts.filter(e=>e.id!==id);tlRenderAll();}
-function tlClearAll(){if(!confirm('¿Borrar todos los
-eventos?'))return;tlEvts=[];tlCancelEdit();tlRenderAll();}
-function
-tlToggleMode(){tlEquidist=!tlEquidist;document.getElementById('tl-mode-lbl').textContent=tlE
-quidist?'Equidistante':'Cronológico';tlRenderCanvas();}
+
+function tlRemove(id){if(tlEditId===id)tlCancelEdit();tlEvts=tlEvts.filter(e=>e.id!==id);tlRenderAll();}
+function tlClearAll(){if(!confirm('¿Borrar todos los eventos?'))return;tlEvts=[];tlCancelEdit();tlRenderAll();}
+function tlToggleMode(){tlEquidist=!tlEquidist;document.getElementById('tl-mode-lbl').textContent=tlEquidist?'Equidistante':'Cronológico';tlRenderCanvas();}
 function tlZoom(val){document.getElementById('tl-preview').style.transform=`scale(${val})`;}
+
 // ── EXPORT PNG (descarga local) ──
 function tlExportPNG(){
-const el=document.getElementById('tl-preview');
-const prev=el.style.transform;
-el.style.transform='scale(1)';
-showToast('Generando imagen...','info');
-html2canvas(el,{scale:2,useCORS:true}).then(canvas=>{
-const link=document.createElement('a');
-const inc=document.getElementById('tlIncNum').value||'Timeline';
-link.download=`Timeline_${inc}.png`;
-link.href=canvas.toDataURL('image/png');
-link.click();
-el.style.transform=prev;
-showToast('PNG descargado','info');
-});
+  const el=document.getElementById('tl-preview');
+  const prev=el.style.transform;
+  el.style.transform='scale(1)';
+  showToast('Generando imagen...','info');
+  html2canvas(el,{scale:2,useCORS:true}).then(canvas=>{
+    const link=document.createElement('a');
+    const inc=document.getElementById('tlIncNum').value||'Timeline';
+    link.download=`Timeline_${inc}.png`;
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+    el.style.transform=prev;
+    showToast('PNG descargado','info');
+  });
 }
+
 // ── EXPORT PPTX (descarga local) ──
 function tlExportPPTX(){
-const incTitle=document.getElementById('tlIncTitle').value||'REPORTE DE INCIDENTE';
-const incNum=document.getElementById('tlIncNum').value||'S/N';
-const dateStr=document.getElementById('tlIncDate').value||new
-Date().toISOString().split('T')[0];
-const mttd=document.getElementById('m-mttd').textContent;
-const mtta=document.getElementById('m-mtta').textContent;
-const mttr=document.getElementById('m-mttr').textContent;
-
-let pres=new PptxGenJS();
-pres.layout='LAYOUT_16x9';
-let s1=pres.addSlide();
-s1.background={color:'FFFFFF'};
-s1.addText(incTitle.toUpperCase(),{x:.5,y:.3,w:7.5,h:.5,fontSize:24,bold:true,color:'1F2937'});
-s1.addText('Fecha: '+dateStr,{x:.5,y:.8,w:5,h:.3,fontSize:12,color:'6B7280',italic:true});
-s1.addShape('rect',{x:8.2,y:.2,w:1.5,h:.8,fill:{color:'F3F4F6'},line:{color:'E5E7EB'}});
-s1.addText('INCIDENTE
-ID',{x:8.2,y:.3,w:1.5,h:.2,align:'center',fontSize:9,color:'6B7280',bold:true});
-s1.addText(incNum,{x:8.2,y:.5,w:1.5,h:.3,align:'center',fontSize:16,color:'374151',bold:true});
-s1.addShape('rect',{x:'5%',y:2.74,w:'76.5%',h:.15,fill:{color:'D93025'}});
-s1.addShape('rect',{x:'81.5%',y:2.74,w:'13.5%',h:.15,fill:{color:'188038'}});
-s1.addText('INICIO',{x:'5%',y:2.5,w:1,fontSize:10,bold:true,color:'D1D5DB'});
-s1.addText('FIN',{x:'92%',y:2.5,w:1,fontSize:10,bold:true,color:'D1D5DB'});
-tlSort();
-if(tlEvts.length>0){
-const ts=tlEvts.map(e=>tlTs(e));
-const minTs=Math.min(...ts),maxTs=Math.max(...ts);
-tlEvts.forEach((evt,idx)=>{
-const pct=tlPos(evt,idx,tlEvts.length,minTs,maxTs);
-const isTop=idx%2!==0;
-const colorHex=TL_HEX[evt.type]||'888888';
-const isMulti=document.getElementById('tlMultiDay').checked;
-const displayTime=isMulti&&evt.date?`${evt.date.split('-').slice(1).reverse().join('/')} ${evt.time}`:evt.time;
-const dotX=pct-1;
-const lineY=isTop?1.81:2.81;
-s1.addShape('line',{x:`${pct}%`,y:lineY,w:0,h:1,line:{color:'D0D0D0',width:2}});
-s1.addShape('ellipse',{x:`${dotX}%`,y:2.71,w:.2,h:.2,fill:{color:colorHex},line:{color:'FFFFFF',
-width:2}});
-const boxW=1.6,boxH=.85;
-let tx=pct/10-boxW/2;
-if(pct<10) tx=pct/10; if(pct>90) tx=pct/10-boxW;
-const ty=isTop?lineY-boxH-.05:lineY+1.05;
-s1.addShape('rect',{x:tx,y:ty,w:boxW,h:boxH,fill:{color:'FFFFFF'},line:{color:'E5E7EB',width:.5
-}});
-s1.addShape('rect',{x:tx,y:ty,w:evt.type==='green'?boxW:.05,h:evt.type==='green'?.05:boxH,f
-ill:{color:colorHex},line:null});
-s1.addText([{text:displayTime+'\n',options:{fontSize:isMulti?9:10,bold:true,color:colorHex}},{text:evt.title+'\n
-',options:{fontSize:11,bold:true,color:'333333'}},{text:evt.desc||'',options:{fontSize:9,color:'666
-666'}}],{x:tx+.07,y:ty+.05,w:boxW-.07,h:boxH-.1,align:'center',shrinkText:true});
-});
+  const incTitle=document.getElementById('tlIncTitle').value||'REPORTE DE INCIDENTE';
+  const incNum=document.getElementById('tlIncNum').value||'S/N';
+  const dateStr=document.getElementById('tlIncDate').value||new Date().toISOString().split('T')[0];
+  const mttd=document.getElementById('m-mttd').textContent;
+  const mtta=document.getElementById('m-mtta').textContent;
+  const mttr=document.getElementById('m-mttr').textContent;
+  let pres=new PptxGenJS();
+  pres.layout='LAYOUT_16x9';
+  let s1=pres.addSlide();
+  s1.background={color:'FFFFFF'};
+  s1.addText(incTitle.toUpperCase(),{x:.5,y:.3,w:7.5,h:.5,fontSize:24,bold:true,color:'1F2937'});
+  s1.addText('Fecha: '+dateStr,{x:.5,y:.8,w:5,h:.3,fontSize:12,color:'6B7280',italic:true});
+  s1.addShape('rect',{x:8.2,y:.2,w:1.5,h:.8,fill:{color:'F3F4F6'},line:{color:'E5E7EB'}});
+  s1.addText('INCIDENTE ID',{x:8.2,y:.3,w:1.5,h:.2,align:'center',fontSize:9,color:'6B7280',bold:true});
+  s1.addText(incNum,{x:8.2,y:.5,w:1.5,h:.3,align:'center',fontSize:16,color:'374151',bold:true});
+  s1.addShape('rect',{x:'5%',y:2.74,w:'76.5%',h:.15,fill:{color:'D93025'}});
+  s1.addShape('rect',{x:'81.5%',y:2.74,w:'13.5%',h:.15,fill:{color:'188038'}});
+  s1.addText('INICIO',{x:'5%',y:2.5,w:1,fontSize:10,bold:true,color:'D1D5DB'});
+  s1.addText('FIN',{x:'92%',y:2.5,w:1,fontSize:10,bold:true,color:'D1D5DB'});
+  tlSort();
+  if(tlEvts.length>0){
+    const ts=tlEvts.map(e=>tlTs(e));
+    const minTs=Math.min(...ts),maxTs=Math.max(...ts);
+    tlEvts.forEach((evt,idx)=>{
+      const pct=tlPos(evt,idx,tlEvts.length,minTs,maxTs);
+      const isTop=idx%2!==0;
+      const colorHex=TL_HEX[evt.type]||'888888';
+      const dotX=pct-1;
+      const lineY=isTop?1.81:2.81;
+      s1.addShape('line',{x:`${pct}%`,y:lineY,w:0,h:1,line:{color:'D0D0D0',width:2}});
+      s1.addShape('ellipse',{x:`${dotX}%`,y:2.71,w:.2,h:.2,fill:{color:colorHex},line:{color:'FFFFFF',width:2}});
+      const boxW=1.6,boxH=.85;
+      let tx=pct/10-boxW/2;
+      if(pct<10) tx=pct/10; if(pct>90) tx=pct/10-boxW;
+      const ty=isTop?lineY-boxH-.05:lineY+1.05;
+      s1.addShape('rect',{x:tx,y:ty,w:boxW,h:boxH,fill:{color:'FFFFFF'},line:{color:'E5E7EB',width:.5}});
+      s1.addShape('rect',{x:tx,y:ty,w:evt.type==='green'?boxW:.05,h:evt.type==='green'?.05:boxH,fill:{color:colorHex},line:null});
+      s1.addText([{text:evt.time+'\n',options:{fontSize:10,bold:true,color:colorHex}},{text:evt.title+'\n',options:{fontSize:11,bold:true,color:'333333'}},{text:evt.desc||'',options:{fontSize:9,color:'666666'}}],{x:tx+.07,y:ty+.05,w:boxW-.07,h:boxH-.1,align:'center',shrinkText:true});
+    });
+  }
+  let s2=pres.addSlide();
+  s2.addText('Métricas y Detalle',{x:.5,y:.4,fontSize:22,bold:true,color:'1F2937'});
+  s2.addTable([[{text:'Métrica',options:{bold:true,fill:'1F2937',color:'FFFFFF'}},{text:'Tiempo',options:{bold:true,fill:'1F2937',color:'FFFFFF'}}],['MTTD (Detección)',mttd!=='--'?mttd+' min':'—'],['MTTA (Acknowledge)',mtta!=='--'?mtta+' min':'—'],['MTTR (Recuperación)',mttr!=='--'?mttr+' min':'—']],{x:.5,y:.9,w:4,colW:[2,2],border:{color:'E5E7EB'}});
+  const rows=[[{text:'Fecha/Hora',options:{bold:true,fill:'F3F4F6'}},{text:'Evento',options:{bold:true,fill:'F3F4F6'}},{text:'Detalle',options:{bold:true,fill:'F3F4F6'}}]];
+  tlEvts.forEach(e=>rows.push([`${e.date||''} ${e.time}`,e.title+(e.desc?'\n'+e.desc:''),e.explanation||'—']));
+  s2.addTable(rows,{x:.5,y:2.8,w:9,colW:[1.5,3,4.5],border:{color:'E5E7EB'}});
+  pres.writeFile({fileName:`Timeline_${incNum}.pptx`});
+  showToast('PPTX descargado','info');
 }
-let s2=pres.addSlide();
-s2.addText('Métricas y Detalle',{x:.5,y:.4,fontSize:22,bold:true,color:'1F2937'});
 
-s2.addTable([[{text:'Métrica',options:{bold:true,fill:'1F2937',color:'FFFFFF'}},{text:'Tiempo',opti
-ons:{bold:true,fill:'1F2937',color:'FFFFFF'}}],['MTTD (Detección)',mttd!=='--'?mttd+'
-min':'—'],['MTTA (Acknowledge)',mtta!=='--'?mtta+' min':'—'],['MTTR
-(Recuperación)',mttr!=='--'?mttr+'
-min':'—']],{x:.5,y:.9,w:4,colW:[2,2],border:{color:'E5E7EB'}});
-const
-rows=[[{text:'Fecha/Hora',options:{bold:true,fill:'F3F4F6'}},{text:'Evento',options:{bold:true,fill:'
-F3F4F6'}},{text:'Detalle',options:{bold:true,fill:'F3F4F6'}}]];
-tlEvts.forEach(e=>rows.push([`${e.date||''}
-${e.time}`,e.title+(e.desc?'\n'+e.desc:''),e.explanation||'—']));
-s2.addTable(rows,{x:.5,y:2.8,w:9,colW:[1.5,3,4.5],border:{color:'E5E7EB'}});
-pres.writeFile({fileName:`Timeline_${incNum}.pptx`});
-showToast('PPTX descargado','info');
+// ── EXPORTAR PNG + SUBIR A DRIVE (URL ESTÁTICA) ──
+async function tlExportAndUploadDrive(){
+  const statusEl=document.getElementById('tl-drive-status');
+
+  // Verificar que las constantes estén configuradas
+  if(!DRIVE_ACCESS_TOKEN||DRIVE_ACCESS_TOKEN.startsWith('REEMPLAZA')){
+    statusEl.className='drive-status err';
+    statusEl.textContent='Token de Drive no configurado en el código.';
+    showToast('Configura DRIVE_ACCESS_TOKEN en el código','error');
+    return;
+  }
+  if(!DRIVE_FOLDER_ID||DRIVE_FOLDER_ID.startsWith('REEMPLAZA')){
+    statusEl.className='drive-status err';
+    statusEl.textContent='ID de carpeta Drive no configurado en el código.';
+    showToast('Configura DRIVE_FOLDER_ID en el código','error');
+    return;
+  }
+
+  const inc=document.getElementById('tlIncNum').value||'Timeline';
+  const date=document.getElementById('tlIncDate').value||new Date().toISOString().split('T')[0];
+  const fileName=`Timeline_${inc}_${date}.png`;
+
+  statusEl.className='drive-status';
+  statusEl.textContent='Capturando imagen...';
+
+  try {
+    const el=document.getElementById('tl-preview');
+    const prev=el.style.transform;
+    el.style.transform='scale(1)';
+    const canvas=await html2canvas(el,{scale:2,useCORS:true});
+    el.style.transform=prev;
+
+    statusEl.textContent='Subiendo a Google Drive...';
+
+    const blob=await new Promise(res=>canvas.toBlob(res,'image/png'));
+    const meta=JSON.stringify({name:fileName,parents:[DRIVE_FOLDER_ID]});
+    const form=new FormData();
+    form.append('metadata',new Blob([meta],{type:'application/json'}));
+    form.append('file',blob);
+
+    const res=await fetch(
+      'https://drive.google.com/drive/folders/1MSFMeSgLAyb3KjhdCvPmb0g8V_VDLpG6?usp=drive_link',
+      {method:'POST',headers:{Authorization:'Bearer '+DRIVE_ACCESS_TOKEN},body:form}
+    );
+
+    if(!res.ok){
+      const err=await res.json();
+      throw new Error(err.error?.message||'Error API: '+res.status);
+    }
+
+    const data=await res.json();
+    statusEl.className='drive-status';
+    statusEl.innerHTML=`✅ Subido: <a href="${data.webViewLink}" target="_blank" style="color:var(--success);font-weight:700;">${data.name}</a>`;
+    showToast('Archivo subido a Drive correctamente');
+
+  } catch(err){
+    statusEl.className='drive-status err';
+    statusEl.textContent='Error: '+err.message;
+    showToast('Error al subir a Drive','error');
+  }
 }
+
 showPage('dashboard');
 </script>
 </body>
