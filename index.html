@@ -897,7 +897,13 @@ async function tlImportPPTX(event){
     text = text.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
     
     if(text.includes('TL_DATA:')) {
-      const data = JSON.parse(text.split('TL_DATA:')[1]);
+      let rawJson = text.split('TL_DATA:')[1];
+      
+      // Encontrar la última llave de cierre para ignorar cualquier basura XML adicional
+      const lastBrace = rawJson.lastIndexOf('}');
+      if (lastBrace !== -1) rawJson = rawJson.substring(0, lastBrace + 1);
+      
+      const data = JSON.parse(rawJson);
       if(data && data.evts) {
         document.getElementById('tlIncTitle').value = data.title || '';
         document.getElementById('tlIncNum').value = data.inc || '';
