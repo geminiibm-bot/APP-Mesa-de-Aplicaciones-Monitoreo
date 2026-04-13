@@ -10,3 +10,17 @@ function enviarCorreoMonitoreo(destinatario, asunto, cuerpoTexto, cuerpoHtml) {
     name: "Mesa de Aplicaciones & Monitoreo"
   });
 }
+
+function registrarAlerta(data) {
+  try {
+    var sheet = SpreadsheetApp.openById('1x0Wyw4nQGcctcIM4hvThMzOSW1VVyJT9kMOEcGXIL2A').getActiveSheet();
+    var marcaTemporal = new Date(); // Fecha y hora automática
+    
+    // Orden: Marca temporal, Numero del Problema, Url Alerta, Equipo soporte, Catalogo (vacío), Aplicación, Con alerting - Sin Task
+    sheet.appendRow([marcaTemporal, data.numeroProblema, data.urlAlerta, data.equipoSoporte, "", data.aplicacion, data.sinTask ? "Sí" : "No"]);
+    
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.toString() };
+  }
+}

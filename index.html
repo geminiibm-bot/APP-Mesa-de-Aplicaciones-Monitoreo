@@ -244,6 +244,7 @@ textarea{resize:vertical;min-height:80px;}
   </div>
   <div class="nav-section">
     <div class="nav-label">Monitoreo</div>
+    <button class="nav-item" onclick="showPage('registro-alertas')"><span class="nav-icon">📝</span> Registro Alertas <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('entrega-turno-mon')"><span class="nav-icon">🔄</span> Entrega de Turno <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('herramientas')"><span class="nav-icon">🛠️</span> Herramientas <span class="nav-dot"></span></button>
   </div>
@@ -333,10 +334,33 @@ textarea{resize:vertical;min-height:80px;}
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">🔑</div><div><div class="htool-name">Cambio de Contraseña de Red</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('https://passwordreset.microsoftonline.com/?whr=davivienda.com')">passwordreset.microsoftonline.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">Propio</span></div></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">🖥️</div><div><div class="htool-name">Pantallas sala WR</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('#')">Acceso Torre CPU</div><div class="htool-meta"><span class="htool-badge badge-app">Local</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">mvisula1</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">Bancos1a</span></div></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📋</div><div><div class="htool-name">Orden tableros en pantallas</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('#')">PANTALLAS WR.pdf</div><div class="htool-meta"><span class="htool-badge badge-web">Local</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
-      <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📝</div><div><div class="htool-name">Registro alertas s/Alerting</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('https://forms.gle/zGoZ6Tcv5ZGJHmCr5')">forms.gle →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
+      <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📝</div><div><div class="htool-name">Registro alertas s/Alerting</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="showPage('registro-alertas')">Formulario Interno →</div><div class="htool-meta"><span class="htool-badge badge-app">Interno</span><span class="htool-badge badge-noauth">App</span></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">🔍</div><div><div class="htool-name">Consulta de Bines Postillion</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('https://script.google.com/a/macros/proveedores.davivienda.com/s/AKfycbwOmNFK6S-95QxiBZCIBONhxnDktjmPswzrX2ukvVEjYBj0rRk1CQ0Et9sorPGSuYSO/exec')">script.google.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
     </div>
     <div class="note-box" style="margin-top:20px">⚙️ <strong>Nota:</strong> Las credenciales marcadas como "Propio" corresponden al acceso personal de cada analista.</div>
+  </div>
+
+  <!-- ══ REGISTRO ALERTAS ══ -->
+  <div class="page" id="page-registro-alertas">
+    <div class="page-header"><h1>Registro de Alertas</h1><p>Formulario nativo para documentar alertas sin Alerting Profile o sin Task asociado.</p></div>
+    <div class="card">
+      <div class="card-title">Detalles del Problema</div>
+      <div class="form-grid cols-2">
+        <div class="form-group"><label class="form-label">Número del Problema <span class="required">*</span></label><input type="text" id="ra-numero" placeholder="Ej: P-230912"></div>
+        <div class="form-group"><label class="form-label">URL Alerta <span class="required">*</span></label><input type="text" id="ra-url" placeholder="https://..."></div>
+        <div class="form-group"><label class="form-label">Aplicación <span class="required">*</span></label><input type="text" id="ra-aplicacion" placeholder="Nombre de la aplicación afectada"></div>
+        <div class="form-group"><label class="form-label">Equipo soporte <span class="required">*</span></label><input type="text" id="ra-equipo" placeholder="Equipo responsable"></div>
+      </div>
+      <div class="form-group" style="margin-top:16px;">
+        <label class="radio-label" style="display:inline-flex;width:auto;cursor:pointer;">
+          <input type="checkbox" id="ra-sintask" style="width:16px;height:16px;"> Con alerting - Sin Task
+        </label>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" id="btn-ra-enviar" onclick="enviarRegistroAlerta()">📤 Guardar Registro en Sheets</button>
+      <button class="btn btn-secondary" onclick="limpiarRegistroAlerta()">🗑️ Limpiar</button>
+    </div>
   </div>
 
 
@@ -549,7 +573,7 @@ function showPage(id) {
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   const page=document.getElementById('page-'+id);
   if(page) page.classList.add('active');
-  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios'};
+  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios','registro-alertas':'Registro Alertas'};
   document.getElementById('topbar-title').textContent=titles[id]||id;
   document.querySelectorAll('.nav-item').forEach(btn=>{
     if((btn.getAttribute('onclick')||'').includes("'"+id+"'")) btn.classList.add('active');
@@ -618,6 +642,51 @@ function limpiarCertificacion(){
   ['vc-cambio','vc-ci','vc-dueno','vc-torre','vc-lider'].forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});
   document.querySelectorAll('#page-validacion-cambios input[type="radio"]').forEach(r=>r.checked=false);
   ['vt1','vt2','m1','m2','i1','i2','i3','v1','v2','v3'].forEach(n=>{var b=document.getElementById('badge-'+n);if(b){b.textContent='—';b.className='estado-badge estado-empty';}});
+}
+
+// ── REGISTRO ALERTAS ──
+function enviarRegistroAlerta(){
+  const numero = document.getElementById('ra-numero').value.trim();
+  const url = document.getElementById('ra-url').value.trim();
+  const aplicacion = document.getElementById('ra-aplicacion').value.trim();
+  const equipo = document.getElementById('ra-equipo').value.trim();
+  const sinTask = document.getElementById('ra-sintask').checked;
+
+  if(!numero || !url || !aplicacion || !equipo){
+    showToast('Complete los campos obligatorios', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('btn-ra-enviar');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+  showToast('Enviando registro...', 'info');
+
+  google.script.run
+    .withSuccessHandler((res) => {
+      btn.disabled = false;
+      btn.textContent = '📤 Guardar Registro en Sheets';
+      if(res && res.success) {
+        showToast('Registro guardado exitosamente', 'success');
+        limpiarRegistroAlerta();
+      } else {
+        showToast('Error al guardar: ' + (res ? res.error : ''), 'error');
+      }
+    })
+    .withFailureHandler((err) => {
+      btn.disabled = false;
+      btn.textContent = '📤 Guardar Registro en Sheets';
+      showToast('Error de conexión', 'error');
+    })
+    .registrarAlerta({numeroProblema: numero, urlAlerta: url, aplicacion: aplicacion, equipoSoporte: equipo, sinTask: sinTask});
+}
+
+function limpiarRegistroAlerta(){
+  document.getElementById('ra-numero').value = '';
+  document.getElementById('ra-url').value = '';
+  document.getElementById('ra-aplicacion').value = '';
+  document.getElementById('ra-equipo').value = '';
+  document.getElementById('ra-sintask').checked = false;
 }
 
 // ── TURNO MONITOREO ──
