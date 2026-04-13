@@ -344,6 +344,37 @@ textarea{resize:vertical;min-height:80px;}
           </div>
         </div>
 
+        <!-- Solicitud de Monitoreo -->
+        <div class="tl-card" style="border-color:rgba(244,162,97,.5); background:rgba(244,162,97,.05);">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input type="checkbox" id="smCheck" onchange="document.getElementById('smFormBody').style.display=this.checked?'block':'none'" style="width:auto;cursor:pointer;">
+            <label for="smCheck" class="tl-card-title" style="color:var(--warning);margin:0;cursor:pointer;">⚠️ Sin Observabilidad</label>
+          </div>
+          <div id="smFormBody" style="display:none; margin-top:10px;">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.4;font-style:italic;">
+              Este incidente no fue detectado automáticamente. Complete para solicitar monitoreo.
+            </div>
+            <div class="tl-field">
+              <label>Fuente de evidencia</label>
+              <select id="smFuente" onchange="document.getElementById('smFuenteOtro').style.display=this.value==='Otro'?'block':'none'">
+                <option value="Reporte Usuario Final">👤 Reporte Usuario Final</option>
+                <option value="Mesa de Ayuda">📞 Mesa de Ayuda (Llamada)</option>
+                <option value="Chat Operativo">💬 Chat Operativo</option>
+                <option value="Validación Manual">👁️ Validación Manual</option>
+                <option value="Correo Directo">📧 Correo Directo</option>
+                <option value="Otro">➕ Otro</option>
+              </select>
+              <input type="text" id="smFuenteOtro" placeholder="Especifique la fuente..." style="display:none;margin-top:6px;">
+            </div>
+            <div class="tl-field"><label>Tipo de Error Evidenciado</label><input type="text" id="smError" placeholder="Ej: Timeout, 500 Internal Error, Falla conexión..."></div>
+            <div class="tl-field"><label>Descripción del Comportamiento</label><textarea id="smDesc" rows="2" placeholder="Detalle cómo se manifiesta la falla..."></textarea></div>
+            
+            <button class="btn" style="width:100%;justify-content:center;margin-top:4px;background:var(--warning);color:#fff;" onclick="generarSolicitudMonitoreo()">
+              ✉️ Generar Solicitud de Monitoreo
+            </button>
+          </div>
+        </div>
+
         <!-- Formulario evento -->
         <div class="tl-card" id="tl-form-card">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -764,6 +795,44 @@ function tlRemove(id){if(tlEditId===id)tlCancelEdit();tlEvts=tlEvts.filter(e=>e.
 function tlClearAll(){if(!confirm('¿Borrar todos los eventos?'))return;tlEvts=[];tlCancelEdit();tlRenderAll();}
 function tlToggleMode(){tlEquidist=!tlEquidist;document.getElementById('tl-mode-lbl').textContent=tlEquidist?'Equidistante':'Cronológico';tlRenderCanvas();}
 function tlZoom(val){document.getElementById('tl-preview').style.transform=`scale(${val})`;}
+
+// ── SOLICITUD DE MONITOREO (Sin Observabilidad) ──
+function generarSolicitudMonitoreo(){
+  const incNum = document.getElementById('tlIncNum').value || 'Sin_ID';
+  const incTitle = document.getElementById('tlIncTitle').value || 'Sin Título';
+  let fuente = document.getElementById('smFuente').value;
+  if(fuente === 'Otro') {
+    fuente = document.getElementById('smFuenteOtro').value || 'Otro (No especificado)';
+  }
+  const error = document.getElementById('smError').value.trim();
+  const desc = document.getElementById('smDesc').value.trim();
+
+  if(!error || !desc){
+    showToast('Complete el error y la descripción para solicitar monitoreo','error');
+    return;
+  }
+
+  // Correo de ejemplo, puedes reemplazarlo
+  const correoEjemplo = 'monitoreo@ejemplo.com.co';
+  const subject = encodeURIComponent(`Solicitud de Monitoreo - Incidente ${incNum}`);
+  const body = encodeURIComponent(`Hola Equipo de Monitoreo,
+
+El siguiente incidente no fue detectado automáticamente por las herramientas. Solicitamos su apoyo para implementar la observabilidad requerida.
+
+• Incidente: ${incNum} - ${incTitle}
+• Fuente de evidencia: ${fuente}
+• Tipo de Error Evidenciado: ${error}
+
+Descripción del Comportamiento:
+${desc}
+
+Quedamos atentos.
+Saludos.`);
+
+  // Esto abrirá el cliente de correo predeterminado (Outlook, Gmail web, etc.)
+  window.location.href = `mailto:${correoEjemplo}?subject=${subject}&body=${body}`;
+  showToast('Generando borrador de correo...','info');
+}
 
 // ── EXPORT PNG (descarga local) ──
 function tlExportPNG(){
