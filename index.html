@@ -245,14 +245,11 @@ textarea{resize:vertical;min-height:80px;}
       <div class="logo-text">Mesa Ops<span>Aplicaciones & Monitoreo</span></div>
     </div>
   </div>
-  <div class="nav-section">
-    <div class="nav-label">General</div>
-    <button class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">🏠</span> Dashboard <span class="nav-dot"></span></button>
-  </div>
+
   <div class="nav-section">
     <div class="nav-label">Monitoreo</div>
     <button class="nav-item" onclick="showPage('registro-alertas')"><span class="nav-icon">📝</span> Registro Alertas <span class="nav-dot"></span></button>
-    <button class="nav-item" onclick="showPage('cortes-pse')"><span class="nav-icon">✂️</span> Cortes PSE <span class="nav-dot"></span></button>
+    <button class="nav-item" onclick="showPage('cortes-pse')"><span class="nav-icon">✅</span> Cortes PSE <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('entrega-turno-mon')"><span class="nav-icon">🔄</span> Entrega de Turno <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('herramientas')"><span class="nav-icon">🛠️</span> Herramientas <span class="nav-dot"></span></button>
   </div>
@@ -262,7 +259,6 @@ textarea{resize:vertical;min-height:80px;}
     <button class="nav-item" onclick="showPage('validacion-cambios')"><span class="nav-icon">✅</span> Validación de Cambios <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('timeline')"><span class="nav-icon">📊</span> Línea de Tiempo <span class="nav-dot"></span></button>
   </div>
-  <div class="sidebar-footer"><span style="display:flex;align-items:center;justify-content:center;gap:6px"><span class="status-dot"></span> Sistemas operativos</span></div>
 </nav>
 
 <!-- ════════ MAIN ════════ -->
@@ -275,63 +271,166 @@ textarea{resize:vertical;min-height:80px;}
     </div>
   </div>
 
-  <!-- ══ DASHBOARD ══ -->
-  <div class="page active" id="page-dashboard">
-    <div class="page-header"><h1>Dashboard</h1><p>Resumen del estado operativo de la mesa</p></div>
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-label">Cambios hoy</div><div class="stat-value stat-accent">0</div><div class="stat-sub">Validaciones registradas</div></div>
-      <div class="stat-card"><div class="stat-label">Turnos</div><div class="stat-value stat-info">0</div><div class="stat-sub">Entregas enviadas</div></div>
-      <div class="stat-card"><div class="stat-label">Herramientas</div><div class="stat-value stat-success">8</div><div class="stat-sub">Accesos configurados</div></div>
-      <div class="stat-card"><div class="stat-label">Alertas</div><div class="stat-value">0</div><div class="stat-sub">Sin incidentes activos</div></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Accesos rápidos</div>
-      <div class="tools-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
-        <div class="tool-card" onclick="showPage('validacion-cambios')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(230,57,70,.15)">✅</div><div><div class="tool-name">Validación de Cambios</div><div class="tool-url">Aplicaciones</div></div></div><div class="tool-desc">Registrar y certificar cambios en producción.</div></div>
-        <div class="tool-card" onclick="showPage('entrega-turno-mon')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(46,196,182,.15)">🔄</div><div><div class="tool-name">Entrega de Turno</div><div class="tool-url">Monitoreo</div></div></div><div class="tool-desc">Formulario de entrega de turno para el equipo de monitoreo.</div></div>
-        <div class="tool-card" onclick="showPage('herramientas')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(69,123,157,.15)">🛠️</div><div><div class="tool-name">Herramientas</div><div class="tool-url">Accesos & URLs</div></div></div><div class="tool-desc">Listado de todas las herramientas y sus accesos.</div></div>
-        <div class="tool-card" onclick="showPage('entrega-turno-app')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(244,162,97,.15)">📋</div><div><div class="tool-name">Entrega de Turno</div><div class="tool-url">Aplicaciones</div></div></div><div class="tool-desc">Formulario de entrega de turno para el equipo de aplicaciones.</div></div>
-        <div class="tool-card" onclick="showPage('timeline')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(69,123,157,.15)">📊</div><div><div class="tool-name">Línea de Tiempo</div><div class="tool-url">Incidentes ITIL</div></div></div><div class="tool-desc">Documenta incidentes con métricas MTTD, MTTA, MTTR. Exporta tu línea de tiempo.</div></div>
-      </div>
-    </div>
-  </div>
-
   <!-- ══ CORTES PSE ══ -->
   <div class="page" id="page-cortes-pse">
-    <div class="page-header"><h1>Reporte de PSE</h1><p>Análisis transaccional y validación de cortes de servicio</p></div>
-    
-    <div class="card">
-      <div class="card-title">Carga de Archivo XLSX</div>
-      <div style="display:flex; align-items:center; gap:16px;">
-        <input type="file" id="pseFileInput" accept=".xlsx" style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px; max-width:300px;">
-        <button class="btn btn-primary" onclick="leerArchivoPSE()">📤 Subir archivo</button>
-      </div>
-      <p id="pseMensaje" style="margin-top: 15px; font-weight: 600; color: var(--muted); font-size:13px;"></p>
+    <div class="page-header">
+      <h1 style="display:flex; align-items:center; gap:10px;">
+        Reporte de PSE
+        <a href="https://docs.google.com/spreadsheets/d/1N8uoiQ0aF69YPgvaPccdTDTqjVoVvMfEXrU4pVN8b_w/edit?pli=1&gid=1218783717#gid=1218783717" target="_blank" title="Abrir Base de Datos en Google Sheets" style="text-decoration:none; font-size:22px; transition:transform 0.2s; display:inline-block;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">📗</a>
+      </h1>
+      <p>Análisis transaccional y validación de cortes de servicio</p>
     </div>
 
-    <div class="card" style="max-width: 700px;">
-      <h2 style="text-align:center; color:var(--accent); font-size:16px; margin-bottom:16px; font-weight:700;">
-        REPORTE TRANSACCIONALIDAD EN PSE
-      </h2>
-      <table class="pse-table">
-        <tr><td class="left"><b>Total TX</b></td><td id="totalTX">--</td><td></td><td></td></tr>
-        <tr><td class="left">Aprobadas</td><td id="aprobadas">--</td><td></td><td id="aprobadasPct">--</td></tr>
-        <tr><td class="left">Fallidas</td><td id="fallidas">--</td><td></td><td id="fallidasPct" style="font-weight:bold;">--</td></tr>
-        <tr><td class="left">Rechazadas</td><td id="rechazadas">--</td><td></td><td id="rechazadasPct">--</td></tr>
-        <tr><td colspan="4" style="background:var(--surface2);"><b>Desglose de rechazos</b></td></tr>
-        <tr><td class="left">Causal 15</td><td id="causal15">--</td><td></td><td id="causal15Pct">--</td></tr>
-        <tr><td class="left">Sin causal 15</td><td id="sinCausal15">--</td><td></td><td id="sinCausal15Pct" style="font-weight:bold;">--</td></tr>
-        <tr><td colspan="4" style="background:var(--surface2);"><b>Causales</b></td></tr>
-        <tr><th class="left">Causal</th><th>Código</th><th>Cantidad</th><th>%</th></tr>
-        <tr><td class="left" id="nom1">--</td><td id="cod1">--</td><td id="cant1">--</td><td id="pct1" style="font-weight:bold;">--</td></tr>
-        <tr><td class="left" id="nom2">--</td><td id="cod2">--</td><td id="cant2">--</td><td id="pct2" style="font-weight:bold;">--</td></tr>
-        <tr><td class="left" id="nom3">--</td><td id="cod3">--</td><td id="cant3">--</td><td id="pct3" style="font-weight:bold;">--</td></tr>
-        <tr>
-          <td colspan="4" style="color:var(--accent); font-weight:700; padding:12px;">
-            Se crea protocolo: Rechazadas sin causal 15 > 20% ó Fallidas > 3%
-          </td>
-        </tr>
-      </table>
+    <!-- Dash Historial Superior -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">Historial de Transacciones (Hoy)</div>
+      <div id="pse-historial-hoy" style="display:flex; gap:10px; flex-wrap:wrap; min-height:40px; align-items:center; background:var(--surface2); padding:12px; border-radius:8px;">
+        <span style="font-size:12px; color:var(--muted); font-style:italic;">Esperando datos del historial...</span>
+      </div>
+    </div>
+    
+    <!-- Contenedor dual de tablas -->
+    <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+      <!-- Tabla Reporte & Carga -->
+      <div class="card" style="flex:1; min-width:320px; max-width:600px;">
+        
+        <!-- Sección de Carga Integrada y Alerta Ampliada -->
+        <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px dashed var(--border);">
+          <div style="font-weight:700; font-size:14px; color:var(--text); margin-bottom:12px; display:flex; align-items:center;">
+            Carga de Archivo XLSX <a href="https://docs.google.com/spreadsheets/d/1N8uoiQ0aF69YPgvaPccdTDTqjVoVvMfEXrU4pVN8b_w/edit?pli=1&gid=1218783717#gid=1218783717" target="_blank" title="Descargar/Abrir plantilla XLSX" style="text-decoration:none; font-size:18px; margin-left:6px;">📄</a>
+          </div>
+          <div style="display:flex; gap:12px; margin-bottom:12px;">
+            <div style="flex:1;">
+              <label style="font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase;">Hora Inicio del Corte</label>
+              <input type="text" id="pseHoraInicio" placeholder="Ej: 0:00" style="margin-top:4px; padding:8px;">
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase;">Hora Fin del Corte</label>
+              <input type="text" id="pseHoraFin" placeholder="Ej: 0:30" style="margin-top:4px; padding:8px;">
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <input type="file" id="pseFileInput" accept=".xlsx" style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px; flex:1;">
+            <button class="btn btn-primary" onclick="leerArchivoPSE()">📤 Subir archivo</button>
+          </div>
+          <div style="color:var(--accent); font-size:14.5px; font-weight:700; background:rgba(230,57,70,0.1); padding:12px 16px; border-radius:8px; text-align:center; border: 1px solid rgba(230,57,70,0.2);">
+            ⚠️ Se crea protocolo: Rechazadas sin causal 15 > 20% ó Fallidas > 3%
+          </div>
+          <p id="pseMensaje" style="margin-top: 12px; font-weight: 600; color: var(--muted); font-size:13px; text-align:center; margin-bottom:0;"></p>
+        </div>
+
+        <h2 style="text-align:center; color:var(--accent); font-size:16px; margin-bottom:16px; font-weight:700;">
+          REPORTE TRANSACCIONALIDAD EN PSE
+        </h2>
+        <table class="pse-table">
+          <tr><td class="left"><b>Total TX</b></td><td id="totalTX">--</td><td></td><td></td></tr>
+          <tr><td class="left">Aprobadas</td><td id="aprobadas">--</td><td></td><td id="aprobadasPct">--</td></tr>
+          <tr><td class="left">Fallidas</td><td id="fallidas">--</td><td></td><td id="fallidasPct" style="font-weight:bold;">--</td></tr>
+          <tr><td class="left">Rechazadas</td><td id="rechazadas">--</td><td></td><td id="rechazadasPct">--</td></tr>
+          <tr><td colspan="4" style="background:var(--surface2);"><b>Desglose de rechazos</b></td></tr>
+          <tr><td class="left">Causal 15</td><td id="causal15">--</td><td></td><td id="causal15Pct" style="font-weight:bold;">--</td></tr>
+          <tr><td class="left">Sin causal 15</td><td id="sinCausal15">--</td><td></td><td id="sinCausal15Pct" style="font-weight:bold;">--</td></tr>
+          <tr><td colspan="4" style="background:var(--surface2);"><b>Causales</b></td></tr>
+          <tr><th class="left">Causal</th><th>Código</th><th>Cantidad</th><th>%</th></tr>
+          <tr><td class="left" id="nom1">--</td><td id="cod1">--</td><td id="cant1">--</td><td id="pct1" style="font-weight:bold;">--</td></tr>
+          <tr><td class="left" id="nom2">--</td><td id="cod2">--</td><td id="cant2">--</td><td id="pct2" style="font-weight:bold;">--</td></tr>
+          <tr><td class="left" id="nom3">--</td><td id="cod3">--</td><td id="cant3">--</td><td id="pct3" style="font-weight:bold;">--</td></tr>
+        </table>
+        
+        <div id="pse-alerts-container" style="margin-top:16px; text-align:center;">
+          <div id="alert-scn" style="display:none; margin-bottom:8px; color:var(--accent); font-weight:700;">⚠️ Sugerencia: Validar con el equipo de soporte SCN (Causal 15 > 35%)</div>
+          <div id="alert-fallidas" style="display:none; margin-bottom:8px; color:var(--warning); font-weight:700;">⚠️ Sugerencia: Revisión con el equipo de soporte (Fallidas > 1.5%)</div>
+          <div id="pse-notif-btns" style="display:none; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px;">
+            <button class="btn btn-secondary" onclick="notificarPSE('torre')">🏢 Notificar a Torre de control</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenedor Tablas Derechas -->
+      <div style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:320px; max-width:600px;">
+        
+        <!-- Tabla Diccionario -->
+        <div class="card" style="padding:20px; margin-bottom:0;">
+          <h2 style="text-align:center; color:var(--accent2); font-size:14px; margin-bottom:16px; font-weight:700;">
+            DICCIONARIO DE CAUSALES
+          </h2>
+          <details>
+            <summary style="font-size:12px; font-weight:700; color:var(--muted); cursor:pointer; outline:none; user-select:none; margin-bottom:10px; padding:10px; background:var(--surface2); border-radius:6px; border:1px solid var(--border);">
+              ▶ CAUSALES DE RECHAZO (Desplegar)
+            </summary>
+            <div style="max-height:280px; overflow-y:auto; border-radius:8px; border:1px solid var(--border); margin-bottom:16px;">
+              <table class="pse-table" style="margin-top:0; font-size:11.5px;">
+                <tr><th style="width:60px;position:sticky;top:0;background:var(--surface2);">CÓDIGO</th><th style="position:sticky;top:0;background:var(--surface2);">CAUSALES RECHAZO</th></tr>
+                <tr><td>00001</td><td class="left">Cancelación del pago por parte del cliente</td></tr>
+                <tr><td>00002</td><td class="left">Cuenta embargada</td></tr>
+                <tr><td>00003</td><td class="left">Cuenta inactiva</td></tr>
+                <tr><td>00004</td><td class="left">Cuenta no existe</td></tr>
+                <tr><td>00005</td><td class="left">Cuenta no habilitada</td></tr>
+                <tr><td>00006</td><td class="left">Cuenta no ha sido asignada</td></tr>
+                <tr><td>00007</td><td class="left">Cuenta saldada</td></tr>
+                <tr><td>00008</td><td class="left">El monto excede el minimo autorizado</td></tr>
+                <tr><td>00009</td><td class="left">Entidad financiera no disponible</td></tr>
+                <tr><td>00010</td><td class="left">Fallas técnicas</td></tr>
+                <tr><td>00011</td><td class="left">Fondos insuficientes</td></tr>
+                <tr><td>00012</td><td class="left">Inconsistencia en datos de la transacción</td></tr>
+                <tr><td>00013</td><td class="left">Cuenta cancelada</td></tr>
+                <tr><td>00014</td><td class="left">Tiempo excedido en pendiente</td></tr>
+                <tr><td>00015</td><td class="left">Transaccion no concluida</td></tr>
+                <tr><td>00016</td><td class="left">Login invalido</td></tr>
+                <tr><td>00017</td><td class="left">Servicio PSE no habilitado</td></tr>
+                <tr><td>00018</td><td class="left">Transaccion no consentida por el cliente</td></tr>
+                <tr><td>00019</td><td class="left">Transacción sopechjosa de fraudes</td></tr>
+                <tr><td>00020</td><td class="left">Transaccion cancelada por el usuario</td></tr>
+                <tr><td>00021</td><td class="left">Transacción con cierre de navegador en PSE</td></tr>
+                <tr><td>00022</td><td class="left">Transacción con navegador no soportado en PSE</td></tr>
+                <tr><td>00023</td><td class="left">Timeout por inactividad del usuario en PSE</td></tr>
+                <tr><td>00024</td><td class="left">Transacción rechazadapor sospecha de fraude en entidad bancaria</td></tr>
+                <tr><th style="background:var(--surface2);">CÓDIGO</th><th style="background:var(--surface2);">CAUSALES FALLIDAS</th></tr>
+                <tr><td>10001</td><td class="left">FAIL_EXCCEDELIMIT - Empresa excede el limite de transacciones en PSE</td></tr>
+                <tr><td>10002</td><td class="left">FAIL_BANKURECHEABLE - no se puede conectar el banco</td></tr>
+                <tr><td>10003</td><td class="left">FAIL_NOTCONFIRMEDBYBANK - Banco no aceptó iniciar la transacción</td></tr>
+              </table>
+            </div>
+          </details>
+        </div>
+
+        <!-- Tabla Horarios -->
+        <div class="card" style="padding:20px; margin-bottom:0;">
+          <h2 style="text-align:center; color:var(--accent2); font-size:14px; margin-bottom:16px; font-weight:700;">
+            TABLA DE HORARIOS
+          </h2>
+          <div style="max-height:250px; overflow-y:auto; border-radius:8px; border:1px solid var(--border);">
+            <table class="pse-table" style="margin-top:0; font-size:11.5px; text-align:center;">
+              <tr><th style="position:sticky;top:0;background:var(--surface2);">INICIO</th><th style="position:sticky;top:0;background:var(--surface2);">MEDIO</th><th style="position:sticky;top:0;background:var(--surface2);">FIN</th></tr>
+              <tr><td>0:00</td><td>0:30</td><td>1:00</td></tr>
+              <tr><td>1:00</td><td>1:30</td><td>2:00</td></tr>
+              <tr><td>2:00</td><td>2:30</td><td>3:00</td></tr>
+              <tr><td>3:00</td><td>3:30</td><td>4:00</td></tr>
+              <tr><td>4:00</td><td>4:30</td><td>5:00</td></tr>
+              <tr><td>5:00</td><td>5:30</td><td>6:00</td></tr>
+              <tr><td>6:00</td><td>6:30</td><td>7:00</td></tr>
+              <tr><td>7:00</td><td>7:30</td><td>8:00</td></tr>
+              <tr><td>8:00</td><td>8:30</td><td>9:00</td></tr>
+              <tr><td>9:00</td><td>9:30</td><td>10:00</td></tr>
+              <tr><td>10:00</td><td>10:30</td><td>11:00</td></tr>
+              <tr><td>11:00</td><td>11:30</td><td>12:00</td></tr>
+              <tr><td>12:00</td><td>12:30</td><td>13:00</td></tr>
+              <tr><td>13:00</td><td>13:30</td><td>14:00</td></tr>
+              <tr><td>14:00</td><td>14:30</td><td>15:00</td></tr>
+              <tr><td>15:00</td><td>15:30</td><td>16:00</td></tr>
+              <tr><td>16:00</td><td>16:30</td><td>17:00</td></tr>
+              <tr><td>17:00</td><td>17:30</td><td>18:00</td></tr>
+              <tr><td>18:00</td><td>18:30</td><td>19:00</td></tr>
+              <tr><td>19:00</td><td>19:30</td><td>20:00</td></tr>
+              <tr><td>20:00</td><td>20:30</td><td>21:00</td></tr>
+              <tr><td>21:00</td><td>21:30</td><td>22:00</td></tr>
+              <tr><td>22:00</td><td>22:30</td><td>23:00</td></tr>
+              <tr><td>23:00</td><td>23:30</td><td>0:00</td></tr>
+            </table>
+          </div>
+        </div>
+        
+      </div>
     </div>
   </div>
 
@@ -377,11 +476,9 @@ textarea{resize:vertical;min-height:80px;}
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📞</div><div><div class="htool-name">CONTACTOS CGR - PROVEEDORES</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('https://docs.google.com/spreadsheets/d/1YWxqhEH0qofi0ybdTF-KUSbvOXL7qL5oZXA3UsyAnAs/edit?gid=0#gid=0')">docs.google.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">💻</div><div><div class="htool-name">PSE Página</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('https://ui.pse.com.co/ui/')">ui.pse.com.co →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">ObservaPSE</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">Davivienda2026</span></div><div class="htool-cred-row"><span class="htool-cred-label">Correo</span><span class="htool-cred-val">grpobservabilidadyanalticati@davivienda.com</span></div></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📄</div><div><div class="htool-name">PSE Archivo</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('https://docs.google.com/spreadsheets/d/1N8uoiQ0aF69YPgvaPccdTDTqjVoVvMfEXrU4pVN8b_w/edit?pli=1&gid=973274225#gid=973274225')">docs.google.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Con Gmail</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">Con Gmail</span></div></div></div>
-      <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📧</div><div><div class="htool-name">Extractos Sap Multicash</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('#')">Vía correo electrónico</div><div class="htool-meta"><span class="htool-badge badge-mail">Correo</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">🔑</div><div><div class="htool-name">Cambio de Contraseña de Red</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('https://passwordreset.microsoftonline.com/?whr=davivienda.com')">passwordreset.microsoftonline.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">Propio</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">Propio</span></div></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">🖥️</div><div><div class="htool-name">Pantallas sala WR</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('#')">Acceso Torre CPU</div><div class="htool-meta"><span class="htool-badge badge-app">Local</span><span class="htool-badge badge-auth">Requiere usuario</span></div><div class="htool-creds"><div class="htool-cred-row"><span class="htool-cred-label">Usuario</span><span class="htool-cred-val">mvisula1</span></div><div class="htool-cred-row"><span class="htool-cred-label">Contraseña</span><span class="htool-cred-val">Bancos1a</span></div></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📋</div><div><div class="htool-name">Orden tableros en pantallas</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('#')">PANTALLAS WR.pdf</div><div class="htool-meta"><span class="htool-badge badge-web">Local</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
-      <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">📝</div><div><div class="htool-name">Registro alertas s/Alerting</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="showPage('registro-alertas')">Formulario Interno →</div><div class="htool-meta"><span class="htool-badge badge-app">Interno</span><span class="htool-badge badge-noauth">App</span></div></div>
       <div class="htool-card" data-cat="apoyo" style="display:none;"><div class="htool-head"><div class="htool-icon" style="background:rgba(108,117,125,.12)">🔍</div><div><div class="htool-name">Consulta de Bines Postillion</div><div class="tag-mail-badge">Apoyo</div></div></div><div class="htool-url" onclick="openUrl('https://script.google.com/a/macros/proveedores.davivienda.com/s/AKfycbwOmNFK6S-95QxiBZCIBONhxnDktjmPswzrX2ukvVEjYBj0rRk1CQ0Et9sorPGSuYSO/exec')">script.google.com →</div><div class="htool-meta"><span class="htool-badge badge-web">Web</span><span class="htool-badge badge-noauth">Sin usuario</span></div></div>
     </div>
     <div class="note-box" style="margin-top:20px">⚙️ <strong>Nota:</strong> Las credenciales marcadas como "Propio" corresponden al acceso personal de cada analista.</div>
@@ -613,6 +710,7 @@ textarea{resize:vertical;min-height:80px;}
 // ─────────────────────────────────────
 const WH_CERT  = 'https://chat.googleapis.com/v1/spaces/AAQAU3eC4u0/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=7DiQ5qv_QuiG-wlxVexD2_v2LEwD-ArEcllS5YgmVzI';
 const WH_TURNO = 'https://chat.googleapis.com/v1/spaces/AAQAhjVz23w/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=rqpcS_Fk7jlZk9z4I3LoXR1FUvmZgNcODUEGdGq3-gM';
+const WH_TORRE   = 'https://chat.googleapis.com/v1/spaces/AAAA0VIHsYA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=xBFg9LOxNiC3R3YXYjtfZUGaO0AGzJF_jbYVYV1A-Go';
 
 // ── NAV ──
 function showPage(id) {
@@ -739,8 +837,11 @@ function limpiarRegistroAlerta(){
 // ── CORTES PSE ──
 function leerArchivoPSE() {
   const file = document.getElementById('pseFileInput').files[0];
-  if (!file) {
-    document.getElementById('pseMensaje').innerText = "⚠️ Selecciona un archivo XLSX";
+  const horaInicio = document.getElementById('pseHoraInicio').value;
+  const horaFin = document.getElementById('pseHoraFin').value;
+  
+  if (!file || !horaInicio || !horaFin) {
+    document.getElementById('pseMensaje').innerText = "⚠️ Completa las horas de inicio/fin y selecciona un archivo XLSX";
     return;
   }
   const reader = new FileReader();
@@ -761,6 +862,14 @@ function leerArchivoPSE() {
     const payload = JSON.stringify(jsonData); // Serializar para transmisión 100% segura
     document.getElementById('pseMensaje').innerText = "⏳ Procesando archivo...";
 
+    // Ocultar botones y alertas previas mientras carga el nuevo archivo
+    const btnGroup = document.getElementById('pse-notif-btns');
+    if(btnGroup) btnGroup.style.display = 'none';
+    const aScn = document.getElementById('alert-scn');
+    if(aScn) aScn.style.display = 'none';
+    const aFall = document.getElementById('alert-fallidas');
+    if(aFall) aFall.style.display = 'none';
+
     google.script.run
       .withSuccessHandler(res => {
         document.getElementById('pseMensaje').innerText = res;
@@ -770,7 +879,7 @@ function leerArchivoPSE() {
         document.getElementById('pseMensaje').innerText = "❌ Error: " + err.message;
         console.error(err);
       })
-      .procesarDatosPSE(payload);
+      .procesarDatosPSE(payload, horaInicio, horaFin);
   };
   reader.readAsArrayBuffer(file);
 }
@@ -806,19 +915,70 @@ function aplicarColoresPSE(data) {
   }
   const fallidas = getNumber(data.fallidasPct);
   const sinCausal = getNumber(data.sinCausal15Pct);
+  const causal15 = getNumber(data.causal15Pct);
+  
+  let mostrarBotones = false;
+
   const elFallidas = document.getElementById("fallidasPct");
   if (elFallidas) { elFallidas.style.background = fallidas > 3 ? "var(--accent)" : "var(--success)"; elFallidas.style.color = "white"; }
+  const alertFallidas = document.getElementById("alert-fallidas");
+  if (elFallidas) { 
+    if (fallidas >= 3) {
+      elFallidas.style.background = "var(--accent)"; mostrarBotones = true;
+    } else if (fallidas >= 1.5) {
+      elFallidas.style.background = "var(--warning)"; mostrarBotones = true;
+    } else {
+      elFallidas.style.background = "var(--success)";
+    }
+    elFallidas.style.color = "white"; 
+    if (alertFallidas) alertFallidas.style.display = fallidas >= 1.5 ? "block" : "none";
+  }
+  
   const elSinCausal = document.getElementById("sinCausal15Pct");
   if (elSinCausal) { 
     if (sinCausal > 20) {
         elSinCausal.style.background = "var(--accent)"; // Rojo
+        elSinCausal.style.background = "var(--accent)"; mostrarBotones = true;
     } else if (sinCausal >= 15 && sinCausal < 20) {
         elSinCausal.style.background = "var(--warning)"; // Naranja
+        elSinCausal.style.background = "var(--warning)"; mostrarBotones = true;
     } else {
         elSinCausal.style.background = "var(--success)"; // Verde
     }
     elSinCausal.style.color = "white"; 
   }
+  const elCausal15 = document.getElementById("causal15Pct");
+  const alertScn = document.getElementById("alert-scn");
+  if (elCausal15) {
+    if (causal15 > 35) {
+      elCausal15.style.background = "var(--accent)"; elCausal15.style.color = "white";
+      if (alertScn) alertScn.style.display = "block";
+    } else {
+      elCausal15.style.background = "var(--success)"; elCausal15.style.color = "white";
+      if (alertScn) alertScn.style.display = "none";
+    }
+  }
+
+  const notifBtns = document.getElementById("pse-notif-btns");
+  if (notifBtns) notifBtns.style.display = mostrarBotones ? "flex" : "none";
+}
+
+function notificarPSE(destino) {
+  const fallidas = document.getElementById('fallidasPct').innerText;
+  const sinCausal = document.getElementById('sinCausal15Pct').innerText;
+  const causal15 = document.getElementById('causal15Pct').innerText;
+  
+  const msg = `📢 *Posible afectación detectada.*🚨🚧\n\nSe presenta aumento en las transacciones (rechazadas o fallidas) para PSE.\n\n📊 *Métricas Actuales:*\n  • Fallidas: ${fallidas}\n  • Rechazadas sin causal 15: ${sinCausal}\n`;
+  const url = destino === 'eventos' ? WH_EVENTOS : WH_TORRE;
+  
+  if (!url || url.startsWith('REEMPLAZAR')) {
+    showToast('Configura la URL del webhook en el código', 'error');
+    return;
+  }
+  
+  fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: msg }) })
+    .then(() => showToast('Notificación enviada', 'success'))
+    .catch(() => showToast('Error al notificar', 'error'));
 }
 
 // ── TURNO MONITOREO ──
