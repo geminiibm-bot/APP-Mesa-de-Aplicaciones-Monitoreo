@@ -174,12 +174,6 @@ textarea{resize:vertical;min-height:80px;}
 .tl-field textarea{resize:none;}
 .tl-field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 
-/* Drive upload box */
-.drive-box{background:rgba(40,167,69,.07);border:1px solid rgba(40,167,69,.25);border-radius:10px;padding:14px;}
-.drive-box-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--success);font-family:'DM Mono',monospace;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-.drive-status{font-size:12px;color:var(--success);font-weight:600;margin-top:8px;min-height:16px;line-height:1.4;}
-.drive-status.err{color:var(--accent);}
-
 /* Event list items */
 .ev-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;transition:border-color .15s;position:relative;overflow:hidden;}
 .ev-item:hover{border-color:var(--accent2);}
@@ -286,7 +280,7 @@ textarea{resize:vertical;min-height:80px;}
         <div class="tool-card" onclick="showPage('entrega-turno-mon')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(46,196,182,.15)">🔄</div><div><div class="tool-name">Entrega de Turno</div><div class="tool-url">Monitoreo</div></div></div><div class="tool-desc">Formulario de entrega de turno para el equipo de monitoreo.</div></div>
         <div class="tool-card" onclick="showPage('herramientas')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(69,123,157,.15)">🛠️</div><div><div class="tool-name">Herramientas</div><div class="tool-url">Accesos & URLs</div></div></div><div class="tool-desc">Listado de todas las herramientas y sus accesos.</div></div>
         <div class="tool-card" onclick="showPage('entrega-turno-app')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(244,162,97,.15)">📋</div><div><div class="tool-name">Entrega de Turno</div><div class="tool-url">Aplicaciones</div></div></div><div class="tool-desc">Formulario de entrega de turno para el equipo de aplicaciones.</div></div>
-        <div class="tool-card" onclick="showPage('timeline')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(69,123,157,.15)">📊</div><div><div class="tool-name">Línea de Tiempo</div><div class="tool-url">Incidentes ITIL</div></div></div><div class="tool-desc">Documenta incidentes con métricas MTTD, MTTA, MTTR. Exporta y sube a Drive.</div></div>
+        <div class="tool-card" onclick="showPage('timeline')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(69,123,157,.15)">📊</div><div><div class="tool-name">Línea de Tiempo</div><div class="tool-url">Incidentes ITIL</div></div></div><div class="tool-desc">Documenta incidentes con métricas MTTD, MTTA, MTTR. Exporta tu línea de tiempo.</div></div>
       </div>
     </div>
   </div>
@@ -356,6 +350,8 @@ textarea{resize:vertical;min-height:80px;}
             <div class="tl-card-title" style="margin:0" id="tl-form-title">Nuevo Evento</div>
             <button id="tl-cancel-btn" class="tbtn" style="display:none;font-size:11px;padding:4px 10px;color:var(--accent);border-color:var(--accent);" onclick="tlCancelEdit()">Cancelar</button>
           </div>
+          <div style="margin-bottom:9px;display:flex;align-items:center;gap:8px;"><input type="checkbox" id="tlMultiDayCheck" onchange="document.getElementById('tlEvtDateWrap').style.display=this.checked?'block':'none'" style="width:auto;cursor:pointer;"><label for="tlMultiDayCheck" style="font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;margin:0;">Evento en diferente día</label></div>
+          <div class="tl-field" id="tlEvtDateWrap" style="display:none;"><label>Fecha del evento</label><input type="date" id="tlEvtDate"></div>
           <div class="tl-field-row">
             <div class="tl-field"><label>Hora</label><input type="time" id="tlTime"></div>
             <div class="tl-field"><label>Fase / Tipo</label>
@@ -382,16 +378,6 @@ textarea{resize:vertical;min-height:80px;}
           <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:6px;" onclick="tlAddEvent()" id="tl-add-btn">
             ＋ <span id="tl-btn-label">Agregar Evento</span>
           </button>
-        </div>
-
-        <!-- Drive Upload — URL estática en código -->
-        <div class="drive-box">
-          <div class="drive-box-title">☁️ Subir a Google Drive</div>
-          <p style="font-size:11px;color:#155e38;margin-bottom:10px;line-height:1.5;">Captura el canvas y lo sube automáticamente a la carpeta de incidentes en Drive.</p>
-          <button class="btn btn-success" style="width:100%;justify-content:center;" onclick="tlExportAndUploadDrive()">
-            ☁️ Exportar PNG y Subir a Drive
-          </button>
-          <div class="drive-status" id="tl-drive-status"></div>
         </div>
 
         <!-- Lista eventos -->
@@ -503,13 +489,6 @@ textarea{resize:vertical;min-height:80px;}
      SCRIPTS
 ════════════════════════════════════ -->
 <script>
-// ─────────────────────────────────────
-// DRIVE CONFIG — URL ESTÁTICA EN CÓDIGO
-// Reemplaza estos valores con los tuyos:
-// ─────────────────────────────────────
-const DRIVE_ACCESS_TOKEN = 'REEMPLAZA_CON_TU_TOKEN_OAUTH2'; // ya29.A0ARr...
-const DRIVE_FOLDER_ID    = 'REEMPLAZA_CON_ID_DE_CARPETA';   // 1BxiMV...
-
 // ─────────────────────────────────────
 // WEBHOOKS GOOGLE CHAT
 // ─────────────────────────────────────
@@ -669,11 +648,13 @@ function tlRenderList(){
   if(tlEvts.length===0){c.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;opacity:.6;">Sin eventos registrados</div>';return;}
   const s=[...tlEvts].sort((a,b)=>tlTs(a)-tlTs(b));
   c.innerHTML='';
+  const incDate=document.getElementById('tlIncDate').value||new Date().toISOString().split('T')[0];
   s.forEach(evt=>{
     const div=document.createElement('div');
     div.className='ev-item';
     const color=TL_COLORS[evt.type]||'#888';
-    div.innerHTML=`<div class="ev-stripe" style="background:${color}"></div><div class="ev-time" style="padding-left:6px">${evt.time}</div><div class="ev-info" onclick="tlLoadEdit(${evt.id})"><div class="ev-title">${evt.title}</div><div class="ev-desc">${evt.desc||''}</div></div><button class="ev-del" onclick="tlRemove(${evt.id})">✕</button>`;
+    const displayTime=(evt.date&&evt.date!==incDate)?evt.date.split('-').slice(1).reverse().join('/')+' '+evt.time:evt.time;
+    div.innerHTML=`<div class="ev-stripe" style="background:${color}"></div><div class="ev-time" style="padding-left:6px;font-size:${evt.date&&evt.date!==incDate?'9.5px':'11px'}">${displayTime}</div><div class="ev-info" onclick="tlLoadEdit(${evt.id})"><div class="ev-title">${evt.title}</div><div class="ev-desc">${evt.desc||''}</div></div><button class="ev-del" onclick="tlRemove(${evt.id})">✕</button>`;
     c.appendChild(div);
   });
 }
@@ -685,6 +666,7 @@ function tlRenderCanvas(){
   tlSort();
   const ts=tlEvts.map(e=>tlTs(e));
   const minTs=Math.min(...ts),maxTs=Math.max(...ts);
+  const incDate=document.getElementById('tlIncDate').value||new Date().toISOString().split('T')[0];
   tlEvts.forEach((evt,idx)=>{
     const pct=tlPos(evt,idx,tlEvts.length,minTs,maxTs);
     const isTop=idx%2!==0;
@@ -704,10 +686,11 @@ function tlRenderCanvas(){
     const line=document.createElement('div');
     line.style.cssText='width:1px;height:40px;background:#cbd5e1;';
     const card=document.createElement('div');
+    const displayTime=(evt.date&&evt.date!==incDate)?evt.date.split('-').slice(1).reverse().join('/')+' '+evt.time:evt.time;
     card.style.cssText=`background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:9px 11px;width:160px;font-size:12px;position:relative;`;
     if(evt.type==='green') card.style.borderTop=`3px solid ${color}`;
     else card.style.borderLeft=`3px solid ${color}`;
-    card.innerHTML=`<div style="font-size:10px;font-weight:700;color:${color};border-bottom:1px solid #f1f5f9;padding-bottom:4px;margin-bottom:4px;">${evt.time}</div><div style="font-weight:700;color:#1a1a2e;font-size:11px;line-height:1.3;margin-bottom:2px;">${evt.title}</div>${evt.desc?`<div style="font-size:10px;color:#5a6a85;line-height:1.4;">${evt.desc}</div>`:''}`;
+    card.innerHTML=`<div style="font-size:10px;font-weight:700;color:${color};border-bottom:1px solid #f1f5f9;padding-bottom:4px;margin-bottom:4px;">${displayTime}</div><div style="font-weight:700;color:#1a1a2e;font-size:11px;line-height:1.3;margin-bottom:2px;">${evt.title}</div>${evt.desc?`<div style="font-size:10px;color:#5a6a85;line-height:1.4;">${evt.desc}</div>`:''}`;
     if(isTop){card.style.marginBottom='5px';wrap.appendChild(card);wrap.appendChild(line);wrap.appendChild(dot);}
     else{card.style.marginTop='5px';wrap.appendChild(dot);wrap.appendChild(line);wrap.appendChild(card);}
     layer.appendChild(wrap);
@@ -720,7 +703,11 @@ function tlAddEvent(){
   const time=document.getElementById('tlTime').value;
   const title=document.getElementById('tlTitle').value.trim();
   if(!time||!title){showToast('Hora y título son obligatorios','error');return;}
-  const data={time,date:document.getElementById('tlIncDate').value,title,desc:document.getElementById('tlDesc').value.trim(),explanation:document.getElementById('tlExpl').value.trim(),type:document.getElementById('tlType').value,manualPos:null};
+  const isMulti=document.getElementById('tlMultiDayCheck').checked;
+  const incDate=document.getElementById('tlIncDate').value;
+  const evtDate=isMulti?document.getElementById('tlEvtDate').value:incDate;
+  if(isMulti&&!evtDate){showToast('Fecha del evento es obligatoria','error');return;}
+  const data={time,date:evtDate,title,desc:document.getElementById('tlDesc').value.trim(),explanation:document.getElementById('tlExpl').value.trim(),type:document.getElementById('tlType').value,manualPos:null};
   if(tlEditId){
     const idx=tlEvts.findIndex(e=>e.id===tlEditId);
     tlEvts[idx]={...tlEvts[idx],...data};
@@ -730,6 +717,9 @@ function tlAddEvent(){
     document.getElementById('tlTitle').value='';
     document.getElementById('tlDesc').value='';
     document.getElementById('tlExpl').value='';
+    document.getElementById('tlMultiDayCheck').checked=false;
+    document.getElementById('tlEvtDateWrap').style.display='none';
+    document.getElementById('tlEvtDate').value='';
   }
   tlRenderAll();
   showToast('Evento guardado','info');
@@ -738,6 +728,11 @@ function tlAddEvent(){
 function tlLoadEdit(id){
   const evt=tlEvts.find(e=>e.id===id);
   tlEditId=id;
+  const incDate=document.getElementById('tlIncDate').value;
+  const isMulti=(evt.date&&evt.date!==incDate);
+  document.getElementById('tlMultiDayCheck').checked=isMulti;
+  document.getElementById('tlEvtDateWrap').style.display=isMulti?'block':'none';
+  document.getElementById('tlEvtDate').value=isMulti?evt.date:'';
   document.getElementById('tlTime').value=evt.time;
   document.getElementById('tlTitle').value=evt.title;
   document.getElementById('tlDesc').value=evt.desc||'';
@@ -755,6 +750,9 @@ function tlCancelEdit(){
   document.getElementById('tlTitle').value='';
   document.getElementById('tlDesc').value='';
   document.getElementById('tlExpl').value='';
+  document.getElementById('tlMultiDayCheck').checked=false;
+  document.getElementById('tlEvtDateWrap').style.display='none';
+  document.getElementById('tlEvtDate').value='';
   document.getElementById('tl-form-title').textContent='Nuevo Evento';
   document.getElementById('tl-btn-label').textContent='Agregar Evento';
   document.getElementById('tl-cancel-btn').style.display='none';
@@ -806,6 +804,7 @@ function tlExportPPTX(){
   s1.addText('INICIO',{x:'5%',y:2.5,w:1,fontSize:10,bold:true,color:'D1D5DB'});
   s1.addText('FIN',{x:'92%',y:2.5,w:1,fontSize:10,bold:true,color:'D1D5DB'});
   tlSort();
+  const baseDate=document.getElementById('tlIncDate').value||new Date().toISOString().split('T')[0];
   if(tlEvts.length>0){
     const ts=tlEvts.map(e=>tlTs(e));
     const minTs=Math.min(...ts),maxTs=Math.max(...ts);
@@ -821,9 +820,10 @@ function tlExportPPTX(){
       let tx=pct/10-boxW/2;
       if(pct<10) tx=pct/10; if(pct>90) tx=pct/10-boxW;
       const ty=isTop?lineY-boxH-.05:lineY+1.05;
+      const displayTime=(evt.date&&evt.date!==baseDate)?evt.date.split('-').slice(1).reverse().join('/')+' '+evt.time:evt.time;
       s1.addShape('rect',{x:tx,y:ty,w:boxW,h:boxH,fill:{color:'FFFFFF'},line:{color:'E5E7EB',width:.5}});
       s1.addShape('rect',{x:tx,y:ty,w:evt.type==='green'?boxW:.05,h:evt.type==='green'?.05:boxH,fill:{color:colorHex},line:null});
-      s1.addText([{text:evt.time+'\n',options:{fontSize:10,bold:true,color:colorHex}},{text:evt.title+'\n',options:{fontSize:11,bold:true,color:'333333'}},{text:evt.desc||'',options:{fontSize:9,color:'666666'}}],{x:tx+.07,y:ty+.05,w:boxW-.07,h:boxH-.1,align:'center',shrinkText:true});
+      s1.addText([{text:displayTime+'\n',options:{fontSize:10,bold:true,color:colorHex}},{text:evt.title+'\n',options:{fontSize:11,bold:true,color:'333333'}},{text:evt.desc||'',options:{fontSize:9,color:'666666'}}],{x:tx+.07,y:ty+.05,w:boxW-.07,h:boxH-.1,align:'center',shrinkText:true});
     });
   }
   let s2=pres.addSlide();
@@ -834,68 +834,6 @@ function tlExportPPTX(){
   s2.addTable(rows,{x:.5,y:2.8,w:9,colW:[1.5,3,4.5],border:{color:'E5E7EB'}});
   pres.writeFile({fileName:`Timeline_${incNum}.pptx`});
   showToast('PPTX descargado','info');
-}
-
-// ── EXPORTAR PNG + SUBIR A DRIVE (URL ESTÁTICA) ──
-async function tlExportAndUploadDrive(){
-  const statusEl=document.getElementById('tl-drive-status');
-
-  // Verificar que las constantes estén configuradas
-  if(!DRIVE_ACCESS_TOKEN||DRIVE_ACCESS_TOKEN.startsWith('REEMPLAZA')){
-    statusEl.className='drive-status err';
-    statusEl.textContent='Token de Drive no configurado en el código.';
-    showToast('Configura DRIVE_ACCESS_TOKEN en el código','error');
-    return;
-  }
-  if(!DRIVE_FOLDER_ID||DRIVE_FOLDER_ID.startsWith('REEMPLAZA')){
-    statusEl.className='drive-status err';
-    statusEl.textContent='ID de carpeta Drive no configurado en el código.';
-    showToast('Configura DRIVE_FOLDER_ID en el código','error');
-    return;
-  }
-
-  const inc=document.getElementById('tlIncNum').value||'Timeline';
-  const date=document.getElementById('tlIncDate').value||new Date().toISOString().split('T')[0];
-  const fileName=`Timeline_${inc}_${date}.png`;
-
-  statusEl.className='drive-status';
-  statusEl.textContent='Capturando imagen...';
-
-  try {
-    const el=document.getElementById('tl-preview');
-    const prev=el.style.transform;
-    el.style.transform='scale(1)';
-    const canvas=await html2canvas(el,{scale:2,useCORS:true});
-    el.style.transform=prev;
-
-    statusEl.textContent='Subiendo a Google Drive...';
-
-    const blob=await new Promise(res=>canvas.toBlob(res,'image/png'));
-    const meta=JSON.stringify({name:fileName,parents:[DRIVE_FOLDER_ID]});
-    const form=new FormData();
-    form.append('metadata',new Blob([meta],{type:'application/json'}));
-    form.append('file',blob);
-
-    const res=await fetch(
-      'https://drive.google.com/drive/folders/1MSFMeSgLAyb3KjhdCvPmb0g8V_VDLpG6?usp=drive_link',
-      {method:'POST',headers:{Authorization:'Bearer '+DRIVE_ACCESS_TOKEN},body:form}
-    );
-
-    if(!res.ok){
-      const err=await res.json();
-      throw new Error(err.error?.message||'Error API: '+res.status);
-    }
-
-    const data=await res.json();
-    statusEl.className='drive-status';
-    statusEl.innerHTML=`✅ Subido: <a href="${data.webViewLink}" target="_blank" style="color:var(--success);font-weight:700;">${data.name}</a>`;
-    showToast('Archivo subido a Drive correctamente');
-
-  } catch(err){
-    statusEl.className='drive-status err';
-    statusEl.textContent='Error: '+err.message;
-    showToast('Error al subir a Drive','error');
-  }
 }
 
 showPage('dashboard');
