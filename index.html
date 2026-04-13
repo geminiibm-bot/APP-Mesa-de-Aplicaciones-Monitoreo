@@ -8,6 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
   --bg:#ffffff; --surface:#f8f9fa; --surface2:#f1f3f5; --border:#dee2e6;
@@ -148,6 +149,12 @@ textarea{resize:vertical;min-height:80px;}
 .tag-seg{background:rgba(230,57,70,.15);color:var(--accent);display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
 .tag-mail-badge{background:rgba(108,117,125,.12);color:var(--muted);display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;margin-top:3px;}
 
+/* PSE Table Styles */
+.pse-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+.pse-table td, .pse-table th { border: 1px solid var(--border); padding: 8px 12px; text-align: center; }
+.pse-table th { background: var(--surface2); font-weight: 600; color: var(--muted); }
+.pse-table .left { text-align: left; }
+
 /* ═══════════════════════════════════════
    TIMELINE PAGE STYLES
 ═══════════════════════════════════════ */
@@ -245,6 +252,7 @@ textarea{resize:vertical;min-height:80px;}
   <div class="nav-section">
     <div class="nav-label">Monitoreo</div>
     <button class="nav-item" onclick="showPage('registro-alertas')"><span class="nav-icon">📝</span> Registro Alertas <span class="nav-dot"></span></button>
+    <button class="nav-item" onclick="showPage('cortes-pse')"><span class="nav-icon">✂️</span> Cortes PSE <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('entrega-turno-mon')"><span class="nav-icon">🔄</span> Entrega de Turno <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('herramientas')"><span class="nav-icon">🛠️</span> Herramientas <span class="nav-dot"></span></button>
   </div>
@@ -285,6 +293,45 @@ textarea{resize:vertical;min-height:80px;}
         <div class="tool-card" onclick="showPage('entrega-turno-app')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(244,162,97,.15)">📋</div><div><div class="tool-name">Entrega de Turno</div><div class="tool-url">Aplicaciones</div></div></div><div class="tool-desc">Formulario de entrega de turno para el equipo de aplicaciones.</div></div>
         <div class="tool-card" onclick="showPage('timeline')"><div class="tool-card-header"><div class="tool-icon" style="background:rgba(69,123,157,.15)">📊</div><div><div class="tool-name">Línea de Tiempo</div><div class="tool-url">Incidentes ITIL</div></div></div><div class="tool-desc">Documenta incidentes con métricas MTTD, MTTA, MTTR. Exporta tu línea de tiempo.</div></div>
       </div>
+    </div>
+  </div>
+
+  <!-- ══ CORTES PSE ══ -->
+  <div class="page" id="page-cortes-pse">
+    <div class="page-header"><h1>Reporte de PSE</h1><p>Análisis transaccional y validación de cortes de servicio</p></div>
+    
+    <div class="card">
+      <div class="card-title">Carga de Archivo XLSX</div>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <input type="file" id="pseFileInput" accept=".xlsx" style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px; max-width:300px;">
+        <button class="btn btn-primary" onclick="leerArchivoPSE()">📤 Subir archivo</button>
+      </div>
+      <p id="pseMensaje" style="margin-top: 15px; font-weight: 600; color: var(--muted); font-size:13px;"></p>
+    </div>
+
+    <div class="card" style="max-width: 700px;">
+      <h2 style="text-align:center; color:var(--accent); font-size:16px; margin-bottom:16px; font-weight:700;">
+        REPORTE TRANSACCIONALIDAD EN PSE
+      </h2>
+      <table class="pse-table">
+        <tr><td class="left"><b>Total TX</b></td><td id="totalTX">--</td><td></td><td></td></tr>
+        <tr><td class="left">Aprobadas</td><td id="aprobadas">--</td><td></td><td id="aprobadasPct">--</td></tr>
+        <tr><td class="left">Fallidas</td><td id="fallidas">--</td><td></td><td id="fallidasPct" style="font-weight:bold;">--</td></tr>
+        <tr><td class="left">Rechazadas</td><td id="rechazadas">--</td><td></td><td id="rechazadasPct">--</td></tr>
+        <tr><td colspan="4" style="background:var(--surface2);"><b>Desglose de rechazos</b></td></tr>
+        <tr><td class="left">Causal 15</td><td id="causal15">--</td><td></td><td id="causal15Pct">--</td></tr>
+        <tr><td class="left">Sin causal 15</td><td id="sinCausal15">--</td><td></td><td id="sinCausal15Pct" style="font-weight:bold;">--</td></tr>
+        <tr><td colspan="4" style="background:var(--surface2);"><b>Causales</b></td></tr>
+        <tr><th class="left">Causal</th><th>Código</th><th>Cantidad</th><th>%</th></tr>
+        <tr><td class="left" id="nom1">--</td><td id="cod1">--</td><td id="cant1">--</td><td id="pct1" style="font-weight:bold;">--</td></tr>
+        <tr><td class="left" id="nom2">--</td><td id="cod2">--</td><td id="cant2">--</td><td id="pct2" style="font-weight:bold;">--</td></tr>
+        <tr><td class="left" id="nom3">--</td><td id="cod3">--</td><td id="cant3">--</td><td id="pct3" style="font-weight:bold;">--</td></tr>
+        <tr>
+          <td colspan="4" style="color:var(--accent); font-weight:700; padding:12px;">
+            Se crea protocolo: Rechazadas sin causal 15 > 20% ó Fallidas > 3%
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 
@@ -573,7 +620,7 @@ function showPage(id) {
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   const page=document.getElementById('page-'+id);
   if(page) page.classList.add('active');
-  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios','registro-alertas':'Registro Alertas'};
+  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios','registro-alertas':'Registro Alertas','cortes-pse':'Reporte PSE'};
   document.getElementById('topbar-title').textContent=titles[id]||id;
   document.querySelectorAll('.nav-item').forEach(btn=>{
     if((btn.getAttribute('onclick')||'').includes("'"+id+"'")) btn.classList.add('active');
@@ -687,6 +734,91 @@ function limpiarRegistroAlerta(){
   document.getElementById('ra-aplicacion').value = '';
   document.getElementById('ra-equipo').value = '';
   document.getElementById('ra-sintask').checked = false;
+}
+
+// ── CORTES PSE ──
+function leerArchivoPSE() {
+  const file = document.getElementById('pseFileInput').files[0];
+  if (!file) {
+    document.getElementById('pseMensaje').innerText = "⚠️ Selecciona un archivo XLSX";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const hoja = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData = XLSX.utils.sheet_to_json(hoja, { header: 1, defval: "" }); 
+    const textData = XLSX.utils.sheet_to_json(hoja, { header: 1, defval: "", raw: false }); 
+
+    // Rescatar los ceros a la izquierda de la columna 'Cod. de autorización' (índice 5)
+    for (let i = 0; i < jsonData.length; i++) {
+      if (textData[i] && textData[i][5] !== undefined) {
+        jsonData[i][5] = textData[i][5];
+      }
+    }
+
+    const payload = JSON.stringify(jsonData); // Serializar para transmisión 100% segura
+    document.getElementById('pseMensaje').innerText = "⏳ Procesando archivo...";
+
+    google.script.run
+      .withSuccessHandler(res => {
+        document.getElementById('pseMensaje').innerText = res;
+        cargarDatosPSE(); // Refresca dashboard
+      })
+      .withFailureHandler(err => {
+        document.getElementById('pseMensaje').innerText = "❌ Error: " + err.message;
+        console.error(err);
+      })
+      .procesarDatosPSE(payload);
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function cargarDatosPSE() {
+  const mapa = {
+    totalTX: "C17", aprobadas: "D19", aprobadasPct: "E19",
+    fallidas: "D20", fallidasPct: "E20", rechazadas: "D21",
+    rechazadasPct: "E21", causal15: "D23", causal15Pct: "E23",
+    sinCausal15: "D24", sinCausal15Pct: "E24", nom1: "B26", cod1: "C26",
+    cant1: "D26", pct1: "E26", nom2: "B27", cod2: "C27", cant2: "D27",
+    pct2: "E27", nom3: "B28", cod3: "C28", cant3: "D28", pct3: "E28"
+  };
+  document.getElementById('pseMensaje').innerText = "⏳ Obteniendo datos mapeados...";
+  google.script.run
+    .withSuccessHandler(pintarDatosPSE)
+    .obtenerDatosPorMapa(mapa);
+}
+
+function pintarDatosPSE(data) {
+  document.getElementById('pseMensaje').innerText = "✅ Reporte generado correctamente";
+  for (let key in data) {
+    const el = document.getElementById(key);
+    if (el) el.innerText = data[key];
+  }
+  aplicarColoresPSE(data);
+}
+
+function aplicarColoresPSE(data) {
+  function getNumber(valor) {
+    if (!valor) return 0;
+    return parseFloat(String(valor).replace("%","").replace(",","."));
+  }
+  const fallidas = getNumber(data.fallidasPct);
+  const sinCausal = getNumber(data.sinCausal15Pct);
+  const elFallidas = document.getElementById("fallidasPct");
+  if (elFallidas) { elFallidas.style.background = fallidas > 3 ? "var(--accent)" : "var(--success)"; elFallidas.style.color = "white"; }
+  const elSinCausal = document.getElementById("sinCausal15Pct");
+  if (elSinCausal) { 
+    if (sinCausal > 20) {
+        elSinCausal.style.background = "var(--accent)"; // Rojo
+    } else if (sinCausal >= 15 && sinCausal < 20) {
+        elSinCausal.style.background = "var(--warning)"; // Naranja
+    } else {
+        elSinCausal.style.background = "var(--success)"; // Verde
+    }
+    elSinCausal.style.color = "white"; 
+  }
 }
 
 // ── TURNO MONITOREO ──

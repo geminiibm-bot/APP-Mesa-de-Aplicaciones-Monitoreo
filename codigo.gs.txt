@@ -24,3 +24,88 @@ function registrarAlerta(data) {
     return { success: false, error: e.toString() };
   }
 }
+
+function procesarDatosPSE(payload) {
+  try {
+    // Decodificar el texto plano a un Array 2D nativo
+    var jsonData = JSON.parse(payload);
+    if (!jsonData || jsonData.length === 0) return "⚠️ Archivo vacío";
+    
+    // Usa el ID del archivo maestro de PSE
+    var ss = SpreadsheetApp.openById('1Ls6AFL26G1B7keyb_S1UWadRzuJsiRdS3PgWtD2LVrs');
+    var hojaCausales = ss.getSheetByName("%Causales");
+    if (!hojaCausales) return "❌ Error: No se encontró la hoja '%Causales'";
+    
+    // 1. Borrado seguro de todo el rango ocupado sin dañar la hoja
+    hojaCausales.getDataRange().clearContent();
+    SpreadsheetApp.flush(); // Forzar el borrado antes de pegar
+
+    var maxCols = 0;
+    for (var i = 0; i < jsonData.length; i++) {
+      if (jsonData[i].length > maxCols) maxCols = jsonData[i].length;
+    }
+    
+    // Cuadrar y limpiar el array para pegado perfecto
+    var cleanData = [];
+    for (var i = 0; i < jsonData.length; i++) {
+      var row = [];
+      for (var j = 0; j < maxCols; j++) {
+        var cell = jsonData[i][j];
+        
+        // Asegurar que la columna "Cod. de autorización" (índice 5) o códigos similares
+        // se peguen como texto en Google Sheets usando el apóstrofe inicial
+        if (j === 5 && cell !== null && cell !== undefined && cell !== "") {
+          cell = "'" + String(cell);
+        } else if (typeof cell === 'string' && cell.match(/^0\d+$/)) {
+          cell = "'" + cell;
+        }
+        
+        row.push((cell === null || cell === undefined) ? "" : cell);
+      }
+      cleanData.push(row);
+    }
+    
+    if (cleanData.length > 0 && maxCols > 0) {
+      hojaCausales.getRange(1, 1, cleanData.length, maxCols).setValues(cleanData);
+    }
+    
+    // Forzar que Google Sheets calcule las tablas dinámicas
+    SpreadsheetApp.flush();
+    Utilities.sleep(3000); // Pausa de 3 seg para asegurar que la tabla dinámica termine de refrescar
+    
+    // 2. Calcular porcentaje y registrar en Base
+    var hojaDinamica = ss.getSheetByName("Tabla dinámica 2");
+    var hojaBase = ss.getSheetByName("Base");
+    if (hojaDinamica && hojaBase) {
+      var numerador = hojaDinamica.getRange("A8159").getValue();
+      var denominador = hojaDinamica.getRange("B671").getValue();
+      var porcentaje = (denominador !== 0 && denominador !== "") ? (numerador / denominador) * 100 : 0;
+      hojaBase.getRange("D18").setValue(porcentaje);
+    }
+    SpreadsheetApp.flush();
+    
+    // 3. Mover a Base de Datos Histórica
+    var hojaDestino = ss.getSheetByName("DB CORTES PSE ABRIL");
+    if (hojaDinamica && hojaDestino) {
+      var filaValores = hojaDinamica.getRange("I2:Y2").getValues()[0]; // Extrae los 17 datos en una sola línea
+      hojaDestino.appendRow(filaValores);
+    }
+    
+    return "✅ Datos procesados, calculados y guardados en DB";
+  } catch (e) {
+    return "❌ Error interno: " + e.message;
+  }
+}
+
+function obtenerDatosPorMapa(mapa) {
+  var ss = SpreadsheetApp.openById('1Ls6AFL26G1B7keyb_S1UWadRzuJsiRdS3PgWtD2LVrs');
+  var sheet = ss.getSheetByName("Base"); // Ahora lee directamente del dashboard final
+  var data = {};
+  if (!sheet) return data;
+  for (var key in mapa) {
+    try {
+      data[key] = sheet.getRange(mapa[key]).getDisplayValue() || "--";
+    } catch(e) { data[key] = "--"; }
+  }
+  return data;
+}
