@@ -3,3 +3,10 @@ function doGet(e) {
     .setTitle("Mesa de Aplicaciones & Monitoreo")
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
+
+function enviarCorreoMonitoreo(destinatario, asunto, cuerpoTexto, cuerpoHtml) {
+  GmailApp.sendEmail(destinatario, asunto, cuerpoTexto, {
+    htmlBody: cuerpoHtml,
+    name: "Mesa de Aplicaciones & Monitoreo"
+  });
+}

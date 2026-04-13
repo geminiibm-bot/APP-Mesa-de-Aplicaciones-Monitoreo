@@ -220,6 +220,7 @@ textarea{resize:vertical;min-height:80px;}
 /* Toast */
 #toast{position:fixed;bottom:28px;right:28px;padding:13px 20px;border-radius:10px;font-weight:600;font-size:13.5px;transform:translateY(80px);opacity:0;transition:all .3s;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.3);}
 #toast.show{transform:none;opacity:1;}
+.hidden{display:none !important;}
 
 ::-webkit-scrollbar{width:6px;height:6px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
@@ -347,7 +348,7 @@ textarea{resize:vertical;min-height:80px;}
         <!-- Solicitud de Monitoreo -->
         <div class="tl-card" style="border-color:rgba(244,162,97,.5); background:rgba(244,162,97,.05);">
           <div style="display:flex;align-items:center;gap:8px;">
-            <input type="checkbox" id="smCheck" onchange="document.getElementById('smFormBody').style.display=this.checked?'block':'none'" style="width:auto;cursor:pointer;">
+            <input type="checkbox" id="smCheck" onchange="toggleNoMonitoringPanel()" style="width:auto;cursor:pointer;">
             <label for="smCheck" class="tl-card-title" style="color:var(--warning);margin:0;cursor:pointer;">⚠️ Sin Observabilidad</label>
           </div>
           <div id="smFormBody" style="display:none; margin-top:10px;">
@@ -369,8 +370,8 @@ textarea{resize:vertical;min-height:80px;}
             <div class="tl-field"><label>Tipo de Error Evidenciado</label><input type="text" id="smError" placeholder="Ej: Timeout, 500 Internal Error, Falla conexión..."></div>
             <div class="tl-field"><label>Descripción del Comportamiento</label><textarea id="smDesc" rows="2" placeholder="Detalle cómo se manifiesta la falla..."></textarea></div>
             
-            <button class="btn" style="width:100%;justify-content:center;margin-top:4px;background:var(--warning);color:#fff;" onclick="generarSolicitudMonitoreo()">
-              ✉️ Generar Solicitud de Monitoreo
+            <button class="btn" style="width:100%;justify-content:center;margin-top:4px;background:var(--warning);color:#fff;" onclick="enviarPlanCorreo()">
+              ✉️ Enviar Plan de Acción por Correo
             </button>
           </div>
         </div>
@@ -796,42 +797,66 @@ function tlClearAll(){if(!confirm('¿Borrar todos los eventos?'))return;tlEvts=[
 function tlToggleMode(){tlEquidist=!tlEquidist;document.getElementById('tl-mode-lbl').textContent=tlEquidist?'Equidistante':'Cronológico';tlRenderCanvas();}
 function tlZoom(val){document.getElementById('tl-preview').style.transform=`scale(${val})`;}
 
-// ── SOLICITUD DE MONITOREO (Sin Observabilidad) ──
-function generarSolicitudMonitoreo(){
-  const incNum = document.getElementById('tlIncNum').value || 'Sin_ID';
-  const incTitle = document.getElementById('tlIncTitle').value || 'Sin Título';
-  let fuente = document.getElementById('smFuente').value;
-  if(fuente === 'Otro') {
-    fuente = document.getElementById('smFuenteOtro').value || 'Otro (No especificado)';
+// === LÓGICA FALLA NO MONITOREADA ===
+function toggleNoMonitoringPanel() {
+  const isChecked = document.getElementById('smCheck').checked;
+  const panel = document.getElementById('smFormBody');
+  if (isChecked) {
+    panel.style.display = 'block';
+  } else {
+    panel.style.display = 'none';
   }
-  const error = document.getElementById('smError').value.trim();
-  const desc = document.getElementById('smDesc').value.trim();
+}
 
-  if(!error || !desc){
-    showToast('Complete el error y la descripción para solicitar monitoreo','error');
-    return;
-  }
+function enviarPlanCorreo() {
+  const inc = document.getElementById('tlIncNum').value || "S/N";
+  const source = document.getElementById('smFuente').value === 'Otro' ? (document.getElementById('smFuenteOtro').value || 'Otro') : document.getElementById('smFuente').value;
+  const errorType = document.getElementById('smError').value || "No especificado";
+  const desc = document.getElementById('smDesc').value || "Sin detalles adicionales.";
+  
+  const subject = `Solicitud de Implementación de Monitoreo - ${inc}`;
+  
+  // Plan en texto plano (generado internamente)
+  const textPlan = `ASUNTO: Solicitud de Implementación de Monitoreo - ${inc}\n\nDATOS DEL INCIDENTE\n==================================================\nTicket Relacionado: ${inc}\nOrigen de Detección: ${source}\nEstado Actual: No detectado por herramientas automáticas\nTipo de Fallo Evidenciado: ${errorType}\n\nDETALLE TÉCNICO Y EVIDENCIA\n==================================================\n${desc}\n\nPLAN DE ACCIÓN SUGERIDO (IMPLEMENTACIÓN)\n==================================================\n1. [ANÁLISIS] Revisión de logs en la franja horaria del reporte para aislar la traza.\n2. [PATRÓN] Identificar la huella digital del error: "${errorType}".\n3. [CONFIGURACIÓN] Crear/Ajustar alerta automática para este patrón específico.\n4. [VALIDACIÓN] Realizar prueba sintética o monitoreo pasivo para confirmar detección.\n\nSolicitamos priorizar esta implementación para garantizar la observabilidad futura.`;
+  
+  // Plan en HTML estructurado para el correo
+  const htmlPlan = `
+    <div style="font-family: Arial, sans-serif; color: #212529; line-height: 1.5;">
+      <h3 style="color: #e63946;">Solicitud de Implementación de Monitoreo</h3>
+      <p>El siguiente incidente no fue detectado automáticamente. Solicitamos priorizar esta implementación para garantizar la observabilidad futura.</p>
+      <h4 style="border-bottom: 1px solid #dee2e6; padding-bottom: 4px;">Datos del Incidente</h4>
+      <ul style="background: #f8f9fa; padding: 15px 30px; border-radius: 8px; list-style-type: none;">
+        <li style="margin-bottom: 6px;"><strong>📌 Ticket Relacionado:</strong> ${inc}</li>
+        <li style="margin-bottom: 6px;"><strong>🔎 Origen de Detección:</strong> ${source}</li>
+        <li><strong>⚠️ Tipo de Fallo:</strong> ${errorType}</li>
+      </ul>
+      <h4 style="border-bottom: 1px solid #dee2e6; padding-bottom: 4px;">Detalle Técnico y Evidencia</h4>
+      <div style="padding: 10px; border-left: 4px solid #fd7e14; background: #fff8f1;">${desc.replace(/\n/g, '<br>')}</div>
+      <h4 style="border-bottom: 1px solid #dee2e6; padding-bottom: 4px;">Plan de Acción Sugerido</h4>
+      <ol style="margin-top:0;">
+        <li style="margin-bottom: 4px;"><strong>[ANÁLISIS]</strong> Revisión de logs en la franja horaria del reporte.</li>
+        <li style="margin-bottom: 4px;"><strong>[PATRÓN]</strong> Identificar la huella digital del error: "${errorType}".</li>
+        <li style="margin-bottom: 4px;"><strong>[CONFIGURACIÓN]</strong> Crear/Ajustar alerta automática para este patrón.</li>
+        <li><strong>[VALIDACIÓN]</strong> Realizar prueba sintética o monitoreo pasivo para confirmar detección.</li>
+      </ol>
+      <p>Saludos,<br><strong>Mesa de Aplicaciones & Monitoreo</strong></p>
+    </div>
+  `;
 
-  // Correo de ejemplo, puedes reemplazarlo
-  const correoEjemplo = 'monitoreo@ejemplo.com.co';
-  const subject = encodeURIComponent(`Solicitud de Monitoreo - Incidente ${incNum}`);
-  const body = encodeURIComponent(`Hola Equipo de Monitoreo,
+  const destinatario = 'montanozapatajesusdavid@gmail.com'; // <-- Reemplaza con el correo real
+  showToast('Enviando correo...', 'info');
 
-El siguiente incidente no fue detectado automáticamente por las herramientas. Solicitamos su apoyo para implementar la observabilidad requerida.
-
-• Incidente: ${incNum} - ${incTitle}
-• Fuente de evidencia: ${fuente}
-• Tipo de Error Evidenciado: ${error}
-
-Descripción del Comportamiento:
-${desc}
-
-Quedamos atentos.
-Saludos.`);
-
-  // Esto abrirá el cliente de correo predeterminado (Outlook, Gmail web, etc.)
-  window.location.href = `mailto:${correoEjemplo}?subject=${subject}&body=${body}`;
-  showToast('Generando borrador de correo...','info');
+  google.script.run
+    .withSuccessHandler(() => {
+      showToast('Correo enviado exitosamente', 'success');
+      // Limpiar campos y ocultar panel al terminar
+      document.getElementById('smError').value = '';
+      document.getElementById('smDesc').value = '';
+      document.getElementById('smCheck').checked = false;
+      toggleNoMonitoringPanel();
+    })
+    .withFailureHandler((err) => { showToast('Error al enviar: ' + err.message, 'error'); })
+    .enviarCorreoMonitoreo(destinatario, subject, textPlan, htmlPlan);
 }
 
 // ── EXPORT PNG (descarga local) ──
