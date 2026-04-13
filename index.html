@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root {
   --bg:#ffffff; --surface:#f8f9fa; --surface2:#f1f3f5; --border:#dee2e6;
@@ -434,6 +435,8 @@ textarea{resize:vertical;min-height:80px;}
         <div style="display:flex;align-items:center;gap:8px;background:var(--surface2);padding:4px 10px;border-radius:7px;font-size:12px;color:var(--muted);">
           🔍 <input type="range" min="0.4" max="1.2" step="0.05" value="0.78" id="tl-zoom" oninput="tlZoom(this.value)" style="width:80px;padding:0;border:none;background:transparent;box-shadow:none;">
         </div>
+        <input type="file" id="tlFileIn" accept=".pptx" style="display:none" onchange="tlImportPPTX(event)">
+        <button class="tbtn" onclick="document.getElementById('tlFileIn').click()" title="Importar PPTX para editar">📂 Importar</button>
         <button class="tbtn" onclick="tlExportPNG()" title="Descargar PNG">🖼 PNG</button>
         <button class="tbtn tbtn-red" onclick="tlExportPPTX()">📊 PPTX</button>
       </div>
@@ -876,6 +879,45 @@ function tlExportPNG(){
   });
 }
 
+// ── IMPORT PPTX (Restaurar edición) ──
+async function tlImportPPTX(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  try {
+    showToast('Leyendo archivo...', 'info');
+    const zip = await JSZip.loadAsync(file);
+    const notes = zip.file('ppt/notesSlides/notesSlide1.xml');
+    if(!notes) throw new Error('El archivo no contiene metadatos editables (Debe ser un archivo generado por esta nueva versión).');
+    const xml = await notes.async('string');
+    
+    let text = '';
+    const regex = /<a:t>([\s\S]*?)<\/a:t>/g;
+    let match;
+    while((match = regex.exec(xml)) !== null) text += match[1];
+    text = text.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    
+    if(text.includes('TL_DATA:')) {
+      const data = JSON.parse(text.split('TL_DATA:')[1]);
+      if(data && data.evts) {
+        document.getElementById('tlIncTitle').value = data.title || '';
+        document.getElementById('tlIncNum').value = data.inc || '';
+        document.getElementById('tlIncDate').value = data.date || '';
+        tlEvts = data.evts;
+        tlEquidist = !!data.equidist;
+        document.getElementById('tl-mode-lbl').textContent = tlEquidist ? 'Equidistante' : 'Cronológico';
+        tlCancelEdit();
+        tlRenderAll();
+        showToast('Línea de tiempo importada y lista para editar', 'success');
+      }
+    } else {
+      throw new Error('El archivo no contiene los datos de la línea de tiempo.');
+    }
+  } catch(err) {
+    showToast(err.message, 'error');
+  }
+  event.target.value = '';
+}
+
 // ── EXPORT PPTX (descarga local) ──
 function tlExportPPTX(){
   const incTitle=document.getElementById('tlIncTitle').value||'REPORTE DE INCIDENTE';
@@ -887,6 +929,11 @@ function tlExportPPTX(){
   let pres=new PptxGenJS();
   pres.layout='LAYOUT_16x9';
   let s1=pres.addSlide();
+  
+  // Ocultamos los datos exactos del modelo en las "Notas de Diapositiva" para que puedan ser editados luego
+  const meta = {title: document.getElementById('tlIncTitle').value, inc: document.getElementById('tlIncNum').value, date: document.getElementById('tlIncDate').value, evts: tlEvts, equidist: tlEquidist};
+  s1.addNotes('TL_DATA:' + JSON.stringify(meta));
+
   s1.background={color:'FFFFFF'};
   s1.addText(incTitle.toUpperCase(),{x:.5,y:.3,w:7.5,h:.5,fontSize:24,bold:true,color:'1F2937'});
   s1.addText('Fecha: '+dateStr,{x:.5,y:.8,w:5,h:.3,fontSize:12,color:'6B7280',italic:true});
