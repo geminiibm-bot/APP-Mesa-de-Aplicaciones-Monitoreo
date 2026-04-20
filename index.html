@@ -255,6 +255,7 @@ textarea{resize:vertical;min-height:80px;}
   </div>
   <div class="nav-section">
     <div class="nav-label">Aplicaciones</div>
+    <button class="nav-item" onclick="showPage('protocolos')"><span class="nav-icon">📝</span> Protocolos <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('entrega-turno-app')"><span class="nav-icon">📋</span> Entrega de Turno <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('validacion-cambios')"><span class="nav-icon">✅</span> Validación de Cambios <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('timeline')"><span class="nav-icon">📊</span> Línea de Tiempo <span class="nav-dot"></span></button>
@@ -684,6 +685,50 @@ textarea{resize:vertical;min-height:80px;}
     <div class="btn-group"><button class="btn btn-primary" onclick="enviarTurnoAplicaciones()">📤 Enviar</button><button class="btn btn-secondary" onclick="limpiarApp()">🗑️ Limpiar</button></div>
   </div>
 
+  <!-- ══ PROTOCOLOS ══ -->
+  <div class="page" id="page-protocolos">
+    <div class="page-header">
+      <h1>Protocolos</h1>
+      <p>Plantillas estandarizadas para el reporte de incidentes (Inicio, Avance, Informativo, Fin).</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Datos del Incidente</div>
+      <div class="form-grid cols-3">
+        <div class="form-group"><label class="form-label">Número de registro</label><input type="text" id="prot-incidente" placeholder="Ej: INC1514602"></div>
+        <div class="form-group"><label class="form-label">Aplicaciones afectadas / Aplicación</label><input type="text" id="prot-app" placeholder="Ej: GLOBAL TRANSFER"></div>
+        <div class="form-group"><label class="form-label">Prioridad</label><select id="prot-prioridad"><option value="Critico">Crítico</option><option value="Alto">Alto</option><option value="Medio">Medio</option><option value="Bajo">Bajo</option></select></div>
+        <div class="form-group"><label class="form-label">Hora del reporte / Inicio</label><input type="time" id="prot-hora-rep"></div>
+        <div class="form-group"><label class="form-label">Hora de solución / Fin</label><input type="time" id="prot-hora-sol"></div>
+        <div class="form-group"><label class="form-label">Se evidenció por monitoreo</label><select id="prot-monitoreo"><option value="No">No</option><option value="Si">Sí</option></select></div>
+        <div class="form-group"><label class="form-label">Incidente en VictorOps</label><input type="text" id="prot-victorops" placeholder="Ej: N/A"></div>
+        <div class="form-group"><label class="form-label">Grupo de asignación</label><input type="text" id="prot-escalado" placeholder="Ej: CAM Servicios..."></div>
+        <div class="form-group"><label class="form-label">URL de Meet</label><input type="text" id="prot-meet" placeholder="https://meet.google.com/..."></div>
+        <div class="form-group"><label class="form-label">Tipo (Falla)</label><input type="text" id="prot-tipo" placeholder="Ej: Degradación"></div>
+        <div class="form-group"><label class="form-label">Grupo que dio la solución</label><input type="text" id="prot-grupo-sol" placeholder="Solo para FIN"></div>
+      </div>
+      <div class="form-grid cols-2" style="margin-top: 18px;">
+        <div class="form-group"><label class="form-label">Descripción de la falla</label><textarea id="prot-desc" rows="3" placeholder="Se presenta degradación en el ingreso..."></textarea></div>
+        <div class="form-group"><label class="form-label">Avance / Solución</label><textarea id="prot-avance" rows="3" placeholder="Detalles de validación o solución dada..."></textarea></div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">Generar Protocolo</div>
+      <div class="btn-group" style="margin-top:0; margin-bottom: 16px;">
+        <button class="btn btn-primary" onclick="generarProtocolo('inicio')">▶️ Inicio</button>
+        <button class="btn btn-primary" onclick="generarProtocolo('avance')">🔄 Avance</button>
+        <button class="btn btn-primary" onclick="generarProtocolo('fin')">⏹️ Fin</button>
+        <button class="btn btn-primary" onclick="generarProtocolo('informativo')">ℹ️ Informativo</button>
+        <button class="btn btn-secondary" onclick="limpiarProtocolo()">🗑️ Limpiar Todo</button>
+      </div>
+      <div class="form-group">
+        <textarea id="prot-resultado" rows="12" readonly style="background:var(--surface2); font-family:'DM Mono', monospace; font-size:12px; color:var(--text);"></textarea>
+      </div>
+      <button class="btn btn-success" style="margin-top: 12px;" onclick="copiarProtocolo()">📋 Copiar al Portapapeles</button>
+      <button class="btn btn-primary" style="margin-top: 12px; margin-left: 8px;" onclick="enviarProtocoloChat()">💬 Enviar al Chat</button>
+    </div>
+  </div>
+
   <!-- ══ VALIDACIÓN DE CAMBIOS ══ -->
   <div class="page" id="page-validacion-cambios">
     <div class="page-header"><h1>Certificación de Cambios</h1><p>Registro y validación de cambios finalizados en producción — ITIL</p></div>
@@ -711,6 +756,8 @@ textarea{resize:vertical;min-height:80px;}
 const WH_CERT  = 'https://chat.googleapis.com/v1/spaces/AAQAU3eC4u0/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=7DiQ5qv_QuiG-wlxVexD2_v2LEwD-ArEcllS5YgmVzI';
 const WH_TURNO = 'https://chat.googleapis.com/v1/spaces/AAQAhjVz23w/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=rqpcS_Fk7jlZk9z4I3LoXR1FUvmZgNcODUEGdGq3-gM';
 const WH_TORRE   = 'https://chat.googleapis.com/v1/spaces/AAAA0VIHsYA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=xBFg9LOxNiC3R3YXYjtfZUGaO0AGzJF_jbYVYV1A-Go';
+const WH_PROT   = 'https://chat.googleapis.com/v1/spaces/AAAA0VIHsYA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=DSs3cIxER3QEe_F6mjBaMTyh5KF_rGv_WCyT80OWc6E';
+
 
 // ── NAV ──
 function showPage(id) {
@@ -718,7 +765,7 @@ function showPage(id) {
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   const page=document.getElementById('page-'+id);
   if(page) page.classList.add('active');
-  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios','registro-alertas':'Registro Alertas','cortes-pse':'Reporte PSE'};
+  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios','registro-alertas':'Registro Alertas','cortes-pse':'Reporte PSE','protocolos':'Protocolos'};
   document.getElementById('topbar-title').textContent=titles[id]||id;
   document.querySelectorAll('.nav-item').forEach(btn=>{
     if((btn.getAttribute('onclick')||'').includes("'"+id+"'")) btn.classList.add('active');
@@ -729,10 +776,14 @@ function showPage(id) {
 function updClock(){const n=new Date();document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');}
 setInterval(updClock,1000);updClock();
 
+let currentUserEmail = '';
 document.addEventListener('DOMContentLoaded',()=>{
   const today=new Date().toISOString().split('T')[0];
   document.querySelectorAll('input[type="date"]').forEach(f=>f.value=today);
   tlUpdateHeader();
+  if(typeof google !== 'undefined' && google.script) {
+    google.script.run.withSuccessHandler(email => currentUserEmail = email).getUserEmail();
+  }
 });
 
 // ── TOAST ──
@@ -968,7 +1019,8 @@ function notificarPSE(destino) {
   const sinCausal = document.getElementById('sinCausal15Pct').innerText;
   const causal15 = document.getElementById('causal15Pct').innerText;
   
-  const msg = `📢 *Posible afectación detectada.*🚨🚧\n\nSe presenta aumento en las transacciones (rechazadas o fallidas) para PSE.\n\n📊 *Métricas Actuales:*\n  • Fallidas: ${fallidas}\n  • Rechazadas sin causal 15: ${sinCausal}\n`;
+  const remitente = currentUserEmail ? currentUserEmail.split('@')[0] : 'Usuario';
+  const msg = `🏢 *Torre de control*\n📢 *Posible afectación detectada.*🚨🚧\n\nSe presenta aumento en las transacciones (rechazadas o fallidas) para PSE.\n\n📊 *Métricas Actuales:*\n  • Fallidas: ${fallidas}\n  • Rechazadas sin causal 15: ${sinCausal}\n`;
   const url = destino === 'eventos' ? WH_EVENTOS : WH_TORRE;
   
   if (!url || url.startsWith('REEMPLAZAR')) {
@@ -1360,8 +1412,96 @@ function tlExportPPTX(){
   pres.writeFile({fileName:`Timeline_${incNum}.pptx`});
   showToast('PPTX descargado','info');
 }
-
 showPage('dashboard');
+
+// ── PROTOCOLOS ──
+function generarProtocolo(tipo) {
+  try {
+    const getVal = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    };
+
+    const inc = getVal('prot-incidente');
+    const app = getVal('prot-app');
+    const prio = getVal('prot-prioridad');
+    const desc = getVal('prot-desc');
+    const hRep = getVal('prot-hora-rep');
+    const hSol = getVal('prot-hora-sol');
+    const mon = getVal('prot-monitoreo');
+    const victorops = getVal('prot-victorops') || 'N/A';
+    const esc = getVal('prot-escalado');
+    const meet = getVal('prot-meet');
+    const avance = getVal('prot-avance');
+    const gSol = getVal('prot-grupo-sol');
+    const tipoFalla = getVal('prot-tipo');
+
+    let texto = '';
+    if (tipo === 'inicio') {
+      texto = `INICIO\n*Número INC:* ${inc}\n*Aplicaciones afectadas:* ${app}\n*Prioridad:* ${prio}\n*Descripción de la falla:* ${desc}\n*Hora del reporte:* ${hRep}\n*Se evidencio por monitoreo:* ${mon}\n*Incidente en VictorOps:* ${victorops}\n*Grupo de asignación:* ${esc}\n*URL de Meet que se creo:* ${meet}`;
+    } else if (tipo === 'avance') {
+      texto = `AVANCE\n*Número INC:* ${inc}\n*Aplicaciones afectadas:* ${app}\n*Prioridad:* ${prio}\n*Descripción de la falla:* ${desc}\n*Hora del reporte:* ${hRep}\n*Se evidencio por monitoreo:* ${mon}\n*Incidente en VictorOps:* ${victorops}\n*Grupo de asignación:* ${esc}\n*URL de Meet que se creo:* ${meet}\n*Avance:* ${avance}`;
+    } else if (tipo === 'fin') {
+      texto = `FIN\n*Número INC:* ${inc}\n*Aplicaciones afectadas:* ${app}\n*Prioridad:* ${prio}\n*Descripción de la falla:* ${desc}\n*Hora del reporte:* ${hRep}\n*Hora de solución:* ${hSol}\n*Se evidencio por monitoreo:* ${mon}\n*Incidente en VictorOps:* ${victorops}\n*Grupo de asignación:* ${esc}\n*Avance:* ${avance}\n*Grupo que dio la solución:* ${gSol}\n*Tipo:* ${tipoFalla}\n|| *INICIO:* ${hRep} *FIN:* ${hSol} ||`;
+    } else if (tipo === 'informativo') {
+      texto = `INFORMATIVO\n*Número INC:* ${inc}\n*Aplicaciones afectadas:* ${app}\n*Prioridad:* ${prio}\n*Descripción de la falla:* ${desc}\n*Hora inicio:* ${hRep}\n*Hora fin:* ${hSol}\n*Se evidencio por monitoreo:* ${mon}\n*Incidente en VictorOps:* ${victorops}\n*Grupo de asignación:* ${esc}\n*Solución:* ${avance}\n*Tipo:* ${tipoFalla}\n| *INICIO:* ${hRep} | *FIN:* ${hSol} |`;
+    }
+    
+    const remitente = currentUserEmail ? currentUserEmail.split('@')[0] : 'Usuario';
+    texto += `\n*Create By:* ${remitente}`;
+
+    const resEl = document.getElementById('prot-resultado');
+    if (resEl) {
+      resEl.value = texto.trim();
+      showToast('Protocolo generado exitosamente', 'info');
+    }
+  } catch (error) {
+    console.error("Error al generar protocolo:", error);
+    showToast('Error interno al procesar el protocolo', 'error');
+  }
+}
+
+function copiarProtocolo() {
+  const res = document.getElementById('prot-resultado');
+  if (!res || !res.value) {
+    showToast('No hay contenido para copiar', 'error');
+    return;
+  }
+  
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(res.value).then(() => {
+      showToast('Protocolo copiado al portapapeles', 'success');
+    }).catch(() => {
+      res.select();
+      document.execCommand('copy');
+      showToast('Protocolo copiado al portapapeles', 'success');
+    });
+  } else {
+    res.select();
+    document.execCommand('copy');
+    showToast('Protocolo copiado al portapapeles', 'success');
+  }
+}
+
+function enviarProtocoloChat() {
+  const resEl = document.getElementById('prot-resultado');
+  if (!resEl || !resEl.value.trim()) {
+    showToast('No hay contenido para enviar', 'error');
+    return;
+  }
+  
+  const remitente = currentUserEmail ? currentUserEmail.split('@')[0] : 'Usuario';
+  fetch(WH_PROT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: resEl.value.trim() }) })
+    .then(() => showToast('Protocolo enviado al chat', 'success'))
+    .catch(() => showToast('Error al enviar al chat', 'error'));
+}
+
+function limpiarProtocolo() {
+  ['prot-incidente', 'prot-app', 'prot-desc', 'prot-hora-rep', 'prot-hora-sol', 'prot-escalado', 'prot-meet', 'prot-avance', 'prot-grupo-sol', 'prot-tipo', 'prot-resultado', 'prot-victorops'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('prot-prioridad').value = 'Critico';
+  document.getElementById('prot-monitoreo').value = 'No';
+  showToast('Formulario de protocolo limpiado', 'info');
+}
 </script>
 </body>
 </html>
