@@ -282,14 +282,6 @@ textarea{resize:vertical;min-height:80px;}
       <p>Análisis transaccional y validación de cortes de servicio</p>
     </div>
 
-    <!-- Dash Historial Superior -->
-    <div class="card" style="margin-bottom:20px;">
-      <div class="card-title">Historial de Transacciones (Hoy)</div>
-      <div id="pse-historial-hoy" style="display:flex; gap:10px; flex-wrap:wrap; min-height:40px; align-items:center; background:var(--surface2); padding:12px; border-radius:8px;">
-        <span style="font-size:12px; color:var(--muted); font-style:italic;">Esperando datos del historial...</span>
-      </div>
-    </div>
-    
     <!-- Contenedor dual de tablas -->
     <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
       <!-- Tabla Reporte & Carga -->
@@ -341,9 +333,6 @@ textarea{resize:vertical;min-height:80px;}
         <div id="pse-alerts-container" style="margin-top:16px; text-align:center;">
           <div id="alert-scn" style="display:none; margin-bottom:8px; color:var(--accent); font-weight:700;">⚠️ Sugerencia: Validar con el equipo de soporte SCN (Causal 15 > 35%)</div>
           <div id="alert-fallidas" style="display:none; margin-bottom:8px; color:var(--warning); font-weight:700;">⚠️ Sugerencia: Revisión con el equipo de soporte (Fallidas > 1.5%)</div>
-          <div id="pse-notif-btns" style="display:none; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px;">
-            <button class="btn btn-secondary" onclick="notificarPSE('torre')">🏢 Notificar a Torre de control</button>
-          </div>
         </div>
       </div>
 
@@ -913,9 +902,7 @@ function leerArchivoPSE() {
     const payload = JSON.stringify(jsonData); // Serializar para transmisión 100% segura
     document.getElementById('pseMensaje').innerText = "⏳ Procesando archivo...";
 
-    // Ocultar botones y alertas previas mientras carga el nuevo archivo
-    const btnGroup = document.getElementById('pse-notif-btns');
-    if(btnGroup) btnGroup.style.display = 'none';
+    // Ocultar alertas previas mientras carga el nuevo archivo
     const aScn = document.getElementById('alert-scn');
     if(aScn) aScn.style.display = 'none';
     const aFall = document.getElementById('alert-fallidas');
@@ -968,16 +955,16 @@ function aplicarColoresPSE(data) {
   const sinCausal = getNumber(data.sinCausal15Pct);
   const causal15 = getNumber(data.causal15Pct);
   
-  let mostrarBotones = false;
+  let debeNotificar = false;
 
   const elFallidas = document.getElementById("fallidasPct");
   if (elFallidas) { elFallidas.style.background = fallidas > 3 ? "var(--accent)" : "var(--success)"; elFallidas.style.color = "white"; }
   const alertFallidas = document.getElementById("alert-fallidas");
   if (elFallidas) { 
     if (fallidas >= 3) {
-      elFallidas.style.background = "var(--accent)"; mostrarBotones = true;
+      elFallidas.style.background = "var(--accent)"; debeNotificar = true;
     } else if (fallidas >= 1.5) {
-      elFallidas.style.background = "var(--warning)"; mostrarBotones = true;
+      elFallidas.style.background = "var(--warning)"; debeNotificar = true;
     } else {
       elFallidas.style.background = "var(--success)";
     }
@@ -988,11 +975,11 @@ function aplicarColoresPSE(data) {
   const elSinCausal = document.getElementById("sinCausal15Pct");
   if (elSinCausal) { 
     if (sinCausal > 20) {
-        elSinCausal.style.background = "var(--accent)"; // Rojo
-        elSinCausal.style.background = "var(--accent)"; mostrarBotones = true;
+        elSinCausal.style.background = "var(--accent)";
+        debeNotificar = true;
     } else if (sinCausal >= 15 && sinCausal < 20) {
-        elSinCausal.style.background = "var(--warning)"; // Naranja
-        elSinCausal.style.background = "var(--warning)"; mostrarBotones = true;
+        elSinCausal.style.background = "var(--warning)";
+        debeNotificar = true;
     } else {
         elSinCausal.style.background = "var(--success)"; // Verde
     }
@@ -1010,8 +997,17 @@ function aplicarColoresPSE(data) {
     }
   }
 
-  const notifBtns = document.getElementById("pse-notif-btns");
-  if (notifBtns) notifBtns.style.display = mostrarBotones ? "flex" : "none";
+  // Evaluar notificación automática
+  if (debeNotificar) {
+    const currentHour = new Date().getHours();
+    
+    // Verificar restricción nocturna (>= 23:00 o < 05:00)
+    if (currentHour >= 23 || currentHour < 5) {
+      showToast('Umbrales superados, pero se omite la alerta por horario nocturno (23:00 - 05:00)', 'info');
+    } else {
+      notificarPSE('torre');
+    }
+  }
 }
 
 function notificarPSE(destino) {
