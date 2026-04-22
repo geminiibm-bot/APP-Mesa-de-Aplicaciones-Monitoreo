@@ -304,10 +304,7 @@ textarea{resize:vertical;min-height:80px;}
           </div>
           <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
             <input type="file" id="pseFileInput" accept=".xlsx" style="background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px; flex:1;">
-            <button class="btn btn-primary" onclick="leerArchivoPSE()">📤 Subir archivo</button>
-          </div>
-          <div style="color:var(--accent); font-size:14.5px; font-weight:700; background:rgba(230,57,70,0.1); padding:12px 16px; border-radius:8px; text-align:center; border: 1px solid rgba(230,57,70,0.2);">
-            ⚠️ Se crea protocolo: Rechazadas sin causal 15 > 20% ó Fallidas > 3%
+            <button class="btn" style="background-color:#00a4e4; color:#fff; transition:background-color 0.2s;" onmouseover="this.style.backgroundColor='#008bc2'" onmouseout="this.style.backgroundColor='#00a4e4'" onclick="leerArchivoPSE()">📤 Subir archivo</button>
           </div>
           <p id="pseMensaje" style="margin-top: 12px; font-weight: 600; color: var(--muted); font-size:13px; text-align:center; margin-bottom:0;"></p>
         </div>
@@ -339,6 +336,11 @@ textarea{resize:vertical;min-height:80px;}
       <!-- Contenedor Tablas Derechas -->
       <div style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:320px; max-width:600px;">
         
+        <!-- Alerta de Protocolo -->
+        <div style="color:var(--accent); font-size:16px; font-weight:700; background:rgba(230,57,70,0.08); padding:20px; border-radius:12px; text-align:center; border: 2px dashed rgba(230,57,70,0.4); box-shadow: 0 4px 12px rgba(230,57,70,0.05);">
+          ⚠️ Se crea protocolo:<br><span style="font-size:14.5px; color:var(--text); font-weight:600;">Rechazadas sin causal 15 &gt; 20% ó Fallidas &gt; 3%</span>
+        </div>
+
         <!-- Tabla Diccionario -->
         <div class="card" style="padding:20px; margin-bottom:0;">
           <h2 style="text-align:center; color:var(--accent2); font-size:14px; margin-bottom:16px; font-weight:700;">
