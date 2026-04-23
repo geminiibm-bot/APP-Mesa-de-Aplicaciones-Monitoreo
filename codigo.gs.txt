@@ -99,6 +99,10 @@ function procesarDatosPSE(payload, horaInicio, horaFin) {
       hojaDestino.appendRow(filaValores);
     }
     
+    // 4. Actualizar el reloj central del servidor
+    var timestamp = new Date().getTime().toString();
+    PropertiesService.getScriptProperties().setProperty('lastPseUploadTs', timestamp);
+    
     return "✅ Datos procesados, calculados y guardados en DB";
   } catch (e) {
     return "❌ Error interno: " + e.message;
@@ -116,4 +120,42 @@ function obtenerDatosPorMapa(mapa) {
     } catch(e) { data[key] = "--"; }
   }
   return data;
+}
+
+// ── LÓGICA DE RECORDATORIOS CENTRALIZADA (SERVER-SIDE) ──
+function getPseTimerData() {
+  var ts = PropertiesService.getScriptProperties().getProperty('lastPseUploadTs');
+  return parseInt(ts || "0", 10);
+}
+
+function checkPseReminderServer() {
+  var now = new Date();
+  var m = now.getMinutes();
+
+  // Validar estrictamente en los minutos :05 y :35
+  if (m === 5 || m === 35) {
+    var props = PropertiesService.getScriptProperties();
+    var lastUpload = parseInt(props.getProperty('lastPseUploadTs') || "0", 10);
+    if (lastUpload === 0) return; // No hacer nada si nunca se ha subido un archivo
+
+    var threshold = now.getTime() - (5 * 60000); // 5 minutos antes (ej: si son las 12:35, el umbral es 12:30)
+
+    // Si el último cargue es más antiguo que el inicio de la ventana actual, significa que omitieron la subida
+    if (lastUpload < threshold) {
+      var WH = 'https://chat.googleapis.com/v1/spaces/AAAAtpD_YME/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=t9UxfoFICiM2HKLqDCnMRIRczdw4LLJqdlljC60PD3c';
+      var hora = now.getHours().toString().padStart(2, '0');
+      var minuto = m.toString().padStart(2, '0');
+      var msg = `⏰ *Recordatorio de Corte PSE*\n\n⚠️ Son las ${hora}:${minuto} y el cronómetro de espera ha finalizado sin recibir el archivo de PSE.\nPor favor, realiza la validación y sube el archivo correspondiente.`;
+      
+      UrlFetchApp.fetch(WH, { method: 'post', contentType: 'application/json', payload: JSON.stringify({ text: msg }), muteHttpExceptions: true });
+    }
+  }
+}
+
+// Ejecuta esto UNA SOLA VEZ desde el editor de Google Apps Script para activar el robot en segundo plano
+function instalarTriggerRecordatorio() {
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < triggers.length; i++) { if (triggers[i].getHandlerFunction() === 'checkPseReminderServer') ScriptApp.deleteTrigger(triggers[i]); }
+  // Crear gatillo que ejecuta la revisión silenciosa cada minuto
+  ScriptApp.newTrigger('checkPseReminderServer').timeBased().everyMinutes(1).create();
 }

@@ -282,6 +282,21 @@ textarea{resize:vertical;min-height:80px;}
       <p>Análisis transaccional y validación de cortes de servicio</p>
     </div>
 
+    <!-- Panel de Cronómetro Global -->
+    <div class="card" style="background:#f8faff; border: 2px dashed #c8d8f0; padding: 18px 24px; margin-bottom: 24px; display:flex; align-items:center; justify-content:space-between; border-radius:12px; flex-wrap:wrap; gap:16px;">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div style="font-size:36px;">⏱️</div>
+        <div>
+          <div style="font-size:11px; font-weight:800; color:var(--accent2); text-transform:uppercase; letter-spacing:1px;">Último Corte Ejecutado</div>
+          <div id="pse-last-time" style="font-size:22px; font-weight:700; color:#1a1a2e; font-family:'DM Mono', monospace;">--:--</div>
+        </div>
+      </div>
+      <div style="text-align:right; min-width: 180px;">
+        <div id="pse-timer-label" style="font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:1px;">Sincronizando...</div>
+        <div id="pse-countdown" style="font-size:32px; font-weight:700; color:var(--success); font-family:'DM Mono', monospace; line-height:1.1;">--:--</div>
+      </div>
+    </div>
+
     <!-- Contenedor dual de tablas -->
     <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
       <!-- Tabla Reporte & Carga -->
@@ -749,6 +764,66 @@ const WH_TURNO = 'https://chat.googleapis.com/v1/spaces/AAQAhjVz23w/messages?key
 const WH_TORRE   = 'https://chat.googleapis.com/v1/spaces/AAAA0VIHsYA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=xBFg9LOxNiC3R3YXYjtfZUGaO0AGzJF_jbYVYV1A-Go';
 const WH_PROT   = 'https://chat.googleapis.com/v1/spaces/AAAA0VIHsYA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=DSs3cIxER3QEe_F6mjBaMTyh5KF_rGv_WCyT80OWc6E';
 
+// ── LÓGICA DEL CRONÓMETRO CENTRAL (PSE) ──
+let globalLastPseTs = 0;
+
+function initPseTimer() {
+  syncPseTimer();
+  setInterval(updatePseTimerDisplay, 1000);
+  setInterval(syncPseTimer, 15000); // Sincroniza en segundo plano con el servidor cada 15 seg
+}
+
+function syncPseTimer() {
+  google.script.run.withSuccessHandler(ts => { if(ts > 0) { globalLastPseTs = ts; updatePseTimerDisplay(); } }).getPseTimerData();
+}
+
+function updatePseTimerDisplay() {
+  if(!globalLastPseTs) return;
+  const now = new Date();
+  const elLast = document.getElementById('pse-last-time'), elCount = document.getElementById('pse-countdown'), elLabel = document.getElementById('pse-timer-label');
+  
+  elLast.innerText = new Date(globalLastPseTs).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  
+  // Calcular próximo límite fijo (:05 o :35)
+  let nextDeadline = new Date(now.getTime());
+  const m = now.getMinutes();
+
+  if (m < 5) {
+    nextDeadline.setMinutes(5, 0, 0);
+  } else if (m < 35) {
+    nextDeadline.setMinutes(35, 0, 0);
+  } else {
+    nextDeadline.setHours(nextDeadline.getHours() + 1);
+    nextDeadline.setMinutes(5, 0, 0);
+  } 
+
+  const threshold = nextDeadline.getTime() - (5 * 60000); // Inicio de la cuenta regresiva de 5m
+  const lastThreshold = nextDeadline.getTime() - (35 * 60000); // Inicio de la ventana anterior
+  const remainingMs = nextDeadline.getTime() - now.getTime();
+  const timeStr = String(Math.floor(remainingMs / 60000)).padStart(2, '0') + ":" + String(Math.floor((remainingMs % 60000) / 1000)).padStart(2, '0');
+
+  if (globalLastPseTs >= threshold) {
+    elLabel.innerText = "CORTE AL DÍA";
+    elCount.innerText = timeStr;
+    elCount.style.color = "var(--success)";
+  } 
+  else if (now.getTime() >= threshold && now.getTime() < nextDeadline.getTime()) {
+    elLabel.innerText = "⏳ ESPERANDO ARCHIVO";
+    elCount.innerText = timeStr;
+    elCount.style.color = "var(--warning)"; // Naranja - 5 minutos regresivos!
+  } 
+  else if (globalLastPseTs < lastThreshold) {
+    elLabel.innerText = "⚠️ CORTE ATRASADO";
+    elCount.innerText = "00:00";
+    elCount.style.color = "var(--accent)";
+  }
+  else {
+    elLabel.innerText = "PRÓXIMO CORTE EN";
+    elCount.innerText = timeStr;
+    elCount.style.color = "var(--muted)";
+  }
+}
+
 
 // ── NAV ──
 function showPage(id) {
@@ -775,6 +850,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(typeof google !== 'undefined' && google.script) {
     google.script.run.withSuccessHandler(email => currentUserEmail = email).getUserEmail();
   }
+  initPseTimer(); // Inicia la escucha del reloj de servidor
 });
 
 // ── TOAST ──
@@ -913,6 +989,7 @@ function leerArchivoPSE() {
     google.script.run
       .withSuccessHandler(res => {
         document.getElementById('pseMensaje').innerText = res;
+        syncPseTimer(); // Fuerza la recarga del reloj global para todos
         cargarDatosPSE(); // Refresca dashboard
       })
       .withFailureHandler(err => {
@@ -963,10 +1040,10 @@ function aplicarColoresPSE(data) {
   if (elFallidas) { elFallidas.style.background = fallidas > 3 ? "var(--accent)" : "var(--success)"; elFallidas.style.color = "white"; }
   const alertFallidas = document.getElementById("alert-fallidas");
   if (elFallidas) { 
-    if (fallidas >= 3) {
+    if (fallidas > 3) {
       elFallidas.style.background = "var(--accent)"; debeNotificar = true;
     } else if (fallidas >= 1.5) {
-      elFallidas.style.background = "var(--warning)"; debeNotificar = true;
+      elFallidas.style.background = "var(--warning)";
     } else {
       elFallidas.style.background = "var(--success)";
     }
@@ -981,7 +1058,6 @@ function aplicarColoresPSE(data) {
         debeNotificar = true;
     } else if (sinCausal >= 15 && sinCausal < 20) {
         elSinCausal.style.background = "var(--warning)";
-        debeNotificar = true;
     } else {
         elSinCausal.style.background = "var(--success)"; // Verde
     }

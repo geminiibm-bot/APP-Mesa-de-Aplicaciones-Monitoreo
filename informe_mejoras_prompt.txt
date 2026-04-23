@@ -1,0 +1,64 @@
+=============================================================================
+DOCUMENTO FUENTE PARA NOTEBOOKLM: REPORTE DE MEJORAS Y NUEVA ARQUITECTURA
+PROYECTO: APP MESA DE APLICACIONES & MONITOREO
+=============================================================================
+
+[1. CONTEXTO GENERAL DEL PROYECTO]
+La "Mesa de Aplicaciones & Monitoreo" es una herramienta integral construida para centralizar, automatizar y optimizar las operaciones diarias del equipo de soporte IT, Torre de Control y Mesa Operativa.
+El objetivo principal de esta actualización fue eliminar la dependencia de procesos manuales, unificar los accesos a herramientas de diagnóstico y establecer un flujo de comunicación automático con los canales de Google Chat institucionales.
+
+[2. MÓDULOS PRINCIPALES Y MEJORAS IMPLEMENTADAS]
+
+A. Módulo de Cortes PSE (Automatización Transaccional):
+- Eliminación del procesamiento manual de archivos de cortes.
+- Integración de un motor de lectura de Excel (.xlsx) 100% del lado del cliente (Client-side) para mayor velocidad y privacidad.
+- Lógica de validación de umbrales en tiempo real: Detección automática de alertas cuando las transacciones Fallidas superan el 3% o las Rechazadas sin Causal 15 superan el 20%.
+- Supresión inteligente de alertas: El sistema bloquea notificaciones no prioritarias en el horario nocturno (23:00 a 05:00) para evitar saturación (Fatiga de Alertas).
+- Cronómetro y Recordatorios Webhook: Sistema pasivo que verifica cada 30 segundos si se ha omitido el cargue del corte en las ventanas operativas (x:15 y x:45) y alerta automáticamente vía Google Chat.
+
+B. Generador de Líneas de Tiempo (Timeline de Incidentes):
+- Creación de una interfaz gráfica para mapear cronológicamente incidentes críticos.
+- Cálculo automático de métricas ITIL: MTTD (Detección), MTTA (Reconocimiento) y MTTR (Recuperación).
+- Exportación avanzada: Capacidad de exportar la gráfica a imagen (.PNG) y a presentación interactiva (.PPTX).
+- Ingeniería inversa: Capacidad de importar archivos .PPTX previamente generados para restaurar la sesión y continuar editando el incidente.
+
+C. Entrega de Turnos y Certificación de Cambios:
+- Digitalización total de los formularios de entrega de turno (Mesa de Aplicaciones y Mesa de Monitoreo).
+- Checklist de Certificación de Cambios (ITIL) integrado.
+- Conexión directa mediante Webhooks para inyectar estos reportes formateados directamente en los espacios de Google Chat correspondientes, estandarizando la comunicación operativa.
+
+D. Protocolos y Registro de Alertas:
+- Generador de protocolos automatizados (Inicio, Avance, Informativo, Fin) con copiado rápido y envío al chat.
+
+E. Catálogo de Herramientas Centralizado:
+- Directorio interactivo con filtrado rápido (Seguridad, Monitoreo, Aplicaciones, Storage).
+- Estructura clara con clasificación de tipos de credenciales (SSO, propias, genéricas) e IPs de acceso rápido.
+
+[3. ARQUITECTURA Y DECISIONES TECNOLÓGICAS]
+- Serverless Backend: Utiliza Google Apps Script (.gs) y Google Sheets como base de datos en tiempo real, lo cual reduce a cero los costos de infraestructura (servidores).
+- Frontend Moderno y Ligero: Construido en HTML5, CSS3 nativo (Grid/Flexbox) y Vanilla JavaScript. No requiere compilación.
+- Librerías implementadas: 
+  * xlsx.js (Procesamiento de datos transaccionales de Excel).
+  * html2canvas (Captura gráfica de elementos del DOM).
+  * PptxGenJS & JSZip (Generación y lectura de archivos PowerPoint dinámicos).
+- Procesamiento en el Cliente (Edge Computing): La mayoría del peso de cálculo (tiempos, gráficas, lectura de archivos) se trasladó al navegador del usuario, evitando agotar las cuotas de ejecución de Google Cloud.
+
+[4. IMPACTO Y BENEFICIOS PARA EL servicio ]
+1. Ahorro de Tiempo: Procesos como la gráfica de la línea de tiempo o el cálculo de PSE pasaron de tomar horas a resolverse en minutos.
+2. Reducción de Errores Humanos (Human Error Rate): La validación matemática de los umbrales de alerta y formatos predefinidos evita inconsistencias operativas.
+3. Gobernanza y Estandarización: Todos los operadores ahora entregan los protocolos y turnos con el mismo rigor y estructura visual.
+4. Comunicación Proactiva: Alertas automáticas y recordatorios que aseguran que ningún corte transaccional o falla crítica pase desapercibida.
+
+=============================================================================
+[INSTRUCCIONES PARA EL MODELO IA (NOTEBOOKLM)]
+
+Actúa como un Consultor Tecnológico Senior. Utilizando exclusivamente el contexto proporcionado en este documento, ayúdame a preparar los materiales para la presentación de este proyecto ante la gerencia.
+
+Por favor, genera lo siguiente:
+
+1. Un "Elevator Pitch" (2 párrafos) resumiendo qué es la aplicación y por qué es un caso de éxito operativo.
+2. Un esquema de diapositivas (Slide by Slide) para una presentación de 10 minutos (aprox. 6-8 diapositivas). Para cada diapositiva indica el Título, los Bullet points principales y la idea central a comunicar.
+3. Destaca 3 "Selling points" (puntos de venta fuertes) enfocados a los gerentes de operaciones o directores de TI (ej. reducción de costos, eficiencia, mitigación de riesgos).
+4. Formula 3 posibles preguntas críticas que podría hacerme la gerencia técnica respecto a la seguridad de los datos o escalabilidad, y sugiéreme las respuestas con base en la arquitectura descrita.
+
+Genera la respuesta con un tono formal, estructurado y persuasivo.
