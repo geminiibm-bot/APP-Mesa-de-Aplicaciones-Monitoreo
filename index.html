@@ -249,6 +249,7 @@ textarea{resize:vertical;min-height:80px;}
   <div class="nav-section">
     <div class="nav-label">Monitoreo</div>
     <button class="nav-item" onclick="showPage('registro-alertas')"><span class="nav-icon">📝</span> Registro Alertas <span class="nav-dot"></span></button>
+    <button class="nav-item" onclick="showPage('causa-raiz')"><span class="nav-icon">🚨</span> Causa Raíz Probable <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('cortes-pse')"><span class="nav-icon">✅</span> Cortes PSE <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('entrega-turno-mon')"><span class="nav-icon">🔄</span> Entrega de Turno <span class="nav-dot"></span></button>
     <button class="nav-item" onclick="showPage('herramientas')"><span class="nav-icon">🛠️</span> Herramientas <span class="nav-dot"></span></button>
@@ -514,6 +515,30 @@ textarea{resize:vertical;min-height:80px;}
     </div>
   </div>
 
+  <!-- ══ CAUSA RAÍZ PROBABLE ══ -->
+  <div class="page" id="page-causa-raiz">
+    <div class="page-header"><h1>Causa Raíz Probable</h1><p>Notificaciones y alertas rápidas sobre posibles afectaciones detectadas.</p></div>
+    
+    <div class="card">
+      <div class="card-title">Alerta Rápida de Monitoreo (Dynatrace)</div>
+      <div class="form-grid cols-2">
+        <div class="form-group"><label class="form-label">Causa raíz probable</label><input type="text" id="ar-causa" placeholder="Ej: saturación de CPU / Falla en BD"></div>
+        <div class="form-group"><label class="form-label">Servicio ó App impactada</label><input type="text" id="ar-app" placeholder="Ej: Portal Transaccional"></div>
+        <div class="form-group" style="grid-column: span 2;"><label class="form-label">URL de Revisión (Meet)</label><input type="text" id="ar-meet" value="https://meet.google.com/evv-toze-ohe"></div>
+      </div>
+      <div class="btn-group" style="margin-top:16px; margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="generarAlertaRapida('especifica')">✍️ Generar Alerta Específica</button>
+        <button class="btn btn-secondary" onclick="generarAlertaRapida('general')"> 🚨 Notificación Inmediata</button>
+      </div>
+      <div class="form-group">
+        <textarea id="ar-resultado" rows="4" readonly style="background:var(--surface2); font-family:'DM Mono', monospace; font-size:12px; color:var(--text);"></textarea>
+      </div>
+      <div class="btn-group" style="margin-top: 12px;">
+        <button class="btn btn-success" onclick="copiarAlertaRapida()">📋 Copiar Alerta</button>
+        <button class="btn btn-primary" onclick="enviarAlertaRapidaChat()">💬 Enviar Alerta</button>
+      </div>
+    </div>
+  </div>
 
 
 
@@ -763,6 +788,8 @@ const WH_CERT  = 'https://chat.googleapis.com/v1/spaces/AAQAU3eC4u0/messages?key
 const WH_TURNO = 'https://chat.googleapis.com/v1/spaces/AAQAhjVz23w/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=rqpcS_Fk7jlZk9z4I3LoXR1FUvmZgNcODUEGdGq3-gM';
 const WH_TORRE   = 'https://chat.googleapis.com/v1/spaces/AAAA0VIHsYA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=xBFg9LOxNiC3R3YXYjtfZUGaO0AGzJF_jbYVYV1A-Go';
 const WH_PROT   = 'https://chat.googleapis.com/v1/spaces/AAAA0VIHsYA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=DSs3cIxER3QEe_F6mjBaMTyh5KF_rGv_WCyT80OWc6E';
+const WH_ALERTAR = 'https://chat.googleapis.com/v1/spaces/AAQASsS812o/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cXNKufdghSn8ZU2O2bk0B8Y1du9qLtLinfx5djhAZrI';
+const WH_ALERTA_PSE = 'https://chat.googleapis.com/v1/spaces/AAQASsS812o/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=cXNKufdghSn8ZU2O2bk0B8Y1du9qLtLinfx5djhAZrI';
 
 // ── LÓGICA DEL CRONÓMETRO CENTRAL (PSE) ──
 let globalLastPseTs = 0;
@@ -831,7 +858,7 @@ function showPage(id) {
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   const page=document.getElementById('page-'+id);
   if(page) page.classList.add('active');
-  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios','registro-alertas':'Registro Alertas','cortes-pse':'Reporte PSE','protocolos':'Protocolos'};
+  const titles={'dashboard':'Dashboard','herramientas':'Herramientas','timeline':'Línea de Tiempo','entrega-turno-mon':'Entrega de Turno — Monitoreo','entrega-turno-app':'Entrega de Turno — Aplicaciones','validacion-cambios':'Certificación de Cambios','registro-alertas':'Registro Alertas','causa-raiz':'Causa Raíz Probable','cortes-pse':'Reporte PSE','protocolos':'Protocolos'};
   document.getElementById('topbar-title').textContent=titles[id]||id;
   document.querySelectorAll('.nav-item').forEach(btn=>{
     if((btn.getAttribute('onclick')||'').includes("'"+id+"'")) btn.classList.add('active');
@@ -950,6 +977,49 @@ function limpiarRegistroAlerta(){
   document.getElementById('ra-aplicacion').value = '';
   document.getElementById('ra-equipo').value = '';
   document.getElementById('ra-sintask').checked = false;
+}
+
+// ── ALERTA RÁPIDA MONITOREO ──
+function generarAlertaRapida(tipo) {
+  const causa = document.getElementById('ar-causa').value.trim() || '[causa raíz]';
+  const app = document.getElementById('ar-app').value.trim() || '[servicio ó app]';
+  const meet = document.getElementById('ar-meet').value.trim();
+  
+  let texto = '';
+  if (tipo === 'especifica') {
+    texto = `📢 *Posible afectación detectada.*🚨🚧\n\nSe presentan alertas en Dynatrace que apuntan a *${causa}* y podrían impactar *${app}*.\nActualmente en revisión en: ${meet}`;
+  } else {
+    texto = `📢 *Posible afectación detectada.*🚨🚧\n\nSe presentan Multiples alertas. Actualmente nos encontramos en revisión en: ${meet}`;
+  }
+  
+  document.getElementById('ar-resultado').value = texto;
+  showToast('Mensaje de alerta generado', 'info');
+}
+
+function copiarAlertaRapida() {
+  const res = document.getElementById('ar-resultado');
+  if (!res || !res.value) {
+    showToast('No hay alerta generada para copiar', 'error');
+    return;
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(res.value).then(() => showToast('Copiado al portapapeles', 'success')).catch(() => {
+      res.select(); document.execCommand('copy'); showToast('Copiado al portapapeles', 'success');
+    });
+  } else {
+    res.select(); document.execCommand('copy'); showToast('Copiado al portapapeles', 'success');
+  }
+}
+
+function enviarAlertaRapidaChat() {
+  const res = document.getElementById('ar-resultado');
+  if (!res || !res.value.trim()) {
+    showToast('No hay contenido para enviar', 'error');
+    return;
+  }
+  fetch(WH_ALERTAR, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: res.value.trim() }) })
+    .then(() => showToast('Alerta enviada correctamente', 'success'))
+    .catch(() => showToast('Error al enviar alerta', 'error'));
 }
 
 // ── CORTES PSE ──
@@ -1075,27 +1145,24 @@ function aplicarColoresPSE(data) {
     }
   }
 
-  // Evaluar notificación automática
+  // Evaluar notificación manual sugerida mediante ventana emergente
   if (debeNotificar) {
-    const currentHour = new Date().getHours();
-    
-    // Verificar restricción nocturna (>= 23:00 o < 05:00)
-    if (currentHour >= 23 || currentHour < 5) {
-      showToast('Umbrales superados, pero se omite la alerta por horario nocturno (23:00 - 05:00)', 'info');
-    } else {
-      notificarPSE('torre');
-    }
+    setTimeout(() => {
+      if (confirm("⚠️ Alerta PSE\n\nSe han superado los umbrales críticos (Rechazadas sin causal 15 > 20% ó Fallidas > 3%).\n\n¿Deseas enviar la notificación al chat de alertas ahora?")) {
+        notificarPSE();
+      }
+    }, 300); // Pequeña pausa para permitir que los colores de la tabla se actualicen antes del popup
   }
 }
 
-function notificarPSE(destino) {
+function notificarPSE() {
   const fallidas = document.getElementById('fallidasPct').innerText;
   const sinCausal = document.getElementById('sinCausal15Pct').innerText;
   const causal15 = document.getElementById('causal15Pct').innerText;
   
   const remitente = currentUserEmail ? currentUserEmail.split('@')[0] : 'Usuario';
   const msg = `🏢 *Torre de control*\n📢 *Posible afectación detectada.*🚨🚧\n\nSe presenta aumento en las transacciones (rechazadas o fallidas) para PSE.\n\n📊 *Métricas Actuales:*\n  • Fallidas: ${fallidas}\n  • Rechazadas sin causal 15: ${sinCausal}\n`;
-  const url = destino === 'eventos' ? WH_EVENTOS : WH_TORRE;
+  const url = WH_ALERTA_PSE;
   
   if (!url || url.startsWith('REEMPLAZAR')) {
     showToast('Configura la URL del webhook en el código', 'error');
